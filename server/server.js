@@ -1,9 +1,16 @@
 const express = require('express');
+const { Pool } = require('pg')
 const app = express();
 const cors = require('cors');
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 app.use(cors());
+
+
+const pool = new Pool({
+  host:
+})
+
 
 app.get('/api/home', (req, res) => {
   res.json({ message: 'Hello World!' });

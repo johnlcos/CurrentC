@@ -15,6 +15,7 @@ app.use(
 );
 
 import userRouter from './routers/userRouter';
+import feedRouter from './routers/feedRouter';
 
 const pool = new Pool({
   host: process.env.RDS_HOSTNAME,
@@ -24,10 +25,7 @@ const pool = new Pool({
 });
 
 app.use('/api/user', userRouter);
-
-app.get('/api/home', (req, res) => {
-  res.json({ message: 'Hello World!' });
-});
+app.use('/api/feed', feedRouter);
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

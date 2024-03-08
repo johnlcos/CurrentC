@@ -4,7 +4,7 @@ export const SideNavBar = () => {
   return (
     <div id='left-column' className='flex flex-col gap-y-5 items-start p-5'>
       <div className='w-[50px] h-[50px] relative rounded-full overflow-hidden'>
-        <Image src={'/logo.png'} fill alt='feeder logo'></Image>
+        <Image src={'/logo.png'} fill sizes='50px' alt='feeder logo'></Image>
       </div>
       <button className='border px-5 rounded-lg bg-black text-white'>
         Home

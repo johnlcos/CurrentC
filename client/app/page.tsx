@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { SideNavBar } from './side-navbar';
-import { MainFeed } from './main-feed';
+import { MainFeed } from '@/components/main-feed';
 
 export default function Home() {
   return (

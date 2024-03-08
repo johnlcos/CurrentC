@@ -1,7 +1,10 @@
 const { Router } = require('express');
+const feedController = require('../controllers/feedController');
 
 const router = Router();
 
-router.get('/');
+router.get('/', feedController.getAllFeed, (req, res) =>
+  res.status(200).json(res.locals.results)
+);
 
-export default router;
+module.exports = router;

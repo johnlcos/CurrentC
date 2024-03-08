@@ -1,10 +1,16 @@
-import {Request, Response, NextFunction} from 'express'
+const db = require('../models/feedModel');
 
+const feedController = {};
 
-const feedController = {}
-
-feedController.getFeeds = async (req,res,next) => {
+feedController.getAllFeed = async (req, res, next) => {
   try {
-    const data = 
+    const queryStr = 'SELECT * from feeds';
+    const result = await db.query(queryStr);
+    res.locals.results = result;
+    next();
+  } catch (error) {
+    next(error);
   }
-}
+};
+
+module.exports = feedController;

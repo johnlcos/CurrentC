@@ -1,5 +1,4 @@
 const express = require('express');
-const { Pool } = require('pg');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
@@ -14,17 +13,8 @@ app.use(
   })
 );
 
-import userRouter from './routers/userRouter';
-import feedRouter from './routers/feedRouter';
+const feedRouter = require('./routers/feedRouter');
 
-const pool = new Pool({
-  host: process.env.RDS_HOSTNAME,
-  user: process.env.RDS_USERNAME,
-  password: process.env.RDS_PASSWORD,
-  port: process.env.PORT,
-});
-
-app.use('/api/user', userRouter);
 app.use('/api/feed', feedRouter);
 
 app.listen(PORT, () => {

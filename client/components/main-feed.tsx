@@ -2,36 +2,37 @@
 
 import { FeedWrapper } from './feed-wrapper';
 import { useState, useEffect } from 'react';
+import { FeedSchema } from '@/types';
 
 export const MainFeed = () => {
+  const [allFeed, setAllFeed] = useState<FeedSchema[]>([]);
+
   useEffect(() => {
     const fetchAllFeed = async () => {
       const response = await fetch('http://localhost:8080/api/feed');
       const data = await response.json();
-      console.log(data);
+      setAllFeed(data);
     };
     fetchAllFeed();
   }, []);
 
+  console.log(allFeed);
+
   return (
     <div id='main-feed-container' className='p-2'>
       <div className='flex justify-center items-center flex-col gap-y-5'>
-        <FeedWrapper
-          name={'Wei'}
-          verificationStatus={true}
-          uniqueIdentifier={'@weiwang0305'}
-          views={14}
-          likes={12}
-          dislikes={1}
-        />
-        <FeedWrapper
-          name={'Peter'}
-          verificationStatus={true}
-          uniqueIdentifier={'@peterchung'}
-          views={20}
-          likes={5}
-          dislikes={1}
-        />
+        {allFeed.map((feed) => (
+          <FeedWrapper
+            key={feed.message}
+            name={feed.name}
+            verificationStatus={feed.verificationstatus}
+            uniqueIdentifier={feed.uniqueidentifier}
+            likes={feed.likes}
+            dislikes={feed.dislikes}
+            message={feed.message}
+            views={feed.views}
+          />
+        ))}
       </div>
     </div>
   );

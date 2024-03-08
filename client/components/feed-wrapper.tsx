@@ -13,6 +13,7 @@ interface FeedWrapperProps {
   views: number;
   likes: number;
   dislikes: number;
+  message: string;
 }
 
 export const FeedWrapper = ({
@@ -22,6 +23,7 @@ export const FeedWrapper = ({
   views,
   likes,
   dislikes,
+  message,
 }: FeedWrapperProps) => {
   return (
     <div className='outline rounded-2xl h-[200px] w-[600px]'>
@@ -42,7 +44,7 @@ export const FeedWrapper = ({
             <span className='mr-5'>{uniqueIdentifier}</span>
           </div>
           <div className='ml-3'>
-            <MessageWrapper />
+            <MessageWrapper message={message} />
           </div>
         </div>
       </div>

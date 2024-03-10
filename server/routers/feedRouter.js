@@ -7,8 +7,13 @@ router.get('/', feedController.getAllFeed, (req, res) =>
   res.status(200).json(res.locals.results)
 );
 
-router.post('/create', feedController.createFeed, (req, res) => {
-  res.status(200).json(res.locals.newPost);
-});
+router.post(
+  '/create',
+  feedController.createFeed,
+  feedController.getAllFeed,
+  (req, res) => {
+    res.status(200).json(res.locals.results);
+  }
+);
 
 module.exports = router;

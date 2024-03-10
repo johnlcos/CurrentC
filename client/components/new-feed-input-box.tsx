@@ -1,9 +1,13 @@
 'use client';
+import { FeedSchema } from '@/types';
+import { revalidatePath } from 'next/cache';
 import { useState } from 'react';
 
-import { FaUserCircle } from 'react-icons/fa';
+interface NewFeedInputBoxProps {
+  setAllFeed: (data: FeedSchema[]) => void;
+}
 
-export const NewFeedInputBox = () => {
+export const NewFeedInputBox = ({ setAllFeed }: NewFeedInputBoxProps) => {
   const [value, setValue] = useState('');
 
   const handleClick = async () => {
@@ -14,7 +18,8 @@ export const NewFeedInputBox = () => {
       },
       body: JSON.stringify({ message: value }),
     });
-    return response.json();
+    const data = await response.json();
+    setAllFeed(data);
   };
 
   return (

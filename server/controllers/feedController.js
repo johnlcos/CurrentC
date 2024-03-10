@@ -19,8 +19,8 @@ feedController.createFeed = async (req, res, next) => {
     const inputs = ['Wei', true, '@weiwang0305', 200, 10, 5, message];
     queryStr =
       'INSERT INTO feeds (name,verificationstatus,uniqueidentifier,views,likes,dislikes,message) VALUES($1,$2,$3,$4,$5,$6,$7)';
-    const result = await db.query(queryStr, inputs);
-    res.locals.newPost = result.rows;
+    await db.query(queryStr, inputs);
+    next();
   } catch (error) {
     next(error);
   }

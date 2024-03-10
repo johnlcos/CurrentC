@@ -3,6 +3,7 @@
 import { FeedWrapper } from './feed-wrapper';
 import { useState, useEffect } from 'react';
 import { FeedSchema } from '@/types';
+import { NewFeedInputBox } from './new-feed-input-box';
 
 export const MainFeed = () => {
   const [allFeed, setAllFeed] = useState<FeedSchema[]>([]);
@@ -18,6 +19,7 @@ export const MainFeed = () => {
 
   return (
     <div id='main-feed-container' className='p-2'>
+      <NewFeedInputBox setAllFeed={setAllFeed} />
       <div className='flex justify-center items-center flex-col gap-y-5'>
         {allFeed.map((feed) => (
           <FeedWrapper

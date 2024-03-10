@@ -16,8 +16,6 @@ export const MainFeed = () => {
     fetchAllFeed();
   }, []);
 
-  console.log(allFeed);
-
   return (
     <div id='main-feed-container' className='p-2'>
       <div className='flex justify-center items-center flex-col gap-y-5'>

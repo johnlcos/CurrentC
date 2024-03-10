@@ -28,7 +28,7 @@ export const FeedWrapper = ({
   return (
     <div className='outline rounded-2xl h-[200px] w-[600px]'>
       <div className='flex m-2'>
-        <div className=''>
+        <div>
           <FaUserCircle size={35} />
         </div>
         <div className='flex flex-col'>

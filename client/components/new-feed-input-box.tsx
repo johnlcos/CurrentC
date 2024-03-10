@@ -1,6 +1,5 @@
 'use client';
 import { FeedSchema } from '@/types';
-import { revalidatePath } from 'next/cache';
 import { useState } from 'react';
 
 interface NewFeedInputBoxProps {
@@ -20,6 +19,7 @@ export const NewFeedInputBox = ({ setAllFeed }: NewFeedInputBoxProps) => {
     });
     const data = await response.json();
     setAllFeed(data);
+    setValue('');
   };
 
   return (

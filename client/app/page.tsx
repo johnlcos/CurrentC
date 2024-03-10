@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { SideNavBar } from './side-navbar';
 import { MainFeed } from '@/components/main-feed';
 

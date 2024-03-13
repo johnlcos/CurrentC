@@ -1,28 +1,16 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import { users } from './models/user';
+import { db } from './utils/db';
+import userRouter from './routers/userRouter';
 
 dotenv.config();
 
-const connectionString = process.env.DATABASE_URL as string;
 const PORT = process.env.PORT || 8080;
 const app: Express = express();
 
-export const client = postgres(connectionString, {
-  ssl: { rejectUnauthorized: false },
-  prepare: false,
-});
-export const db = drizzle(client);
+app.get('/', async (req: Request, res: Response) => {});
 
-app.get('/', async (req: Request, res: Response) => {
-  const allUsers = await db.select().from(users);
-  console.log(allUsers);
-  return allUsers;
-});
-
-// app.use('/api/feed', feedRouter);
+app.use('/auth', userRouter);
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

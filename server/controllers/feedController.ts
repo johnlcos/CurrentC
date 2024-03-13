@@ -1,4 +1,4 @@
-import { db } from '../models/db';
+import { db } from '../utils/db';
 import { Request, Response, NextFunction } from 'express';
 
 const feedController = {} as FeedController;

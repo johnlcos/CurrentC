@@ -8,14 +8,14 @@ import { NewFeedInputBox } from './new-feed-input-box';
 export const MainFeed = () => {
   const [allFeed, setAllFeed] = useState<FeedSchema[]>([]);
 
-  useEffect(() => {
-    const fetchAllFeed = async () => {
-      const response = await fetch('http://localhost:8080/api/feed');
-      const data = await response.json();
-      setAllFeed(data);
-    };
-    fetchAllFeed();
-  }, []);
+  // useEffect(() => {
+  //   const fetchAllFeed = async () => {
+  //     const response = await fetch('http://localhost:8080/api/feed');
+  //     const data = await response.json();
+  //     setAllFeed(data);
+  //   };
+  //   fetchAllFeed();
+  // }, []);
 
   return (
     <div id='main-feed-container' className='p-2'>

@@ -24,15 +24,18 @@ userController.signup = async (
   next: NextFunction
 ) => {
   try {
-    const { data, error } = await supabase.auth.signUp({
-      email: 'example@email.com',
-      password: 'example-password',
-      options: {
-        emailRedirectTo: 'http://localhost:3000',
-      },
-    });
+    console.log(req.body);
+
+    // const { data, error } = await supabase.auth.signUp({
+    //   email: 'example@email.com',
+    //   password: 'example-password',
+    //   options: {
+    //     emailRedirectTo: 'http://localhost:3000',
+    //   },
+    // });
     next();
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

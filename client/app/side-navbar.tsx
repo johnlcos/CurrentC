@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 export const SideNavBar = () => {
   return (
@@ -21,6 +22,7 @@ export const SideNavBar = () => {
       <button className='border px-5 rounded-lg bg-black text-white'>
         Profile
       </button>
+      <Link href='/signup'>Sign Up</Link>
     </div>
   );
 };

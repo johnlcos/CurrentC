@@ -1,5 +1,5 @@
-const { Router } = require('express');
-const feedController = require('../controllers/feedController');
+import Router from 'express';
+import feedController from '../controllers/feedController';
 
 const router = Router();
 

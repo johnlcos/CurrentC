@@ -15,11 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const userRouter_1 = __importDefault(require("./routers/userRouter"));
-// import cors from 'cors';
+const cors_1 = __importDefault(require("cors"));
+const bodyParser = require("body-parser");
 dotenv_1.default.config();
 const PORT = process.env.PORT || 8080;
 const app = (0, express_1.default)();
-// app.use(cors);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use((0, cors_1.default)());
+app.use(bodyParser.json());
 app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
 app.use('/auth', userRouter_1.default);
 app.listen(PORT, () => {

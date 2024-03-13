@@ -16,33 +16,40 @@ export const FormWrapper = () => {
     try {
       const res = RegisterSchema.parse(data);
       console.log(res);
+      const response = await fetch('http://localhost:8080/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(res),
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
-  // const form = useForm<z.infer<typeof RegisterSchema>>({
-  //   resolver: zodResolver(RegisterSchema),
-  //   defaultValues: {
-  //     email: '',
-  //     password: '',
-  //     username: '',
-  //   },
-  // });
-
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <div className='flex flex-col justify-center items-center space-y-4'>
-          <label htmlFor='email'>
+          <label
+            htmlFor='email'
+            className='flex flex-col justify-center items-center'
+          >
             Email:
             <input placeholder='email' type='email' name='email'></input>
           </label>
-          <label htmlFor='username'>
+          <label
+            htmlFor='username'
+            className='flex flex-col justify-center items-center'
+          >
             Username:
             <input placeholder='username' type='text' name='username'></input>
           </label>
-          <label htmlFor='password'>
+          <label
+            htmlFor='password'
+            className='flex flex-col justify-center items-center'
+          >
             Password:
             <input
               placeholder='password'
@@ -54,14 +61,14 @@ export const FormWrapper = () => {
         </div>
       </form>
       {isRegisterForm && (
-        <div>
+        <div className='flex justify-center my-5'>
           <button onClick={() => setIsRegisterForm(true)}>
             Do not have an account?
           </button>
         </div>
       )}
       {!isRegisterForm && (
-        <div>
+        <div className='flex justify-center my-5'>
           <button onClick={() => setIsRegisterForm(false)}>
             Do you have an account already?
           </button>

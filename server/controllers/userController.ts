@@ -24,7 +24,8 @@ userController.signup = async (
   next: NextFunction
 ) => {
   try {
-    console.log(req.body);
+    const data = await req.body;
+    console.log(data);
 
     // const { data, error } = await supabase.auth.signUp({
     //   email: 'example@email.com',

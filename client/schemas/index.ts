@@ -11,3 +11,12 @@ export const RegisterSchema = z.object({
     message: 'Username is required',
   }),
 });
+
+export const LoginSchema = z.object({
+  email: z.string().email({
+    message: 'Email is required',
+  }),
+  password: z.string().min(1, {
+    message: 'Password is required',
+  }),
+});

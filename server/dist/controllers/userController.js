@@ -19,15 +19,19 @@ const userController = {};
 const supabase = (0, supabase_js_1.createClient)(`${process.env.PROJECT_URL}`, `${process.env.PROJECT_ANON_KEY}`);
 userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const data = yield req.body;
-        console.log(data);
-        // const { data, error } = await supabase.auth.signUp({
-        //   email: 'example@email.com',
-        //   password: 'example-password',
-        //   options: {
-        //     emailRedirectTo: 'http://localhost:3000',
-        //   },
-        // });
+        const { email, password, username } = req.body;
+        console.log(email, password, username);
+        const { data, error } = yield supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                    username: username,
+                },
+            },
+        });
+        console.log('auth data: ', data);
+        console.log('auth error: ', error);
         next();
     }
     catch (error) {

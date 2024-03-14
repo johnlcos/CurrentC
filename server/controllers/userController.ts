@@ -24,16 +24,19 @@ userController.signup = async (
   next: NextFunction
 ) => {
   try {
-    const data = await req.body;
-    console.log(data);
-
-    // const { data, error } = await supabase.auth.signUp({
-    //   email: 'example@email.com',
-    //   password: 'example-password',
-    //   options: {
-    //     emailRedirectTo: 'http://localhost:3000',
-    //   },
-    // });
+    const { email, password, username } = req.body;
+    console.log(email, password, username);
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          username: username,
+        },
+      },
+    });
+    console.log('auth data: ', data);
+    console.log('auth error: ', error);
     next();
   } catch (error) {
     console.log(error);

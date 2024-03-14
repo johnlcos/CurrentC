@@ -1,7 +1,6 @@
 import { SideNavBar } from "./side-navbar";
 import { MainFeed } from "@/components/main-feed";
 // comment
-// another comment
 export default function Home() {
   return (
     <div id="main-container" className="h-full w-full flex">

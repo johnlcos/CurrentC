@@ -14,8 +14,12 @@ const supabase = createClient(
 
 interface UserController {
   signup: (req: Request, res: Response, next: NextFunction) => Promise<void>;
-
   login: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+  getSession: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
 }
 
 userController.signup = async (
@@ -24,16 +28,17 @@ userController.signup = async (
   next: NextFunction
 ) => {
   try {
-    const data = await req.body;
-    console.log(data);
-
-    // const { data, error } = await supabase.auth.signUp({
-    //   email: 'example@email.com',
-    //   password: 'example-password',
-    //   options: {
-    //     emailRedirectTo: 'http://localhost:3000',
-    //   },
-    // });
+    const { email, password, username } = req.body;
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          username: username,
+        },
+      },
+    });
+    res.locals.data = data;
     next();
   } catch (error) {
     console.log(error);
@@ -54,6 +59,23 @@ userController.login = async (
     // await db.query(queryStr, inputs);
     next();
   } catch (error) {
+    next(error);
+  }
+};
+
+userController.getSession = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { data, error } = await supabase.auth.getSession();
+    console.log(data);
+    console.log(error);
+    res.locals.data = data;
+    next();
+  } catch (error) {
+    console.error(error);
     next(error);
   }
 };

@@ -19,15 +19,17 @@ const userController = {};
 const supabase = (0, supabase_js_1.createClient)(`${process.env.PROJECT_URL}`, `${process.env.PROJECT_ANON_KEY}`);
 userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const data = yield req.body;
-        console.log(data);
-        // const { data, error } = await supabase.auth.signUp({
-        //   email: 'example@email.com',
-        //   password: 'example-password',
-        //   options: {
-        //     emailRedirectTo: 'http://localhost:3000',
-        //   },
-        // });
+        const { email, password, username } = req.body;
+        const { data, error } = yield supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                    username: username,
+                },
+            },
+        });
+        res.locals.data = data;
         next();
     }
     catch (error) {
@@ -45,6 +47,19 @@ userController.login = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         next();
     }
     catch (error) {
+        next(error);
+    }
+});
+userController.getSession = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { data, error } = yield supabase.auth.getSession();
+        console.log(data);
+        console.log(error);
+        res.locals.data = data;
+        next();
+    }
+    catch (error) {
+        console.error(error);
         next(error);
     }
 });

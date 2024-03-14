@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { db } from './utils/db';
 import userRouter from './routers/userRouter';
 import cors from 'cors';
-import bodyParser = require('body-parser');
+import bodyParser from 'body-parser';
 
 dotenv.config();
 

@@ -50,4 +50,17 @@ userController.login = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         next(error);
     }
 });
+userController.getSession = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { data, error } = yield supabase.auth.getSession();
+        console.log(data);
+        console.log(error);
+        res.locals.data = data;
+        next();
+    }
+    catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
 exports.default = userController;

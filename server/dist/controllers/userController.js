@@ -20,7 +20,6 @@ const supabase = (0, supabase_js_1.createClient)(`${process.env.PROJECT_URL}`, `
 userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password, username } = req.body;
-        console.log(email, password, username);
         const { data, error } = yield supabase.auth.signUp({
             email: email,
             password: password,
@@ -30,8 +29,7 @@ userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
                 },
             },
         });
-        console.log('auth data: ', data);
-        console.log('auth error: ', error);
+        res.locals.data = data;
         next();
     }
     catch (error) {

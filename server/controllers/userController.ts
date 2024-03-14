@@ -25,7 +25,6 @@ userController.signup = async (
 ) => {
   try {
     const { email, password, username } = req.body;
-    console.log(email, password, username);
     const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
@@ -35,8 +34,7 @@ userController.signup = async (
         },
       },
     });
-    console.log('auth data: ', data);
-    console.log('auth error: ', error);
+    res.locals.data = data;
     next();
   } catch (error) {
     console.log(error);

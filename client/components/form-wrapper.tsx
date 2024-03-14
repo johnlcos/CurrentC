@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { RegisterSchema } from '@/schemas/index';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface FormWrapperProps {
   formType: string;
@@ -10,6 +11,7 @@ interface FormWrapperProps {
 
 export const FormWrapper = ({ formType }: FormWrapperProps) => {
   const [type, setType] = useState<string>(formType);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,7 +19,6 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
     const data = Object.fromEntries(new FormData(e.currentTarget));
     try {
       const res = RegisterSchema.parse(data);
-      console.log(res);
       const response = await fetch('http://localhost:8080/auth/signup', {
         method: 'POST',
         headers: {
@@ -25,6 +26,11 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
         },
         body: JSON.stringify(res),
       });
+
+      const returnedData = await response.json();
+      if (returnedData) {
+        router.push(returnedData.redirectUrl);
+      }
     } catch (error) {
       console.log(error);
     }

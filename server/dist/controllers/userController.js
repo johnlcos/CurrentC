@@ -37,13 +37,14 @@ userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         next(error);
     }
 });
-userController.login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+userController.signin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { message } = req.body;
-        const inputs = ['Wei', true, '@weiwang0305', 200, 10, 5, message];
-        // const queryStr =
-        //   'INSERT INTO feeds (name,verificationstatus,uniqueidentifier,views,likes,dislikes,message) VALUES($1,$2,$3,$4,$5,$6,$7)';
-        // await db.query(queryStr, inputs);
+        const { email, password } = req.body;
+        const { data, error } = yield supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+        res.locals.loggedinUser = data;
         next();
     }
     catch (error) {
@@ -56,6 +57,20 @@ userController.getSession = (req, res, next) => __awaiter(void 0, void 0, void 0
         console.log(data);
         console.log(error);
         res.locals.data = data;
+        next();
+    }
+    catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { data, error } = yield supabase
+            .from('profiles')
+            .select('id, username');
+        console.log(data);
+        res.locals.userInfo = data;
         next();
     }
     catch (error) {

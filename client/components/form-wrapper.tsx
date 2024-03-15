@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { RegisterSchema } from '@/schemas/index';
+import { useState, useEffect } from 'react';
+import { LoginSchema, RegisterSchema } from '@/schemas/index';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -16,27 +16,47 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const data = Object.fromEntries(new FormData(e.currentTarget));
-    try {
-      const res = RegisterSchema.parse(data);
-      const response = await fetch('http://localhost:8080/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(res),
-      });
+    if (type === 'register') {
+      const data = Object.fromEntries(new FormData(e.currentTarget));
+      try {
+        const validatedForm = RegisterSchema.parse(data);
+        const response = await fetch('http://localhost:8080/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(validatedForm),
+        });
 
-      const returnedData = await response.json();
-      if (returnedData) {
-        router.push(returnedData.redirectUrl);
+        const returnedData = await response.json();
+        if (returnedData) {
+          router.push(returnedData.redirectUrl);
+        }
+
+        const sessionRes = await fetch('http://localhost:8080/auth/getSession');
+        const session = await sessionRes.json();
+        console.log(session);
+      } catch (error) {
+        console.log(error);
       }
-
-      const sessionRes = await fetch('http://localhost:8080/auth/getSession');
-      const session = await sessionRes.json();
-      console.log(session);
-    } catch (error) {
-      console.log(error);
+    } else if (type === 'login') {
+      const data = Object.fromEntries(new FormData(e.currentTarget));
+      try {
+        const validatedForm = LoginSchema.parse(data);
+        const response = await fetch('http://localhost:8080/auth/signin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(validatedForm),
+        });
+        const returnedData = await response.json();
+        if (returnedData) {
+          router.push(returnedData.redirectUrl);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -75,14 +95,14 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
           {type === 'login' && (
             <>
               <label
-                htmlFor='user'
+                htmlFor='email'
                 className='flex flex-col justify-center items-start w-full'
               >
-                Username or Email:
+                Email:
                 <input
-                  placeholder='Username or Email'
-                  type='text'
-                  name='user'
+                  placeholder='Email'
+                  type='email'
+                  name='email'
                   className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5'
                 ></input>
               </label>

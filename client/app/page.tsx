@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FaGoogle } from "react-icons/fa";
 
 export default function Home() {
   return (
@@ -15,9 +16,9 @@ export default function Home() {
             <li>
               <Link
                 href="/"
-                className="block w-full text-center bg-green-700 p-3 rounded-lg text-gray-50 font-semibold shadow-md hover:bg-green-600 transition duration-300"
+                className="w-full text-center bg-green-700 p-3 rounded-lg text-gray-50 font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2"
               >
-                Sign up with Google
+                <FaGoogle /> Sign up with Google
               </Link>
             </li>
             <li>
@@ -33,7 +34,7 @@ export default function Home() {
             </li>
             <li>
               <Link
-                href="/signin"
+                href="/login"
                 className="block w-full text-center bg-green-700 p-3 rounded-lg text-gray-50 font-semibold shadow-md hover:bg-green-600 transition duration-300"
               >
                 Sign In

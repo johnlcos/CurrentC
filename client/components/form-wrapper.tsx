@@ -105,17 +105,32 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
             ></input>
           </label>
-          <button type="submit">{formType}</button>
+          <button
+            type="submit"
+            className="w-full text-center bg-green-700 p-3 rounded-lg text-gray-50 font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2"
+          >
+            {formType === "register" ? "Sign Up" : "Log In"}
+          </button>
         </div>
       </form>
       {formType === "register" && (
         <div className="flex justify-center my-5">
-          <Link href="/login">Do you have an account already?</Link>
+          <Link
+            href="/login"
+            className="w-full text-center bg-green-700 p-3 rounded-lg text-gray-50 font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2"
+          >
+            Do you have an account already?
+          </Link>
         </div>
       )}
       {formType === "login" && (
         <div className="flex justify-center my-5">
-          <Link href="/signup">Do not have an account already?</Link>
+          <Link
+            href="/signup"
+            className="w-full text-center bg-green-700 p-3 rounded-lg text-gray-50 font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2"
+          >
+            Do not have an account already?
+          </Link>
         </div>
       )}
     </div>

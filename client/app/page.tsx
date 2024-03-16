@@ -4,8 +4,8 @@ import { FaGoogle } from "react-icons/fa";
 
 export default function Home() {
   return (
-    <div className="h-screen w-screen flex justify-center items-center">
-      <div className="flex flex-col items-center md:flex-row">
+    <div className="h-screen w-screen flex justify-center items-center bg-slate-100">
+      <div className="flex flex-col items-center md:flex-row bg-white pr-8 py-4 rounded-lg shadow-2xl">
         <Image src="/alerty.png" width={300} height={300} alt="Alerty Logo" />
         <div className="flex flex-col gap-2">
           <h2 className="text-center text-xl text-green-900 font-semibold">

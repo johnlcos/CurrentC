@@ -51,9 +51,9 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
         <div className="flex flex-col justify-center items-center space-y-4">
           <label
             htmlFor="email"
-            className="flex flex-col justify-center items-start w-full"
+            className="flex flex-col justify-center items-start w-full text-gray-700 text-sm font-bold mb-2"
           >
-            Email:
+            Email
             <input
               placeholder="Email"
               type="email"
@@ -64,9 +64,9 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
           {formType === "register" && (
             <label
               htmlFor="username"
-              className="flex flex-col justify-center items-start w-full"
+              className="flex flex-col justify-center items-start w-full text-gray-700 text-sm font-bold mb-2"
             >
-              Username:
+              Username
               <input
                 placeholder="Username"
                 type="text"
@@ -77,9 +77,9 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
           )}
           <label
             htmlFor="password"
-            className="flex flex-col justify-center items-start w-full"
+            className="flex flex-col justify-center items-start w-full text-gray-700 text-sm font-bold mb-2"
           >
-            Password:
+            Password
             <input
               placeholder="Password"
               type="password"

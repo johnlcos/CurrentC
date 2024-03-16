@@ -16,13 +16,14 @@ export default function Home() {
   }, []);
 
   return (
-    <div id="main-container" className="h-full w-full flex">
-      <div className="w-1/5">
+    <div id="main-container" className="h-screen w-full flex bg-slate-100">
+      <div className="w-2/12 p-0">
         <SideNavBar />
       </div>
-      <div className="w-4/5">
+      <div className="w-6/12">
         <MainFeed />
       </div>
+      <div className="w-4/12 h-full bg-white"></div>
     </div>
   );
 }

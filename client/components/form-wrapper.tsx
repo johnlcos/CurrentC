@@ -49,49 +49,31 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
     <div>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col justify-center items-center space-y-4">
+          <label
+            htmlFor="email"
+            className="flex flex-col justify-center items-start w-full"
+          >
+            Email:
+            <input
+              placeholder="Email"
+              type="email"
+              name="email"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+            ></input>
+          </label>
           {formType === "register" && (
-            <>
-              <label
-                htmlFor="email"
-                className="flex flex-col justify-center items-start w-full"
-              >
-                Email:
-                <input
-                  placeholder="email"
-                  type="email"
-                  name="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
-                ></input>
-              </label>
-              <label
-                htmlFor="username"
-                className="flex flex-col justify-center items-start w-full"
-              >
-                Username:
-                <input
-                  placeholder="username"
-                  type="text"
-                  name="username"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
-                ></input>
-              </label>
-            </>
-          )}
-          {formType === "login" && (
-            <>
-              <label
-                htmlFor="email"
-                className="flex flex-col justify-center items-start w-full"
-              >
-                Email:
-                <input
-                  placeholder="Email"
-                  type="email"
-                  name="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
-                ></input>
-              </label>
-            </>
+            <label
+              htmlFor="username"
+              className="flex flex-col justify-center items-start w-full"
+            >
+              Username:
+              <input
+                placeholder="Username"
+                type="text"
+                name="username"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+              ></input>
+            </label>
           )}
           <label
             htmlFor="password"
@@ -99,7 +81,7 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
           >
             Password:
             <input
-              placeholder="password"
+              placeholder="Password"
               type="password"
               name="password"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"

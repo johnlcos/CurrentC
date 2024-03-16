@@ -25,49 +25,49 @@ export const SideNavBar = () => {
           className="text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2"
         >
           <BiHome />
-          <p className="hidden md:block">Home</p>
+          <p className="hidden lg:block">Home</p>
         </Link>
         <Link
           href="/"
           className="text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2"
         >
           <BiMapAlt />
-          <p className="hidden md:block">Explore</p>
+          <p className="hidden lg:block">Explore</p>
         </Link>
         <Link
           href="/"
           className="text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2"
         >
           <BiBell />
-          <p className="hidden md:block">Notifications</p>
+          <p className="hidden lg:block">Notifications</p>
         </Link>
         <Link
           href="/"
           className="text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2"
         >
           <BiEnvelope />
-          <p className="hidden md:block">Messages</p>
+          <p className="hidden lg:block">Messages</p>
         </Link>
         <Link
           href="/"
           className="text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2"
         >
           <BiSolidUser />
-          <p className="hidden md:block">Profile</p>
+          <p className="hidden lg:block">Profile</p>
         </Link>
         <Link
           href="/"
           className="text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2"
         >
           <BiCog />
-          <p className="hidden md:block">Settings</p>
+          <p className="hidden lg:block">Settings</p>
         </Link>
         <Link
           href="/"
           className="text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2"
         >
           <BiExit />
-          <p className="hidden md:block">Sign Out</p>
+          <p className="hidden lg:block">Sign Out</p>
         </Link>
       </div>
     </div>

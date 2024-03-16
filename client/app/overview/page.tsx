@@ -20,10 +20,12 @@ export default function Home() {
       <div className="w-2/12 p-0">
         <SideNavBar />
       </div>
-      <div className="w-6/12">
-        <MainFeed />
+      <div className="w-10/12 flex flex-col md:flex-row">
+        <div className="w-full md:w-7/12">
+          <MainFeed />
+        </div>
+        <div className="w-full md:w-5/12 h-full bg-white"></div>
       </div>
-      <div className="w-4/12 h-full bg-white"></div>
     </div>
   );
 }

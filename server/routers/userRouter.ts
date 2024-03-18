@@ -15,7 +15,7 @@ router.post('/signin', userController.signin, (req, res) => {
 });
 
 router.get(
-  '/getSession',
+  '/session',
   userController.getSession,
   (req: Request, res: Response) => {
     res.status(200).json({ data: res.locals.data });

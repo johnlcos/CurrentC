@@ -15,7 +15,7 @@ router.post('/signin', userController_1.default.signin, (req, res) => {
         redirectUrl: 'http://localhost:3000/overview',
     });
 });
-router.get('/getSession', userController_1.default.getSession, (req, res) => {
+router.get('/session', userController_1.default.getSession, (req, res) => {
     res.status(200).json({ data: res.locals.data });
 });
 router.get('/signout', userController_1.default.signout, (req, res) => {

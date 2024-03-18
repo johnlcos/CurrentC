@@ -4,6 +4,7 @@ import { db } from './utils/db';
 import userRouter from './routers/userRouter';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import supabase from './utils/supabase';
 
 dotenv.config();
 
@@ -14,9 +15,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('/', async (req: Request, res: Response) => {});
-
 app.use('/auth', userRouter);
+
+app.use('*', async (req: Request, res: Response) => {
+  const { data, error } = await supabase.auth.getSession();
+  console.log('session', data);
+});
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

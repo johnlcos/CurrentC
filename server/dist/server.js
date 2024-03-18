@@ -25,7 +25,7 @@ app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
 app.use('/auth', userRouter_1.default);
-app.use('*', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.use('/overview', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { data, error } = yield supabase_1.default.auth.getSession();
     console.log('session', data);
 }));

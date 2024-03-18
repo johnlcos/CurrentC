@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 app.use('/auth', userRouter);
 
-app.use('*', async (req: Request, res: Response) => {
+app.use('/overview', async (req: Request, res: Response) => {
   const { data, error } = await supabase.auth.getSession();
   console.log('session', data);
 });

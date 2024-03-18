@@ -87,7 +87,6 @@ userController.getUserInfo = async (
     const { data, error } = await supabase
       .from('profiles')
       .select('id, username');
-    console.log(data);
     res.locals.userInfo = data;
     next();
   } catch (error) {

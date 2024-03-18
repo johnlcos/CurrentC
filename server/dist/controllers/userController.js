@@ -64,7 +64,6 @@ userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 
         const { data, error } = yield supabase_1.default
             .from('profiles')
             .select('id, username');
-        console.log(data);
         res.locals.userInfo = data;
         next();
     }

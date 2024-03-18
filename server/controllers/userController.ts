@@ -14,8 +14,13 @@ const supabase = createClient(
 
 interface UserController {
   signup: (req: Request, res: Response, next: NextFunction) => Promise<void>;
-  login: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+  signin: (req: Request, res: Response, next: NextFunction) => Promise<void>;
   getSession: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  getUserInfo: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -46,17 +51,18 @@ userController.signup = async (
   }
 };
 
-userController.login = async (
+userController.signin = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { message } = req.body;
-    const inputs = ['Wei', true, '@weiwang0305', 200, 10, 5, message];
-    // const queryStr =
-    //   'INSERT INTO feeds (name,verificationstatus,uniqueidentifier,views,likes,dislikes,message) VALUES($1,$2,$3,$4,$5,$6,$7)';
-    // await db.query(queryStr, inputs);
+    const { email, password } = req.body;
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    res.locals.loggedinUser = data;
     next();
   } catch (error) {
     next(error);
@@ -73,6 +79,24 @@ userController.getSession = async (
     console.log(data);
     console.log(error);
     res.locals.data = data;
+    next();
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+userController.getUserInfo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id, username');
+    console.log(data);
+    res.locals.userInfo = data;
     next();
   } catch (error) {
     console.error(error);

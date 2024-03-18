@@ -1,16 +1,14 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { RegisterSchema } from '@/schemas/index';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { LoginSchema, RegisterSchema } from "@/schemas/index";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface FormWrapperProps {
   formType: string;
 }
 
 export const FormWrapper = ({ formType }: FormWrapperProps) => {
-  const [type, setType] = useState<string>(formType);
   const router = useRouter();
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -18,13 +16,20 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
 
     const data = Object.fromEntries(new FormData(e.currentTarget));
     try {
-      const res = RegisterSchema.parse(data);
-      const response = await fetch('http://localhost:8080/auth/signup', {
-        method: 'POST',
+      const validatedForm =
+        formType === "register"
+          ? RegisterSchema.parse(data)
+          : LoginSchema.parse(data);
+      const fetchURL =
+        formType === "register"
+          ? "http://localhost:8080/auth/signup"
+          : "http://localhost:8080/auth/signin";
+      const response = await fetch(fetchURL, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(res),
+        body: JSON.stringify(validatedForm),
       });
 
       const returnedData = await response.json();
@@ -32,7 +37,7 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
         router.push(returnedData.redirectUrl);
       }
 
-      const sessionRes = await fetch('http://localhost:8080/auth/getSession');
+      const sessionRes = await fetch("http://localhost:8080/auth/getSession");
       const session = await sessionRes.json();
       console.log(session);
     } catch (error) {
@@ -43,74 +48,71 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div className='flex flex-col justify-center items-center space-y-4'>
-          {type === 'register' && (
-            <>
-              <label
-                htmlFor='email'
-                className='flex flex-col justify-center items-start w-full'
-              >
-                Email:
-                <input
-                  placeholder='email'
-                  type='email'
-                  name='email'
-                  className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5'
-                ></input>
-              </label>
-              <label
-                htmlFor='username'
-                className='flex flex-col justify-center items-start w-full'
-              >
-                Username:
-                <input
-                  placeholder='username'
-                  type='text'
-                  name='username'
-                  className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5'
-                ></input>
-              </label>
-            </>
-          )}
-          {type === 'login' && (
-            <>
-              <label
-                htmlFor='user'
-                className='flex flex-col justify-center items-start w-full'
-              >
-                Username or Email:
-                <input
-                  placeholder='Username or Email'
-                  type='text'
-                  name='user'
-                  className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5'
-                ></input>
-              </label>
-            </>
-          )}
+        <div className="flex flex-col justify-center items-center space-y-4">
           <label
-            htmlFor='password'
-            className='flex flex-col justify-center items-start w-full'
+            htmlFor="email"
+            className="flex flex-col justify-center items-start w-full text-gray-700 text-sm font-bold mb-2"
           >
-            Password:
+            Email
             <input
-              placeholder='password'
-              type='password'
-              name='password'
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5'
+              placeholder="Email"
+              type="email"
+              name="email"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
             ></input>
           </label>
-          <button type='submit'>{type}</button>
+          {formType === "register" && (
+            <label
+              htmlFor="username"
+              className="flex flex-col justify-center items-start w-full text-gray-700 text-sm font-bold mb-2"
+            >
+              Username
+              <input
+                placeholder="Username"
+                type="text"
+                name="username"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+              ></input>
+            </label>
+          )}
+          <label
+            htmlFor="password"
+            className="flex flex-col justify-center items-start w-full text-gray-700 text-sm font-bold mb-2"
+          >
+            Password
+            <input
+              placeholder="Password"
+              type="password"
+              name="password"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+            ></input>
+          </label>
+          <button
+            type="submit"
+            className="w-full text-center bg-green-700 p-3 rounded-lg text-gray-50 font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2"
+          >
+            {formType === "register" ? "Sign Up" : "Log In"}
+          </button>
         </div>
       </form>
-      {type === 'register' && (
-        <div className='flex justify-center my-5'>
-          <Link href='/login'>Do you have an account already?</Link>
+      {formType === "register" && (
+        <div className="flex justify-center my-5">
+          <Link
+            href="/login"
+            className="w-full text-center bg-green-700 p-3 rounded-lg text-gray-50 font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2"
+          >
+            Do you have an account already?
+          </Link>
         </div>
       )}
-      {type === 'login' && (
-        <div className='flex justify-center my-5'>
-          <Link href='/signup'>Do not have an account already?</Link>
+      {formType === "login" && (
+        <div className="flex justify-center my-5">
+          <Link
+            href="/signup"
+            className="w-full text-center bg-green-700 p-3 rounded-lg text-gray-50 font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2"
+          >
+            Do not have an account already?
+          </Link>
         </div>
       )}
     </div>

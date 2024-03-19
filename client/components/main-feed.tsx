@@ -24,7 +24,7 @@ export const MainFeed = () => {
         {allFeed.map((feed) => (
           <FeedWrapper
             key={feed.id}
-            author={feed.author}
+            author={feed.profiles.username}
             id={feed.id}
             likes={feed.like_count}
             dislikes={feed.dislike_count}

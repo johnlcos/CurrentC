@@ -11,7 +11,6 @@ export const NewFeedInputBox = ({ setAllFeed }: NewFeedInputBoxProps) => {
   const [value, setValue] = useState('');
 
   const session = useContext(OverviewContext);
-  console.log('session from context: ', session);
 
   const handleClick = async () => {
     const response = await fetch('http://localhost:8080/feed/create', {

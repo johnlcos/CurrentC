@@ -39,7 +39,6 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
 
       const sessionRes = await fetch('http://localhost:8080/auth/session');
       const session = await sessionRes.json();
-      // console.log(session);
     } catch (error) {
       console.log(error);
     }

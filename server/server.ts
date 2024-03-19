@@ -1,11 +1,8 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import { db } from './utils/db';
-import userRouter from './routers/userRouter';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import supabase from './utils/supabase';
-import { createServer } from 'http';
 
 dotenv.config();
 
@@ -16,7 +13,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(bodyParser.json());
 
+import userRouter from './routers/userRouter';
+import feedRouter from './routers/feedRouter';
+
 app.use('/auth', userRouter);
+app.use('/feed', feedRouter);
 
 app.use('/overview', async (req: Request, res: Response) => {
   const { data, error } = await supabase.auth.getSession();

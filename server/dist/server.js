@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const userRouter_1 = __importDefault(require("./routers/userRouter"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const supabase_1 = __importDefault(require("./utils/supabase"));
@@ -24,7 +23,10 @@ const app = (0, express_1.default)();
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
+const userRouter_1 = __importDefault(require("./routers/userRouter"));
+const feedRouter_1 = __importDefault(require("./routers/feedRouter"));
 app.use('/auth', userRouter_1.default);
+app.use('/feed', feedRouter_1.default);
 app.use('/overview', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { data, error } = yield supabase_1.default.auth.getSession();
     console.log('session', data);

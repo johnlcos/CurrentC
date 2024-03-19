@@ -1,6 +1,7 @@
 'use client';
 import { FeedSchema } from '@/types';
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { OverviewContext } from '@/app/(protected)/layout';
 
 interface NewFeedInputBoxProps {
   setAllFeed: (data: FeedSchema[]) => void;
@@ -9,13 +10,15 @@ interface NewFeedInputBoxProps {
 export const NewFeedInputBox = ({ setAllFeed }: NewFeedInputBoxProps) => {
   const [value, setValue] = useState('');
 
+  const session = useContext(OverviewContext);
+
   const handleClick = async () => {
-    const response = await fetch('http://localhost:8080/api/feed/create', {
+    const response = await fetch('http://localhost:8080/feed/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ message: value }),
+      body: JSON.stringify({ message: value, authorId: session?.user.id }),
     });
     const data = await response.json();
     setAllFeed(data);

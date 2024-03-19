@@ -1,28 +1,44 @@
 'use client';
 
-import { useState } from 'react';
-import * as z from 'zod';
-import { RegisterSchema } from '@/schemas/index';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { LoginSchema, RegisterSchema } from '@/schemas/index';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-export const FormWrapper = () => {
-  const [isRegisterForm, setIsRegisterForm] = useState<boolean>(true);
+interface FormWrapperProps {
+  formType: string;
+}
+
+export const FormWrapper = ({ formType }: FormWrapperProps) => {
+  const router = useRouter();
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const data = Object.fromEntries(new FormData(e.currentTarget));
     try {
-      const res = RegisterSchema.parse(data);
-      console.log(res);
-      const response = await fetch('http://localhost:8080/auth/signup', {
+      const validatedForm =
+        formType === 'register'
+          ? RegisterSchema.parse(data)
+          : LoginSchema.parse(data);
+      const fetchURL =
+        formType === 'register'
+          ? 'http://localhost:8080/auth/signup'
+          : 'http://localhost:8080/auth/signin';
+      const response = await fetch(fetchURL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(res),
+        body: JSON.stringify(validatedForm),
       });
+
+      const returnedData = await response.json();
+      if (returnedData) {
+        router.push(returnedData.redirectUrl);
+      }
+
+      const sessionRes = await fetch('http://localhost:8080/auth/session');
+      const session = await sessionRes.json();
     } catch (error) {
       console.log(error);
     }
@@ -34,44 +50,68 @@ export const FormWrapper = () => {
         <div className='flex flex-col justify-center items-center space-y-4'>
           <label
             htmlFor='email'
-            className='flex flex-col justify-center items-center'
+            className='flex flex-col justify-center items-start w-full text-gray-700 text-sm font-bold mb-2'
           >
-            Email:
-            <input placeholder='email' type='email' name='email'></input>
-          </label>
-          <label
-            htmlFor='username'
-            className='flex flex-col justify-center items-center'
-          >
-            Username:
-            <input placeholder='username' type='text' name='username'></input>
-          </label>
-          <label
-            htmlFor='password'
-            className='flex flex-col justify-center items-center'
-          >
-            Password:
+            Email
             <input
-              placeholder='password'
-              type='password'
-              name='password'
+              placeholder='Email'
+              type='email'
+              name='email'
+              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5'
             ></input>
           </label>
-          <button type='submit'>Login</button>
+          {formType === 'register' && (
+            <label
+              htmlFor='username'
+              className='flex flex-col justify-center items-start w-full text-gray-700 text-sm font-bold mb-2'
+            >
+              Username
+              <input
+                placeholder='Username'
+                type='text'
+                name='username'
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5'
+              ></input>
+            </label>
+          )}
+          <label
+            htmlFor='password'
+            className='flex flex-col justify-center items-start w-full text-gray-700 text-sm font-bold mb-2'
+          >
+            Password
+            <input
+              placeholder='Password'
+              type='password'
+              name='password'
+              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5'
+            ></input>
+          </label>
+          <button
+            type='submit'
+            className='w-full text-center bg-green-700 p-3 rounded-lg text-gray-50 font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2'
+          >
+            {formType === 'register' ? 'Sign Up' : 'Log In'}
+          </button>
         </div>
       </form>
-      {isRegisterForm && (
+      {formType === 'register' && (
         <div className='flex justify-center my-5'>
-          <button onClick={() => setIsRegisterForm(true)}>
-            Do not have an account?
-          </button>
+          <Link
+            href='/login'
+            className='w-full text-center bg-green-700 p-3 rounded-lg text-gray-50 font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2'
+          >
+            Do you have an account already?
+          </Link>
         </div>
       )}
-      {!isRegisterForm && (
+      {formType === 'login' && (
         <div className='flex justify-center my-5'>
-          <button onClick={() => setIsRegisterForm(false)}>
-            Do you have an account already?
-          </button>
+          <Link
+            href='/signup'
+            className='w-full text-center bg-green-700 p-3 rounded-lg text-gray-50 font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2'
+          >
+            Do not have an account already?
+          </Link>
         </div>
       )}
     </div>

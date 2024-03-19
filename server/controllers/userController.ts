@@ -34,10 +34,12 @@ userController.signup = async (
       options: {
         data: {
           username: username,
+          profile_avatar: 'PROFILE',
         },
       },
     });
     res.locals.data = data;
+    console.log(error);
     next();
   } catch (error) {
     console.log(error);

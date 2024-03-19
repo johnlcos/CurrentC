@@ -23,10 +23,12 @@ userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             options: {
                 data: {
                     username: username,
+                    profile_avatar: 'PROFILE',
                 },
             },
         });
         res.locals.data = data;
+        console.log(error);
         next();
     }
     catch (error) {

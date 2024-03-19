@@ -15,6 +15,13 @@
       "when": 1710444344196,
       "tag": "0001_slow_sentinel",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1710800155744,
+      "tag": "0002_dark_expediter",
+      "breakpoints": true
     }
   ]
 }

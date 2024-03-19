@@ -16,7 +16,6 @@ export default function Layout({
       const response = await fetch('http://localhost:8080/auth/session');
       const json = await response.json();
       const session = json.data.session;
-      console.log(session);
       if (!session) {
         router.push('http://localhost:3000/');
       } else {

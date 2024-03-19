@@ -12,24 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const supabase_js_1 = require("@supabase/supabase-js");
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+const supabase_1 = __importDefault(require("../utils/supabase"));
 const userController = {};
-const supabase = (0, supabase_js_1.createClient)(`${process.env.PROJECT_URL}`, `${process.env.PROJECT_ANON_KEY}`);
 userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password, username } = req.body;
-        const { data, error } = yield supabase.auth.signUp({
+        const { data, error } = yield supabase_1.default.auth.signUp({
             email: email,
             password: password,
             options: {
                 data: {
                     username: username,
+                    profile_avatar: 'PROFILE',
                 },
             },
         });
         res.locals.data = data;
+        console.log(error);
         next();
     }
     catch (error) {
@@ -40,7 +39,7 @@ userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 userController.signin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
-        const { data, error } = yield supabase.auth.signInWithPassword({
+        const { data, error } = yield supabase_1.default.auth.signInWithPassword({
             email,
             password,
         });
@@ -53,9 +52,7 @@ userController.signin = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 });
 userController.getSession = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { data, error } = yield supabase.auth.getSession();
-        console.log(data);
-        console.log(error);
+        const { data, error } = yield supabase_1.default.auth.getSession();
         res.locals.data = data;
         next();
     }
@@ -66,15 +63,24 @@ userController.getSession = (req, res, next) => __awaiter(void 0, void 0, void 0
 });
 userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { data, error } = yield supabase
+        const { data, error } = yield supabase_1.default
             .from('profiles')
             .select('id, username');
-        console.log(data);
         res.locals.userInfo = data;
         next();
     }
     catch (error) {
-        console.error(error);
+        console.log(error);
+        next(error);
+    }
+});
+userController.signout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { error } = yield supabase_1.default.auth.signOut();
+        next();
+    }
+    catch (error) {
+        console.log(error);
         next(error);
     }
 });

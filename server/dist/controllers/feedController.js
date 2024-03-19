@@ -8,13 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const supabase_1 = __importDefault(require("../utils/supabase"));
 const feedController = {};
 feedController.getAllFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // const queryStr = 'SELECT * from feeds';
-        // const result = await db.query(queryStr);
-        // res.locals.results = result.rows;
+        const { data, error } = yield supabase_1.default
+            .from('feeds')
+            .select('id, created_at, content, like_count, dislike_count, profiles(username)');
+        console.log('feeds data: ', data);
+        res.locals.results = data;
         next();
     }
     catch (error) {
@@ -23,11 +29,10 @@ feedController.getAllFeed = (req, res, next) => __awaiter(void 0, void 0, void 0
 });
 feedController.createFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { message } = req.body;
-        const inputs = ['Wei', true, '@weiwang0305', 200, 10, 5, message];
-        // const queryStr =
-        //   'INSERT INTO feeds (name,verificationstatus,uniqueidentifier,views,likes,dislikes,message) VALUES($1,$2,$3,$4,$5,$6,$7)';
-        // await db.query(queryStr, inputs);
+        const { message, authorId } = req.body;
+        const { error } = yield supabase_1.default
+            .from('feeds')
+            .insert({ content: message, author: authorId });
         next();
     }
     catch (error) {

@@ -1,20 +1,14 @@
 import { db } from '../utils/db';
 import { Request, Response, NextFunction } from 'express';
 import { createClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import supabase from '../utils/supabase';
 
 const userController = {} as UserController;
-
-const supabase = createClient(
-  `${process.env.PROJECT_URL}`,
-  `${process.env.PROJECT_ANON_KEY}`
-);
 
 interface UserController {
   signup: (req: Request, res: Response, next: NextFunction) => Promise<void>;
   signin: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+  signout: (req: Request, res: Response, next: NextFunction) => Promise<void>;
   getSession: (
     req: Request,
     res: Response,
@@ -40,10 +34,12 @@ userController.signup = async (
       options: {
         data: {
           username: username,
+          profile_avatar: 'PROFILE',
         },
       },
     });
     res.locals.data = data;
+    console.log(error);
     next();
   } catch (error) {
     console.log(error);
@@ -76,8 +72,6 @@ userController.getSession = async (
 ) => {
   try {
     const { data, error } = await supabase.auth.getSession();
-    console.log(data);
-    console.log(error);
     res.locals.data = data;
     next();
   } catch (error) {
@@ -95,11 +89,24 @@ userController.getUserInfo = async (
     const { data, error } = await supabase
       .from('profiles')
       .select('id, username');
-    console.log(data);
     res.locals.userInfo = data;
     next();
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    next(error);
+  }
+};
+
+userController.signout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { error } = await supabase.auth.signOut();
+    next();
+  } catch (error) {
+    console.log(error);
     next(error);
   }
 };

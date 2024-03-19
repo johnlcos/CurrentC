@@ -1,5 +1,6 @@
 import { db } from '../utils/db';
 import { Request, Response, NextFunction } from 'express';
+import supabase from '../utils/supabase';
 
 const feedController = {} as FeedController;
 
@@ -23,9 +24,13 @@ feedController.getAllFeed = async (
   next: NextFunction
 ) => {
   try {
-    // const queryStr = 'SELECT * from feeds';
-    // const result = await db.query(queryStr);
-    // res.locals.results = result.rows;
+    const { data, error } = await supabase
+      .from('feeds')
+      .select(
+        'id, created_at, content, like_count, dislike_count, profiles(username)'
+      );
+    console.log('feeds data: ', data);
+    res.locals.results = data;
     next();
   } catch (error) {
     next(error);
@@ -38,11 +43,10 @@ feedController.createFeed = async (
   next: NextFunction
 ) => {
   try {
-    const { message } = req.body;
-    const inputs = ['Wei', true, '@weiwang0305', 200, 10, 5, message];
-    // const queryStr =
-    //   'INSERT INTO feeds (name,verificationstatus,uniqueidentifier,views,likes,dislikes,message) VALUES($1,$2,$3,$4,$5,$6,$7)';
-    // await db.query(queryStr, inputs);
+    const { message, authorId } = req.body;
+    const { error } = await supabase
+      .from('feeds')
+      .insert({ content: message, author: authorId });
     next();
   } catch (error) {
     next(error);

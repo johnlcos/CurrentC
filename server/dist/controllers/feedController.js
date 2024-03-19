@@ -17,8 +17,8 @@ const feedController = {};
 feedController.getAllFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { data, error } = yield supabase_1.default
-            .from('profiles')
-            .select('id, username, feeds (created_at,content,like_count,dislike_count)');
+            .from('feeds')
+            .select('id, created_at, content, like_count, dislike_count, profiles(username)');
         console.log('feeds data: ', data);
         res.locals.results = data;
         next();

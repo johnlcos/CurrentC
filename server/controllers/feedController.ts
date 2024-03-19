@@ -25,9 +25,9 @@ feedController.getAllFeed = async (
 ) => {
   try {
     const { data, error } = await supabase
-      .from('profiles')
+      .from('feeds')
       .select(
-        'id, username, feeds (created_at,content,like_count,dislike_count)'
+        'id, created_at, content, like_count, dislike_count, profiles(username)'
       );
     console.log('feeds data: ', data);
     res.locals.results = data;

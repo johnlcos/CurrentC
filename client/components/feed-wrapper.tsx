@@ -1,8 +1,6 @@
 import { FaUserCircle } from 'react-icons/fa';
 import { BiLike } from 'react-icons/bi';
 import { BiDislike } from 'react-icons/bi';
-import { GoUnverified } from 'react-icons/go';
-import { GoVerified } from 'react-icons/go';
 
 import { MessageWrapper } from './message-wrapper';
 

@@ -1,18 +1,24 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { SearchResults } from "./search-results";
+import { useDebounce } from "use-debounce";
 
 export const UserSearch = () => {
   const router = useRouter();
   const [text, setText] = useState<string>("");
+  const [query] = useDebounce(text, 500);
 
   const handleSearch = () => {
-    console.log("in handleSearch: ", text);
-    router.push(`/overview?search=${text}`);
+    router.push(`/overview?search=${query}`);
   };
+
+  useEffect(() => {
+    if (!query) router.push("/overview");
+    else handleSearch();
+  }, [query]);
 
   return (
     <div className="bg-green-700 p-4 shadow-sm">

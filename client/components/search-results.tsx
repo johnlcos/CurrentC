@@ -1,9 +1,10 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import Link from "next/link";
+import { OverviewContext } from "@/app/(protected)/layout";
 
 interface SearchResultType {
   id: string;
@@ -15,6 +16,7 @@ export const SearchResults = () => {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
   const searchParams = useSearchParams();
   const searchValue = searchParams.get("search");
+  const session = useContext(OverviewContext);
 
   const fetchSearchResults = async () => {
     if (searchValue) {
@@ -44,7 +46,7 @@ export const SearchResults = () => {
               <FaUserCircle />
               <h1>{result.username}</h1>
             </Link>
-            <button>Follow</button>
+            {result.id !== session?.user.id ? <button>Follow</button> : null}
           </div>
         );
       })}

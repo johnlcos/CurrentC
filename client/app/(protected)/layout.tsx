@@ -4,7 +4,7 @@ import { useEffect, useState, createContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { Session } from '@supabase/gotrue-js/src/lib/types';
 
-export const OverviewContext = createContext<Session | null>(null);
+export const SessionContext = createContext<Session | null>(null);
 
 export default function Layout({
   children,
@@ -31,7 +31,7 @@ export default function Layout({
     getCurrentSession();
   }, [router]);
   return (
-    <OverviewContext.Provider value={userSession}>
+    <SessionContext.Provider value={userSession}>
       {!isLoading && (
         <div className='flex'>
           <div className='w-2/12 p-0'>
@@ -40,6 +40,6 @@ export default function Layout({
           <div className='w-10/12'>{children}</div>
         </div>
       )}
-    </OverviewContext.Provider>
+    </SessionContext.Provider>
   );
 }

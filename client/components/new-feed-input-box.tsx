@@ -1,7 +1,7 @@
 'use client';
 import { FeedSchema } from '@/types';
 import { useState, useEffect, useContext } from 'react';
-import { OverviewContext } from '@/app/(protected)/layout';
+import { SessionContext } from '@/app/(protected)/layout';
 
 interface NewFeedInputBoxProps {
   setAllFeed: (data: FeedSchema[]) => void;
@@ -10,7 +10,7 @@ interface NewFeedInputBoxProps {
 export const NewFeedInputBox = ({ setAllFeed }: NewFeedInputBoxProps) => {
   const [value, setValue] = useState('');
 
-  const session = useContext(OverviewContext);
+  const session = useContext(SessionContext);
 
   const handleClick = async () => {
     if (session) {

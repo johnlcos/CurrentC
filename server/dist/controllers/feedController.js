@@ -18,7 +18,8 @@ feedController.getAllFeed = (req, res, next) => __awaiter(void 0, void 0, void 0
     try {
         const { data, error } = yield supabase_1.default
             .from('feeds')
-            .select('id, created_at, content, like_count, dislike_count, profiles(username)');
+            .select('id, created_at, content, like_count, dislike_count, profiles(username)')
+            .order('created_at', { ascending: false });
         console.log('feeds data: ', data);
         res.locals.results = data;
         next();
@@ -33,7 +34,6 @@ feedController.createFeed = (req, res, next) => __awaiter(void 0, void 0, void 0
         const { error } = yield supabase_1.default
             .from('feeds')
             .insert({ content: message, authorId });
-        console.log(error);
         next();
     }
     catch (error) {

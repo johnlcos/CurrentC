@@ -10,6 +10,7 @@ interface FeedWrapperProps {
   likes: number;
   dislikes: number;
   content: string;
+  created_at: string;
 }
 
 export const FeedWrapper = ({
@@ -18,6 +19,7 @@ export const FeedWrapper = ({
   likes,
   dislikes,
   content,
+  created_at,
 }: FeedWrapperProps) => {
   return (
     <div className='outline rounded-2xl h-[200px] w-[400px]'>
@@ -31,6 +33,7 @@ export const FeedWrapper = ({
             className='flex justify-start items-center ml-3'
           >
             <span className='mr-5'>{author}</span>
+            <span>{created_at.slice(0, 10)}</span>
           </div>
           <div className='ml-3'>
             <MessageWrapper message={content} />

@@ -8,4 +8,5 @@ export interface FeedSchema {
   like_count: number;
   dislike_count: number;
   content: string;
+  created_at: string;
 }

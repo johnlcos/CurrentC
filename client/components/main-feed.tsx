@@ -29,6 +29,7 @@ export const MainFeed = () => {
             likes={feed.like_count}
             dislikes={feed.dislike_count}
             content={feed.content}
+            created_at={feed.created_at}
           />
         ))}
       </div>

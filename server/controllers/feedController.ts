@@ -46,7 +46,8 @@ feedController.createFeed = async (
     const { message, authorId } = req.body;
     const { error } = await supabase
       .from('feeds')
-      .insert({ content: message, author: authorId });
+      .insert({ content: message, authorId });
+    console.log(error);
     next();
   } catch (error) {
     next(error);

@@ -32,7 +32,8 @@ feedController.createFeed = (req, res, next) => __awaiter(void 0, void 0, void 0
         const { message, authorId } = req.body;
         const { error } = yield supabase_1.default
             .from('feeds')
-            .insert({ content: message, author: authorId });
+            .insert({ content: message, authorId });
+        console.log(error);
         next();
     }
     catch (error) {

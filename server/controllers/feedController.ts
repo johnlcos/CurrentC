@@ -28,7 +28,8 @@ feedController.getAllFeed = async (
       .from('feeds')
       .select(
         'id, created_at, content, like_count, dislike_count, profiles(username)'
-      );
+      )
+      .order('created_at', { ascending: false });
     console.log('feeds data: ', data);
     res.locals.results = data;
     next();
@@ -46,7 +47,7 @@ feedController.createFeed = async (
     const { message, authorId } = req.body;
     const { error } = await supabase
       .from('feeds')
-      .insert({ content: message, author: authorId });
+      .insert({ content: message, authorId });
     next();
   } catch (error) {
     next(error);

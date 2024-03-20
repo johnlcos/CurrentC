@@ -16,7 +16,7 @@ export const MainFeed = () => {
     };
     fetchAllFeed();
   }, []);
-
+  console.log(allFeed);
   return (
     <div id='main-feed-container' className='p-2'>
       <NewFeedInputBox setAllFeed={setAllFeed} />
@@ -29,6 +29,7 @@ export const MainFeed = () => {
             likes={feed.like_count}
             dislikes={feed.dislike_count}
             content={feed.content}
+            created_at={feed.created_at}
           />
         ))}
       </div>

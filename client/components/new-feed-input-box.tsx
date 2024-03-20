@@ -13,16 +13,20 @@ export const NewFeedInputBox = ({ setAllFeed }: NewFeedInputBoxProps) => {
   const session = useContext(OverviewContext);
 
   const handleClick = async () => {
-    const response = await fetch('http://localhost:8080/feed/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message: value, authorId: session?.user.id }),
-    });
-    const data = await response.json();
-    setAllFeed(data);
-    setValue('');
+    if (session) {
+      const response = await fetch('http://localhost:8080/feed/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: value, authorId: session.user.id }),
+      });
+      const data = await response.json();
+      setAllFeed(data);
+      setValue('');
+    } else {
+      return null;
+    }
   };
 
   return (

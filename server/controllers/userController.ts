@@ -1,7 +1,7 @@
-import { db } from '../utils/db';
-import { Request, Response, NextFunction } from 'express';
-import { createClient } from '@supabase/supabase-js';
-import supabase from '../utils/supabase';
+import { db } from "../utils/db";
+import { Request, Response, NextFunction } from "express";
+import { createClient } from "@supabase/supabase-js";
+import supabase from "../utils/supabase";
 
 const userController = {} as UserController;
 
@@ -15,6 +15,11 @@ interface UserController {
     next: NextFunction
   ) => Promise<void>;
   getUserInfo: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  searchUsers: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -34,7 +39,7 @@ userController.signup = async (
       options: {
         data: {
           username: username,
-          profile_avatar: 'PROFILE',
+          profile_avatar: "PROFILE",
         },
       },
     });
@@ -87,8 +92,8 @@ userController.getUserInfo = async (
 ) => {
   try {
     const { data, error } = await supabase
-      .from('profiles')
-      .select('id, username');
+      .from("profiles")
+      .select("id, username");
     res.locals.userInfo = data;
     next();
   } catch (error) {
@@ -104,6 +109,29 @@ userController.signout = async (
 ) => {
   try {
     const { error } = await supabase.auth.signOut();
+    next();
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+userController.searchUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (typeof req.query.name === "string") {
+      const name = req.query.name;
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, username, profile_avatar")
+        .textSearch("username", name);
+      res.locals.searchResults = data;
+      console.log("server search results: ", data);
+    }
+
     next();
   } catch (error) {
     console.log(error);

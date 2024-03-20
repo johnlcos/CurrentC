@@ -23,7 +23,7 @@ userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             options: {
                 data: {
                     username: username,
-                    profile_avatar: 'PROFILE',
+                    profile_avatar: "PROFILE",
                 },
             },
         });
@@ -64,8 +64,8 @@ userController.getSession = (req, res, next) => __awaiter(void 0, void 0, void 0
 userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { data, error } = yield supabase_1.default
-            .from('profiles')
-            .select('id, username');
+            .from("profiles")
+            .select("id, username");
         res.locals.userInfo = data;
         next();
     }
@@ -77,6 +77,24 @@ userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 
 userController.signout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { error } = yield supabase_1.default.auth.signOut();
+        next();
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+userController.searchUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (typeof req.query.name === "string") {
+            const name = req.query.name;
+            const { data, error } = yield supabase_1.default
+                .from("profiles")
+                .select("id, username, profile_avatar")
+                .textSearch("username", name);
+            res.locals.searchResults = data;
+            console.log("server search results: ", data);
+        }
         next();
     }
     catch (error) {

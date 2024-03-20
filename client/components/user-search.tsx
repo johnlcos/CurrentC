@@ -1,13 +1,13 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
+import { SearchResults } from "./search-results";
 
 export const UserSearch = () => {
   const router = useRouter();
   const [text, setText] = useState<string>("");
-  const search = useSearchParams();
 
   const handleSearch = () => {
     console.log("in handleSearch: ", text);
@@ -27,6 +27,7 @@ export const UserSearch = () => {
           className="w-full"
         />
       </div>
+      <SearchResults />
     </div>
   );
 };

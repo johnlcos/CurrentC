@@ -1,6 +1,6 @@
 'use client';
 import { FeedSchema } from '@/types';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { SessionContext } from '@/app/(protected)/layout';
 
 interface NewFeedInputBoxProps {

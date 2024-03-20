@@ -4,7 +4,6 @@ import { FeedWrapper } from './feed-wrapper';
 import { useState, useEffect } from 'react';
 import { FeedSchema } from '@/types';
 import { NewFeedInputBox } from './new-feed-input-box';
-import { ReplyFeedModal } from './reply-feed-modal';
 
 export const MainFeed = () => {
   const [allFeed, setAllFeed] = useState<FeedSchema[]>([]);

@@ -4,7 +4,8 @@ import { FaUserCircle } from 'react-icons/fa';
 import { BiLike } from 'react-icons/bi';
 import { BiDislike } from 'react-icons/bi';
 import { MessageWrapper } from './message-wrapper';
-import { ReplyFeedModal } from './reply-feed-modal';
+import { OverviewContext } from '@/app/(protected)/layout';
+import { useContext } from 'react';
 
 interface FeedWrapperProps {
   author: string;
@@ -24,9 +25,11 @@ export const FeedWrapper = ({
   created_at,
 }: FeedWrapperProps) => {
   const router = useRouter();
+  const { showModal, setShowModal } = useContext(OverviewContext);
 
   const handleModalClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    // setShowModal(true);
     setShowModal(true);
   };
 

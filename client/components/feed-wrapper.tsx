@@ -1,7 +1,8 @@
+'use client';
+import { useRouter } from 'next/navigation';
 import { FaUserCircle } from 'react-icons/fa';
 import { BiLike } from 'react-icons/bi';
 import { BiDislike } from 'react-icons/bi';
-
 import { MessageWrapper } from './message-wrapper';
 
 interface FeedWrapperProps {
@@ -21,8 +22,13 @@ export const FeedWrapper = ({
   content,
   created_at,
 }: FeedWrapperProps) => {
+  const router = useRouter();
+
   return (
-    <div className='outline rounded-2xl h-[200px] w-[400px]'>
+    <div
+      className='outline rounded-2xl h-[200px] w-[500px]'
+      onClick={() => router.push(`/feed/${id}`)}
+    >
       <div className='flex m-2'>
         <div>
           <FaUserCircle size={35} />

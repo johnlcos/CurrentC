@@ -2,6 +2,8 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaUserCircle } from "react-icons/fa";
+import Link from "next/link";
 
 interface SearchResultType {
   id: string;
@@ -31,9 +33,20 @@ export const SearchResults = () => {
   }, [searchValue]);
 
   return searchResults.length > 0 ? (
-    <div>
+    <div className="p-2">
       {searchResults.map((result) => {
-        return <h1 key={result.id}>{result.username}</h1>;
+        return (
+          <div key={result.id} className="flex items-center justify-between">
+            <Link
+              href={`/profile/${result.username}`}
+              className="flex items-center w-full gap-4"
+            >
+              <FaUserCircle />
+              <h1>{result.username}</h1>
+            </Link>
+            <button>Follow</button>
+          </div>
+        );
       })}
     </div>
   ) : null;

@@ -6,6 +6,7 @@ import { FeedWrapper } from './feed-wrapper';
 
 export const ReplyFeedModal = () => {
   const [currentFeed, setCurrentFeed] = useState<FeedSchema | null>(null);
+
   const { showModal, setShowModal, selectedFeed } = useContext(OverviewContext);
 
   useEffect(() => {
@@ -15,6 +16,7 @@ export const ReplyFeedModal = () => {
   }, [selectedFeed]);
 
   const handleCloseModal = (e: React.MouseEvent) => {
+    setCurrentFeed(null);
     setShowModal(false);
   };
 
@@ -29,12 +31,12 @@ export const ReplyFeedModal = () => {
           onClick={handleCloseModal}
           className='fixed left-0 top-0 bg-black bg-opacity-50 w-screen h-screen flex justify-center items-center'
         >
-          <div
-            className='bg-white rounded shadow-md p-2 w-[30%] flex flex-col'
-            onClick={handleContentClick}
-          >
-            <div>
-              {currentFeed && (
+          {currentFeed && (
+            <div
+              className='bg-white rounded shadow-md p-2 w-[50%] h-max flex flex-col justify-center items-center gap-y-5'
+              onClick={handleContentClick}
+            >
+              <div className='w-[90%]'>
                 <FeedWrapper
                   author={currentFeed.profiles.username}
                   id={currentFeed.id}
@@ -43,9 +45,13 @@ export const ReplyFeedModal = () => {
                   content={currentFeed.content}
                   created_at={currentFeed.created_at}
                 />
-              )}
+              </div>
+              <textarea
+                className='outline w-[90%] rounded-lg p-2'
+                placeholder='Post your reply'
+              ></textarea>
             </div>
-          </div>
+          )}
         </div>
       )}
     </>

@@ -43,7 +43,7 @@ router.get("/getUserInfo", userController.getUserInfo, (req, res) => {
 
 router.get(
   "/isfollowing",
-  userController.isFollowing,
+  userController.checkIsFollowing,
   (req: Request, res: Response) => {
     res.status(200).json({ data: res.locals.isFollowing });
   }
@@ -53,7 +53,7 @@ router.get(
   "/follow",
   userController.toggleFollow,
   (req: Request, res: Response) => {
-    res.status(200).json({ data: res.locals.follow });
+    res.status(200).json({});
   }
 );
 

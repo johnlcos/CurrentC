@@ -1,35 +1,33 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { useEffect, useState, useContext } from "react";
+import { OverviewContext } from "@/app/(protected)/layout";
 
 interface FollowButtonProps {
-  follower_id: string;
   followed_id: string;
 }
 
-export const FollowButton = ({
-  follower_id,
-  followed_id,
-}: FollowButtonProps) => {
+export const FollowButton = ({ followed_id }: FollowButtonProps) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const session = useContext(OverviewContext);
 
   const fetchIsFollowing = async () => {
     const response = await fetch(
-      `http://localhost:8080/users/isfollowing?follower=${follower_id}&followed=${followed_id}`
+      `http://localhost:8080/users/isfollowing?follower=${session?.user.id}&followed=${followed_id}`
     );
     const json = await response.json();
-    console.log("FollowButton isFollowing: ", json.data);
     setIsFollowing(json.data);
     setLoading(false);
   };
 
   const fetchToggleFollow = async () => {
     setIsFollowing((prev) => !prev);
-    console.log("fetchToggleFollow isFollowing: ", isFollowing);
     const response = await fetch(
-      `http://localhost:8080/users/follow?follower=${follower_id}&followed=${followed_id}&following=${!isFollowing}`
+      `http://localhost:8080/users/follow?follower=${
+        session?.user.id
+      }&followed=${followed_id}&following=${!isFollowing}`
     );
-    const json = await response.json();
-    console.log("FollowButton toggleFollow: ", json);
   };
 
   useEffect(() => {
@@ -39,8 +37,11 @@ export const FollowButton = ({
   return (
     <>
       {loading ? null : (
-        <button onClick={fetchToggleFollow}>
-          {isFollowing ? "Unfollow" : "Follow"}
+        <button
+          onClick={fetchToggleFollow}
+          className=" text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-1.5 transition duration-300"
+        >
+          {isFollowing ? "Following" : "Follow"}
         </button>
       )}
     </>

@@ -34,22 +34,25 @@ export const SearchResults = () => {
   }, [searchValue]);
 
   return searchResults.length > 0 ? (
-    <div className="p-2">
+    <div className="py-2">
       {searchResults.map((result) => {
         return (
-          <div key={result.id} className="flex items-center justify-between">
+          <div
+            key={result.id}
+            className="flex items-center justify-between bg-white rounded-md shadow-sm py-2 px-1"
+          >
             <Link
-              href={`/profile/${result.username}`}
-              className="flex items-center w-full gap-4"
+              href={{
+                pathname: `/profile/${result.username}`,
+                query: { id: result.id },
+              }}
+              className="flex items-center w-full gap-4 "
             >
-              <FaUserCircle />
+              <FaUserCircle size={25} />
               <h1>{result.username}</h1>
             </Link>
             {session && result.id !== session.user.id ? (
-              <FollowButton
-                followed_id={result.id}
-                follower_id={session.user.id}
-              />
+              <FollowButton followed_id={result.id} />
             ) : null}
           </div>
         );

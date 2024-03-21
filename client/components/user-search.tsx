@@ -21,16 +21,16 @@ export const UserSearch = () => {
   }, [query]);
 
   return (
-    <div className="bg-green-700 p-4 shadow-sm">
+    <div className="p-4">
       <div className="flex bg-white items-center p-2 rounded-md shadow-sm gap-1">
-        <BiSearch />
+        <BiSearch size={25} />
         <input
           type="text"
           placeholder="Search users..."
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => (e.key === "Enter" ? handleSearch() : null)}
-          className="w-full"
+          className="w-full px-2"
         />
       </div>
       <SearchResults />

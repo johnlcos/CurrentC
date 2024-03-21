@@ -101,7 +101,7 @@ userController.searchUsers = (req, res, next) => __awaiter(void 0, void 0, void 
         next(error);
     }
 });
-userController.isFollowing = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+userController.checkIsFollowing = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { data, error } = yield supabase_1.default
             .from("relationships")
@@ -125,9 +125,7 @@ userController.isFollowing = (req, res, next) => __awaiter(void 0, void 0, void 
 });
 userController.toggleFollow = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("req.query.following: ", req.query.following);
         if (req.query.following === "true") {
-            console.log("follow");
             const { error } = yield supabase_1.default.from("relationships").insert({
                 follower_id: req.query.follower,
                 followed_id: req.query.followed,
@@ -135,7 +133,6 @@ userController.toggleFollow = (req, res, next) => __awaiter(void 0, void 0, void
             res.locals.follow = "followed";
         }
         else {
-            console.log("unfollow");
             const { error } = yield supabase_1.default.from("relationships").delete().match({
                 follower_id: req.query.follower,
                 followed_id: req.query.followed,

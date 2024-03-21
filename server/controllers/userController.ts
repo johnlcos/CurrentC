@@ -24,7 +24,7 @@ interface UserController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
-  isFollowing: (
+  checkIsFollowing: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -148,7 +148,7 @@ userController.searchUsers = async (
   }
 };
 
-userController.isFollowing = async (
+userController.checkIsFollowing = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -178,16 +178,13 @@ userController.toggleFollow = async (
   next: NextFunction
 ) => {
   try {
-    console.log("req.query.following: ", req.query.following);
     if (req.query.following === "true") {
-      console.log("follow");
       const { error } = await supabase.from("relationships").insert({
         follower_id: req.query.follower,
         followed_id: req.query.followed,
       });
       res.locals.follow = "followed";
     } else {
-      console.log("unfollow");
       const { error } = await supabase.from("relationships").delete().match({
         follower_id: req.query.follower,
         followed_id: req.query.followed,

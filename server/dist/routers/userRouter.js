@@ -30,10 +30,10 @@ router.get("/", userController_1.default.searchUsers, (req, res) => {
 router.get("/getUserInfo", userController_1.default.getUserInfo, (req, res) => {
     res.status(200).json({ data: res.locals.userInfo });
 });
-router.get("/isfollowing", userController_1.default.isFollowing, (req, res) => {
+router.get("/isfollowing", userController_1.default.checkIsFollowing, (req, res) => {
     res.status(200).json({ data: res.locals.isFollowing });
 });
 router.get("/follow", userController_1.default.toggleFollow, (req, res) => {
-    res.status(200).json({ data: res.locals.follow });
+    res.status(200).json({});
 });
 exports.default = router;

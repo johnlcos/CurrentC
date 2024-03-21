@@ -13,7 +13,7 @@ export default function Home() {
         <div className="w-full md:w-7/12">
           <MainFeed />
         </div>
-        <div className="w-full md:w-5/12 h-full bg-white flex flex-col">
+        <div className="w-full md:w-5/12 h-full flex flex-col">
           <UserSearch />
         </div>
       </div>

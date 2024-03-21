@@ -25,15 +25,15 @@ export const FeedWrapper = ({
   created_at,
 }: FeedWrapperProps) => {
   const router = useRouter();
-  const { showModal, setShowModal, setSelectedFeed } =
+  const { showModal, setShowModal, setSelectedFeedID } =
     useContext(OverviewContext);
 
-  const handleModalClick = (e: React.MouseEvent) => {
+  const handleReplyClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setSelectedFeed(id);
+    console.log('id', id);
+    setSelectedFeedID(id);
     setShowModal(true);
   };
-
   return (
     <div
       className='outline rounded-2xl h-[200px] w-[500px]'
@@ -71,7 +71,7 @@ export const FeedWrapper = ({
             </span>
           </div>
         </div>
-        <button onClick={handleModalClick}>Reply</button>
+        <button onClick={handleReplyClick}>Reply</button>
       </div>
     </div>
   );

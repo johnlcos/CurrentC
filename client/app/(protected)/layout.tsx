@@ -4,19 +4,25 @@ import { useEffect, useState, createContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { Session } from '@supabase/gotrue-js/src/lib/types';
 import { ReplyFeedModal } from '@/components/reply-feed-modal';
+import { FeedSchema } from '@/types';
+import fetchSpecificFeed from '@/hooks/fetchSpecficFeed';
 
 interface OverviewContextSchema {
   showModal: boolean;
   setShowModal: (bool: boolean) => void;
-  selectedFeed: string;
-  setSelectedFeed: (id: string) => void;
+  selectedFeedID: string;
+  setSelectedFeedID: (id: string) => void;
+  selectedFeed: FeedSchema | null;
+  setSelectedFeed: (feed: FeedSchema | null) => void;
 }
 
 export const SessionContext = createContext<Session | null>(null);
 export const OverviewContext = createContext<OverviewContextSchema>({
   showModal: false,
   setShowModal: () => {},
-  selectedFeed: '',
+  selectedFeedID: '',
+  setSelectedFeedID: () => {},
+  selectedFeed: null,
   setSelectedFeed: () => {},
 });
 
@@ -28,7 +34,8 @@ export default function Layout({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [userSession, setUserSession] = useState<Session | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [selectedFeed, setSelectedFeed] = useState<string>('');
+  const [selectedFeedID, setSelectedFeedID] = useState<string>('');
+  const [selectedFeed, setSelectedFeed] = useState<FeedSchema | null>(null);
 
   const router = useRouter();
   useEffect(() => {
@@ -46,10 +53,26 @@ export default function Layout({
 
     getCurrentSession();
   }, [router]);
+
+  useEffect(() => {
+    console.log('selectedFeedID', selectedFeedID);
+    fetchSpecificFeed({ feedID: selectedFeedID }).then((data) => {
+      console.log(data);
+      setSelectedFeed(data);
+    });
+  }, [selectedFeedID]);
+
   return (
     <SessionContext.Provider value={userSession}>
       <OverviewContext.Provider
-        value={{ showModal, setShowModal, selectedFeed, setSelectedFeed }}
+        value={{
+          showModal,
+          setShowModal,
+          selectedFeedID,
+          setSelectedFeedID,
+          selectedFeed,
+          setSelectedFeed,
+        }}
       >
         <div className='w-screen'>
           <ReplyFeedModal />

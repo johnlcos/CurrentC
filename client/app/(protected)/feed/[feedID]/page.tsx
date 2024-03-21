@@ -16,8 +16,8 @@ const FeedPage = ({ params }: { params: { feedID: string } }) => {
     //   const data = await response.json();
     //   setCurrentFeed(data[0]);
     // };
-    fetchSpecificFeed({ feedID: params.feedID }).then((data: FeedSchema[]) => {
-      setCurrentFeed(data[0]);
+    fetchSpecificFeed({ feedID: params.feedID }).then((data: FeedSchema) => {
+      setCurrentFeed(data);
     });
   }, [params.feedID]);
 

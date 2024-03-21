@@ -44,11 +44,8 @@ export default function Layout({
   return (
     <SessionContext.Provider value={userSession}>
       <OverviewContext.Provider value={{ showModal, setShowModal }}>
-        <>
-          <ReplyFeedModal
-            showModal={showModal}
-            closeModal={() => setShowModal(false)}
-          />
+        <div className='w-screen'>
+          <ReplyFeedModal />
           {!isLoading && (
             <div className='flex'>
               <div className='w-2/12 p-0'>
@@ -57,7 +54,7 @@ export default function Layout({
               <div className='w-10/12'>{children}</div>
             </div>
           )}
-        </>
+        </div>
       </OverviewContext.Provider>
     </SessionContext.Provider>
   );

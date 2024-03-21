@@ -1,8 +1,13 @@
 import { OverviewContext } from '@/app/(protected)/layout';
-import { useContext } from 'react';
+import fetchSpecificFeed from '@/hooks/fetchSpecficFeed';
+import { useContext, useEffect } from 'react';
 
 export const ReplyFeedModal = () => {
   const { showModal, setShowModal } = useContext(OverviewContext);
+
+  useEffect(() => {
+    fetchSpecificFeed({});
+  }, []);
 
   const handleCloseModal = (e: React.MouseEvent) => {
     setShowModal(false);

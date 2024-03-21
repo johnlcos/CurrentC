@@ -1,4 +1,8 @@
+'use client';
+import { userInfo } from 'os';
 import { MainFeed } from '@/components/main-feed';
+import { useEffect, useState } from 'react';
+import { UserSearch } from '@/components/user-search';
 
 export default function Home() {
   return (
@@ -7,7 +11,9 @@ export default function Home() {
         <div className='w-full md:w-7/12'>
           <MainFeed />
         </div>
-        <div className='w-full md:w-5/12 h-full bg-white'></div>
+        <div className='w-full md:w-5/12 h-full flex flex-col'>
+          <UserSearch />
+        </div>
       </div>
     </div>
   );

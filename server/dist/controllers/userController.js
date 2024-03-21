@@ -23,7 +23,7 @@ userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             options: {
                 data: {
                     username: username,
-                    profile_avatar: 'PROFILE',
+                    profile_avatar: "PROFILE",
                 },
             },
         });
@@ -64,8 +64,8 @@ userController.getSession = (req, res, next) => __awaiter(void 0, void 0, void 0
 userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { data, error } = yield supabase_1.default
-            .from('profiles')
-            .select('id, username');
+            .from("profiles")
+            .select("id, username");
         res.locals.userInfo = data;
         next();
     }
@@ -77,6 +77,68 @@ userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 
 userController.signout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { error } = yield supabase_1.default.auth.signOut();
+        next();
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+userController.searchUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (typeof req.query.name === "string") {
+            const name = req.query.name;
+            const { data, error } = yield supabase_1.default
+                .from("profiles")
+                .select("id, username, profile_avatar")
+                .textSearch("username", name);
+            res.locals.searchResults = data;
+        }
+        next();
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+userController.checkIsFollowing = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { data, error } = yield supabase_1.default
+            .from("relationships")
+            .select("id")
+            .match({
+            follower_id: req.query.follower,
+            followed_id: req.query.followed,
+        });
+        if (data) {
+            if (data.length > 0)
+                res.locals.isFollowing = true;
+            else
+                res.locals.isFollowing = false;
+        }
+        next();
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+userController.toggleFollow = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (req.query.following === "true") {
+            const { error } = yield supabase_1.default.from("relationships").insert({
+                follower_id: req.query.follower,
+                followed_id: req.query.followed,
+            });
+            res.locals.follow = "followed";
+        }
+        else {
+            const { error } = yield supabase_1.default.from("relationships").delete().match({
+                follower_id: req.query.follower,
+                followed_id: req.query.followed,
+            });
+            res.locals.follow = "unfollowed";
+        }
         next();
     }
     catch (error) {

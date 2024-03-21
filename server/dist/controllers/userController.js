@@ -93,7 +93,54 @@ userController.searchUsers = (req, res, next) => __awaiter(void 0, void 0, void 
                 .select("id, username, profile_avatar")
                 .textSearch("username", name);
             res.locals.searchResults = data;
-            console.log("server search results: ", data);
+        }
+        next();
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+userController.isFollowing = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { data, error } = yield supabase_1.default
+            .from("relationships")
+            .select("id")
+            .match({
+            follower_id: req.query.follower,
+            followed_id: req.query.followed,
+        });
+        if (data) {
+            if (data.length > 0)
+                res.locals.isFollowing = true;
+            else
+                res.locals.isFollowing = false;
+        }
+        next();
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+userController.toggleFollow = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log("req.query.following: ", req.query.following);
+        if (req.query.following === "true") {
+            console.log("follow");
+            const { error } = yield supabase_1.default.from("relationships").insert({
+                follower_id: req.query.follower,
+                followed_id: req.query.followed,
+            });
+            res.locals.follow = "followed";
+        }
+        else {
+            console.log("unfollow");
+            const { error } = yield supabase_1.default.from("relationships").delete().match({
+                follower_id: req.query.follower,
+                followed_id: req.query.followed,
+            });
+            res.locals.follow = "unfollowed";
         }
         next();
     }

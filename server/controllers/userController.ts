@@ -24,6 +24,16 @@ interface UserController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  isFollowing: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  toggleFollow: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
 }
 
 userController.signup = async (
@@ -129,9 +139,61 @@ userController.searchUsers = async (
         .select("id, username, profile_avatar")
         .textSearch("username", name);
       res.locals.searchResults = data;
-      console.log("server search results: ", data);
     }
 
+    next();
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+userController.isFollowing = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { data, error } = await supabase
+      .from("relationships")
+      .select("id")
+      .match({
+        follower_id: req.query.follower,
+        followed_id: req.query.followed,
+      });
+    if (data) {
+      if (data.length > 0) res.locals.isFollowing = true;
+      else res.locals.isFollowing = false;
+    }
+    next();
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+userController.toggleFollow = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    console.log("req.query.following: ", req.query.following);
+    if (req.query.following === "true") {
+      console.log("follow");
+      const { error } = await supabase.from("relationships").insert({
+        follower_id: req.query.follower,
+        followed_id: req.query.followed,
+      });
+      res.locals.follow = "followed";
+    } else {
+      console.log("unfollow");
+      const { error } = await supabase.from("relationships").delete().match({
+        follower_id: req.query.follower,
+        followed_id: req.query.followed,
+      });
+      res.locals.follow = "unfollowed";
+    }
     next();
   } catch (error) {
     console.log(error);

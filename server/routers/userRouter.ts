@@ -41,4 +41,20 @@ router.get("/getUserInfo", userController.getUserInfo, (req, res) => {
   res.status(200).json({ data: res.locals.userInfo });
 });
 
+router.get(
+  "/isfollowing",
+  userController.isFollowing,
+  (req: Request, res: Response) => {
+    res.status(200).json({ data: res.locals.isFollowing });
+  }
+);
+
+router.get(
+  "/follow",
+  userController.toggleFollow,
+  (req: Request, res: Response) => {
+    res.status(200).json({ data: res.locals.follow });
+  }
+);
+
 export default router;

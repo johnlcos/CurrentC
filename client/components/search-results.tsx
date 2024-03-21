@@ -5,6 +5,7 @@ import { useEffect, useState, useContext } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { OverviewContext } from "@/app/(protected)/layout";
+import { FollowButton } from "./follow-button";
 
 interface SearchResultType {
   id: string;
@@ -20,13 +21,11 @@ export const SearchResults = () => {
 
   const fetchSearchResults = async () => {
     if (searchValue) {
-      console.log("searchValue: ", searchValue);
-      const searchString = `http://localhost:8080/users?name=${searchValue}`;
-      console.log("searchString: ", searchString);
-      const response = await fetch(searchString);
+      const response = await fetch(
+        `http://localhost:8080/users?name=${searchValue}`
+      );
       const json = await response.json();
       setSearchResults(json.data);
-      console.log("searchResults: ", searchResults);
     }
   };
 
@@ -46,7 +45,12 @@ export const SearchResults = () => {
               <FaUserCircle />
               <h1>{result.username}</h1>
             </Link>
-            {result.id !== session?.user.id ? <button>Follow</button> : null}
+            {session && result.id !== session.user.id ? (
+              <FollowButton
+                followed_id={result.id}
+                follower_id={session.user.id}
+              />
+            ) : null}
           </div>
         );
       })}

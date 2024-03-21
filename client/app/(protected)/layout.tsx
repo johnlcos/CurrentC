@@ -8,12 +8,16 @@ import { ReplyFeedModal } from '@/components/reply-feed-modal';
 interface OverviewContextSchema {
   showModal: boolean;
   setShowModal: (bool: boolean) => void;
+  selectedFeed: string;
+  setSelectedFeed: (id: string) => void;
 }
 
 export const SessionContext = createContext<Session | null>(null);
 export const OverviewContext = createContext<OverviewContextSchema>({
   showModal: false,
   setShowModal: () => {},
+  selectedFeed: '',
+  setSelectedFeed: () => {},
 });
 
 export default function Layout({
@@ -24,6 +28,7 @@ export default function Layout({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [userSession, setUserSession] = useState<Session | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [selectedFeed, setSelectedFeed] = useState<string>('');
 
   const router = useRouter();
   useEffect(() => {
@@ -43,7 +48,9 @@ export default function Layout({
   }, [router]);
   return (
     <SessionContext.Provider value={userSession}>
-      <OverviewContext.Provider value={{ showModal, setShowModal }}>
+      <OverviewContext.Provider
+        value={{ showModal, setShowModal, selectedFeed, setSelectedFeed }}
+      >
         <div className='w-screen'>
           <ReplyFeedModal />
           {!isLoading && (

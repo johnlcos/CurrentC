@@ -25,11 +25,12 @@ export const FeedWrapper = ({
   created_at,
 }: FeedWrapperProps) => {
   const router = useRouter();
-  const { showModal, setShowModal } = useContext(OverviewContext);
+  const { showModal, setShowModal, setSelectedFeed } =
+    useContext(OverviewContext);
 
   const handleModalClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // setShowModal(true);
+    setSelectedFeed(id);
     setShowModal(true);
   };
 

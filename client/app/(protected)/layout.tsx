@@ -1,7 +1,7 @@
 'use client';
 import { SideNavBar } from '../side-navbar';
 import { UserSearch } from '@/components/user-search';
-import { useEffect, useState, createContext } from 'react';
+import { useMemo, useState, createContext, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Session } from '@supabase/gotrue-js/src/lib/types';
 import { ReplyFeedModal } from '@/components/reply-feed-modal';
@@ -13,8 +13,6 @@ interface OverviewContextSchema {
   setShowModal: (bool: boolean) => void;
   selectedFeedID: string;
   setSelectedFeedID: (id: string) => void;
-  selectedFeed: FeedSchema | null;
-  setSelectedFeed: (feed: FeedSchema | null) => void;
 }
 
 export const SessionContext = createContext<Session | null>(null);
@@ -23,8 +21,6 @@ export const OverviewContext = createContext<OverviewContextSchema>({
   setShowModal: () => {},
   selectedFeedID: '',
   setSelectedFeedID: () => {},
-  selectedFeed: null,
-  setSelectedFeed: () => {},
 });
 
 export default function Layout({
@@ -36,7 +32,6 @@ export default function Layout({
   const [userSession, setUserSession] = useState<Session | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedFeedID, setSelectedFeedID] = useState<string>('');
-  const [selectedFeed, setSelectedFeed] = useState<FeedSchema | null>(null);
 
   const router = useRouter();
   useEffect(() => {
@@ -55,13 +50,13 @@ export default function Layout({
     getCurrentSession();
   }, [router]);
 
-  useEffect(() => {
-    console.log('selectedFeedID', selectedFeedID);
-    fetchSpecificFeed({ feedID: selectedFeedID }).then((data) => {
-      console.log(data);
-      setSelectedFeed(data);
-    });
-  }, [selectedFeedID]);
+  // useEffect(() => {
+  //   console.log('selectedFeedID', selectedFeedID);
+  //   fetchSpecificFeed({ feedID: selectedFeedID }).then((data) => {
+  //     console.log(data);
+  //     setSelectedFeed(data);
+  //   });
+  // }, [selectedFeedID]);
 
   return (
     <SessionContext.Provider value={userSession}>
@@ -71,8 +66,6 @@ export default function Layout({
           setShowModal,
           selectedFeedID,
           setSelectedFeedID,
-          selectedFeed,
-          setSelectedFeed,
         }}
       >
         <div className='w-screen'>

@@ -1,12 +1,16 @@
 import { OverviewContext } from '@/app/(protected)/layout';
 import fetchSpecificFeed from '@/hooks/fetchSpecficFeed';
 import { FeedSchema } from '@/types';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { FeedWrapper } from './feed-wrapper';
 
 export const ReplyFeedModal = () => {
-  const { showModal, setShowModal, selectedFeed, setSelectedFeed } =
+  const [selectedFeed, setSelectedFeed] = useState<FeedSchema | null>(null);
+
+  const { showModal, setShowModal, selectedFeedID } =
     useContext(OverviewContext);
+
+  const lastFetchedID = useRef<string | null>(null);
 
   const handleCloseModal = (e: React.MouseEvent) => {
     setShowModal(false);
@@ -16,6 +20,19 @@ export const ReplyFeedModal = () => {
   const handleContentClick = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
+
+  useEffect(() => {
+    if (
+      showModal &&
+      (selectedFeedID !== lastFetchedID.current || selectedFeed === null)
+    ) {
+      fetchSpecificFeed({ feedID: selectedFeedID }).then((data) => {
+        setSelectedFeed(data);
+        lastFetchedID.current = selectedFeedID;
+        console.log(data);
+      });
+    }
+  }, [selectedFeedID, showModal]);
 
   return (
     <>

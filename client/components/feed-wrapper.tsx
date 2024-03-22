@@ -48,7 +48,7 @@ export const FeedWrapper = ({
 
   return (
     <div
-      className='outline rounded-2xl h-[200px] w-[90%] md:w-[80%] max-w-[500px]'
+      className='outline rounded-2xl h-[200px] w-[90%] md:w-[80%] max-w-[500px] hover:opacity-70'
       onClick={() => router.push(`/feed/${id}`)}
     >
       <div className='flex m-2 w-full'>

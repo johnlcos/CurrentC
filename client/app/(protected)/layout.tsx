@@ -1,5 +1,6 @@
 'use client';
 import { SideNavBar } from '../side-navbar';
+import { UserSearch } from '@/components/user-search';
 import { useEffect, useState, createContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { Session } from '@supabase/gotrue-js/src/lib/types';
@@ -77,11 +78,14 @@ export default function Layout({
         <div className='w-screen'>
           <ReplyFeedModal />
           {!isLoading && (
-            <div className='flex'>
-              <div className='w-2/12 p-0'>
+            <div className='flex w-screen'>
+              <div className='w-4/12 p-0 fixed sm:w-1/4 max-w-[300px] h-screen'>
                 <SideNavBar />
               </div>
-              <div className='w-10/12'>{children}</div>
+              <div className='flex-1 ml-[300px]'>{children}</div>
+              <div className='w-4/12 p-0 fixed sm:w-1/4 max-w-[300px] right-0 bg-green-700 h-screen'>
+                <UserSearch />
+              </div>
             </div>
           )}
         </div>

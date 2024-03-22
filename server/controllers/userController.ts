@@ -1,7 +1,7 @@
-import { db } from '../utils/db';
-import { Request, Response, NextFunction } from 'express';
-import { createClient } from '@supabase/supabase-js';
-import supabase from '../utils/supabase';
+import { db } from "../utils/db";
+import { Request, Response, NextFunction } from "express";
+import { createClient } from "@supabase/supabase-js";
+import supabase from "../utils/supabase";
 
 const userController = {} as UserController;
 
@@ -15,6 +15,21 @@ interface UserController {
     next: NextFunction
   ) => Promise<void>;
   getUserInfo: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  searchUsers: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  checkIsFollowing: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  toggleFollow: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -34,7 +49,7 @@ userController.signup = async (
       options: {
         data: {
           username: username,
-          profile_avatar: 'PROFILE',
+          profile_avatar: "PROFILE",
         },
       },
     });
@@ -87,8 +102,8 @@ userController.getUserInfo = async (
 ) => {
   try {
     const { data, error } = await supabase
-      .from('profiles')
-      .select('id, username');
+      .from("profiles")
+      .select("id, username");
     res.locals.userInfo = data;
     next();
   } catch (error) {
@@ -104,6 +119,78 @@ userController.signout = async (
 ) => {
   try {
     const { error } = await supabase.auth.signOut();
+    next();
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+userController.searchUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (typeof req.query.name === "string") {
+      const name = req.query.name;
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, username, profile_avatar")
+        .textSearch("username", name);
+      res.locals.searchResults = data;
+    }
+
+    next();
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+userController.checkIsFollowing = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { data, error } = await supabase
+      .from("relationships")
+      .select("id")
+      .match({
+        follower_id: req.query.follower,
+        followed_id: req.query.followed,
+      });
+    if (data) {
+      if (data.length > 0) res.locals.isFollowing = true;
+      else res.locals.isFollowing = false;
+    }
+    next();
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+userController.toggleFollow = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (req.query.following === "true") {
+      const { error } = await supabase.from("relationships").insert({
+        follower_id: req.query.follower,
+        followed_id: req.query.followed,
+      });
+      res.locals.follow = "followed";
+    } else {
+      const { error } = await supabase.from("relationships").delete().match({
+        follower_id: req.query.follower,
+        followed_id: req.query.followed,
+      });
+      res.locals.follow = "unfollowed";
+    }
     next();
   } catch (error) {
     console.log(error);

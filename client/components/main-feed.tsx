@@ -18,7 +18,7 @@ export const MainFeed = () => {
   }, []);
 
   return (
-    <div id='main-feed-container' className='p-2'>
+    <div id='main-feed-container' className='p-2 w-full'>
       <NewFeedInputBox setAllFeed={setAllFeed} />
       <div className='flex justify-center items-center flex-col gap-y-5'>
         {allFeed.map((feed) => (
@@ -29,6 +29,7 @@ export const MainFeed = () => {
             likes={feed.like_count}
             dislikes={feed.dislike_count}
             content={feed.content}
+            created_at={feed.created_at}
           />
         ))}
       </div>

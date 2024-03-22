@@ -6,6 +6,7 @@ import { BiDislike } from 'react-icons/bi';
 import { MessageWrapper } from './message-wrapper';
 import { OverviewContext } from '@/app/(protected)/layout';
 import { useContext } from 'react';
+import { difference } from 'next/dist/build/utils';
 
 interface FeedWrapperProps {
   author: string;
@@ -34,22 +35,38 @@ export const FeedWrapper = ({
     setSelectedFeedID(id);
     setShowModal(true);
   };
+
+  const getTimeDifferenceInMinutes = (created_at: string): number => {
+    const createdAtDate: any = new Date(created_at);
+    const currentDate: any = new Date();
+    const differenceInMilliseconds = currentDate - createdAtDate;
+    const differenceInMinutes = Math.floor(
+      differenceInMilliseconds / (1000 * 60)
+    );
+    return differenceInMinutes;
+  };
+
   return (
     <div
-      className='outline rounded-2xl h-[200px] w-[500px]'
+      className='outline rounded-2xl h-[200px] w-[90%] md:w-[80%] max-w-[500px]'
       onClick={() => router.push(`/feed/${id}`)}
     >
-      <div className='flex m-2'>
+      <div className='flex m-2 w-full'>
         <div>
           <FaUserCircle size={35} />
         </div>
-        <div className='flex flex-col'>
+        <div className='flex flex-col w-[80%] sm:w-[85%] '>
           <div
             id='feed-wrapper-identifiers'
-            className='flex justify-start items-center ml-3'
+            className='w-full flex justify-between items-center ml-3'
           >
-            <span className='mr-5'>{author}</span>
-            <span>{created_at.slice(0, 10)}</span>
+            <div className='flex justify-center'>
+              <div className='mr-5'>{author}</div>
+              <div>{`${getTimeDifferenceInMinutes(
+                created_at
+              )} minutes ago`}</div>
+            </div>
+            <div>...</div>
           </div>
           <div className='ml-3'>
             <MessageWrapper message={content} />

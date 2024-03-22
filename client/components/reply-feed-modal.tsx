@@ -9,8 +9,8 @@ export const ReplyFeedModal = () => {
     useContext(OverviewContext);
 
   const handleCloseModal = (e: React.MouseEvent) => {
-    setSelectedFeed(null);
     setShowModal(false);
+    setSelectedFeed(null);
   };
 
   const handleContentClick = (e: React.MouseEvent) => {

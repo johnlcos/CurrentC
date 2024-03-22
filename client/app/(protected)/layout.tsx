@@ -75,8 +75,8 @@ export default function Layout({
               <div className='w-4/12 p-0 fixed sm:w-1/4 max-w-[300px] h-screen'>
                 <SideNavBar />
               </div>
-              <div className='flex-1 ml-[300px]'>{children}</div>
-              <div className='w-4/12 p-0 fixed sm:w-1/4 max-w-[300px] right-0 bg-green-700 h-screen'>
+              <div className='flex-1 ml-[30%]'>{children}</div>
+              <div className='w-4/12 p-0 fixed sm:w-1/4 max-w-[300px] right-0 bg-green-700 h-screen hidden'>
                 <UserSearch />
               </div>
             </div>

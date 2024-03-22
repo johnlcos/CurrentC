@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { FaUserCircle } from 'react-icons/fa';
-import { BiLike } from 'react-icons/bi';
+import { CiHeart } from 'react-icons/ci';
 import { BiDislike } from 'react-icons/bi';
 import { MessageWrapper } from './message-wrapper';
 import { OverviewContext } from '@/app/(protected)/layout';
@@ -43,7 +43,15 @@ export const FeedWrapper = ({
     const differenceInMinutes = Math.floor(
       differenceInMilliseconds / (1000 * 60)
     );
-    return differenceInMinutes;
+    if (differenceInMinutes > 1440) {
+      const differenceInDays = differenceInMinutes / (60 * 24);
+      return differenceInDays;
+    } else if (differenceInMinutes > 60) {
+      const differenceInHours = differenceInMinutes / 60;
+      return differenceInHours;
+    } else {
+      return differenceInMinutes;
+    }
   };
 
   return (
@@ -60,11 +68,11 @@ export const FeedWrapper = ({
             id='feed-wrapper-identifiers'
             className='w-full flex justify-between items-center ml-3'
           >
-            <div className='flex justify-center'>
-              <div className='mr-5'>{author}</div>
-              <div>{`${getTimeDifferenceInMinutes(
+            <div className='flex justify-center items-center'>
+              <div className='text-[14px] bolded'>{author}</div>
+              <div className='opacity- text-[12px] ml-1 text-gray-500'>{`· ${getTimeDifferenceInMinutes(
                 created_at
-              )} minutes ago`}</div>
+              )}`}</div>
             </div>
             <div>...</div>
           </div>
@@ -79,10 +87,10 @@ export const FeedWrapper = ({
           id='views-likes-dislike-box'
           className='flex justify-between w-1/3'
         >
-          <div className='w-[100px] justify-self-start flex gap-4'>
-            <span className='flex justify-center items-center'>
-              <BiLike size={17} /> {likes}
-            </span>
+          <div className='flex gap-4'>
+            <div className='flex justify-center items-center hover:bg-red-200 transition-all rounded-md'>
+              <CiHeart size={17} /> {likes}
+            </div>
             <span className='flex justify-center items-center'>
               <BiDislike size={17} /> {dislikes}
             </span>

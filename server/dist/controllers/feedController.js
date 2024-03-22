@@ -14,18 +14,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supabase_1 = __importDefault(require("../utils/supabase"));
 const feedController = {};
-feedController.getAllFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { data, error } = yield supabase_1.default
-            .from('feeds')
-            .select('id, created_at, content, like_count, dislike_count, profiles(username)')
-            .order('created_at', { ascending: false });
-        console.log('feeds data: ', data);
-        res.locals.results = data;
-        next();
+feedController.getFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.query);
+    if (req.query.id) {
+        try {
+            const { data, error } = yield supabase_1.default
+                .from('feeds')
+                .select('id,created_at,content,like_count,dislike_count, profiles(username)')
+                .eq('id', req.query.id);
+            res.locals.results = data;
+            next();
+        }
+        catch (error) {
+            next(error);
+        }
     }
-    catch (error) {
-        next(error);
+    else {
+        try {
+            const { data, error } = yield supabase_1.default
+                .from('feeds')
+                .select('id, created_at, content, like_count, dislike_count, profiles(username)')
+                .order('created_at', { ascending: false });
+            // console.log('feeds data: ', data);
+            res.locals.results = data;
+            next();
+        }
+        catch (error) {
+            next(error);
+        }
     }
 });
 feedController.createFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

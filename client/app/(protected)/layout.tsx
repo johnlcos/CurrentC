@@ -1,10 +1,31 @@
 'use client';
 import { SideNavBar } from '../side-navbar';
+import { UserSearch } from '@/components/user-search';
 import { useEffect, useState, createContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { Session } from '@supabase/gotrue-js/src/lib/types';
+import { ReplyFeedModal } from '@/components/reply-feed-modal';
+import { FeedSchema } from '@/types';
+import fetchSpecificFeed from '@/hooks/fetchSpecficFeed';
 
-export const OverviewContext = createContext<Session | null>(null);
+interface OverviewContextSchema {
+  showModal: boolean;
+  setShowModal: (bool: boolean) => void;
+  selectedFeedID: string;
+  setSelectedFeedID: (id: string) => void;
+  selectedFeed: FeedSchema | null;
+  setSelectedFeed: (feed: FeedSchema | null) => void;
+}
+
+export const SessionContext = createContext<Session | null>(null);
+export const OverviewContext = createContext<OverviewContextSchema>({
+  showModal: false,
+  setShowModal: () => {},
+  selectedFeedID: '',
+  setSelectedFeedID: () => {},
+  selectedFeed: null,
+  setSelectedFeed: () => {},
+});
 
 export default function Layout({
   children,
@@ -13,6 +34,9 @@ export default function Layout({
 }>) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [userSession, setUserSession] = useState<Session | null>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [selectedFeedID, setSelectedFeedID] = useState<string>('');
+  const [selectedFeed, setSelectedFeed] = useState<FeedSchema | null>(null);
 
   const router = useRouter();
   useEffect(() => {
@@ -30,16 +54,42 @@ export default function Layout({
 
     getCurrentSession();
   }, [router]);
+
+  useEffect(() => {
+    console.log('selectedFeedID', selectedFeedID);
+    fetchSpecificFeed({ feedID: selectedFeedID }).then((data) => {
+      console.log(data);
+      setSelectedFeed(data);
+    });
+  }, [selectedFeedID]);
+
   return (
-    <OverviewContext.Provider value={userSession}>
-      {!isLoading && (
-        <div className='flex'>
-          <div className='w-2/12 p-0'>
-            <SideNavBar />
-          </div>
-          <div className='w-10/12'>{children}</div>
+    <SessionContext.Provider value={userSession}>
+      <OverviewContext.Provider
+        value={{
+          showModal,
+          setShowModal,
+          selectedFeedID,
+          setSelectedFeedID,
+          selectedFeed,
+          setSelectedFeed,
+        }}
+      >
+        <div className='w-screen'>
+          <ReplyFeedModal />
+          {!isLoading && (
+            <div className='flex w-screen'>
+              <div className='w-4/12 p-0 fixed sm:w-1/4 max-w-[300px] h-screen'>
+                <SideNavBar />
+              </div>
+              <div className='flex-1 ml-[300px]'>{children}</div>
+              <div className='w-4/12 p-0 fixed sm:w-1/4 max-w-[300px] right-0 bg-green-700 h-screen'>
+                <UserSearch />
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </OverviewContext.Provider>
+      </OverviewContext.Provider>
+    </SessionContext.Provider>
   );
 }

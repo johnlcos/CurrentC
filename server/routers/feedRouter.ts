@@ -3,14 +3,14 @@ import feedController from '../controllers/feedController';
 
 const router = Router();
 
-router.get('/', feedController.getAllFeed, (req, res) =>
+router.get('/*', feedController.getFeed, (req, res) =>
   res.status(200).json(res.locals.results)
 );
 
 router.post(
   '/create',
   feedController.createFeed,
-  feedController.getAllFeed,
+  feedController.getFeed,
   (req, res) => {
     res.status(200).json(res.locals.results);
   }

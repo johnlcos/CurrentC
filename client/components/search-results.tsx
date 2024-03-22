@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useContext } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import Link from "next/link";
-import { OverviewContext } from "@/app/(protected)/layout";
+import { SessionContext } from "@/app/(protected)/layout";
 import { FollowButton } from "./follow-button";
 
 interface SearchResultType {
@@ -17,7 +17,7 @@ export const SearchResults = () => {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
   const searchParams = useSearchParams();
   const searchValue = searchParams.get("search");
-  const session = useContext(OverviewContext);
+  const session = useContext(SessionContext);
 
   const fetchSearchResults = async () => {
     if (searchValue) {

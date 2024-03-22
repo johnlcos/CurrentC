@@ -71,8 +71,8 @@ export default function Layout({
         <div className='w-screen'>
           <ReplyFeedModal />
           {!isLoading && (
-            <div className='flex w-screen'>
-              <div className='w-4/12 p-0 fixed sm:w-1/4 max-w-[300px] h-screen'>
+            <div className='flex w-full'>
+              <div className='w-1/6 p-0 fixed h-screen'>
                 <SideNavBar />
               </div>
               <div className='flex-1 ml-[30%]'>{children}</div>

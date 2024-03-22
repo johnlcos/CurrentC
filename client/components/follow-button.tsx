@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useContext } from "react";
-import { OverviewContext } from "@/app/(protected)/layout";
+import { SessionContext } from "@/app/(protected)/layout";
 
 interface FollowButtonProps {
   followed_id: string;
@@ -10,7 +10,7 @@ interface FollowButtonProps {
 export const FollowButton = ({ followed_id }: FollowButtonProps) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const session = useContext(OverviewContext);
+  const session = useContext(SessionContext);
 
   const fetchIsFollowing = async () => {
     const response = await fetch(

@@ -7,6 +7,7 @@ import { Session } from "@supabase/gotrue-js/src/lib/types";
 import { ReplyFeedModal } from "@/components/reply-feed-modal";
 import { FeedSchema } from "@/types";
 import fetchSpecificFeed from "@/hooks/fetchSpecficFeed";
+import { RightSideWrapper } from "@/components/right-side-wrapper";
 
 interface OverviewContextSchema {
   showModal: boolean;
@@ -90,7 +91,7 @@ export default function Layout({
                 <div className="w-2/6 hidden md:block"></div>
               </div>
               <div className="w-2/6 p-0 fixed right-0 bg-green-700 h-screen hidden md:block">
-                <UserSearch />
+                <RightSideWrapper />
               </div>
             </div>
           )}

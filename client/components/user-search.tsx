@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { SearchResults } from "./search-results";
@@ -8,6 +8,7 @@ import { useDebounce } from "use-debounce";
 
 export const UserSearch = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const [text, setText] = useState<string>("");
   const [query] = useDebounce(text, 500);
 
@@ -16,7 +17,10 @@ export const UserSearch = () => {
   };
 
   useEffect(() => {
-    if (!query) router.push("/overview");
+    console.log("----------------");
+    console.log("pathname: ", pathname);
+    if (pathname !== "/overview") return;
+    else if (!query) router.push("/overview");
     else handleSearch();
   }, [query]);
 
@@ -33,7 +37,7 @@ export const UserSearch = () => {
           className="w-full px-2"
         />
       </div>
-      {text.length ? <SearchResults /> : null}
+      {text.length ? <SearchResults setText={setText} /> : null}
     </div>
   );
 };

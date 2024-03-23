@@ -12,9 +12,13 @@ import {
   BiSolidUser,
 } from "react-icons/bi";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import { SessionContext } from "@/app/(protected)/layout";
 
 export const SideNavBar = () => {
   const router = useRouter();
+  const session = useContext(SessionContext);
+  console.log(session?.user.user_metadata.username);
 
   const handleSignOut = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -67,7 +71,7 @@ export const SideNavBar = () => {
           <p className="hidden lg:block">Messages</p>
         </Link>
         <Link
-          href="/"
+          href={`/profile/${session?.user.user_metadata.username}`}
           className="text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2"
         >
           <BiSolidUser />

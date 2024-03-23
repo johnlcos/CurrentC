@@ -19,9 +19,9 @@ feedController.getFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     if (req.query.id) {
         try {
             const { data, error } = yield supabase_1.default
-                .from('feeds')
-                .select('id,created_at,content,like_count,dislike_count, profiles(username)')
-                .eq('id', req.query.id);
+                .from("feeds")
+                .select("id, created_at, content, like_count, dislike_count, profiles(username)")
+                .eq("authorId", req.query.id);
             res.locals.results = data;
             next();
         }
@@ -32,10 +32,9 @@ feedController.getFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     else {
         try {
             const { data, error } = yield supabase_1.default
-                .from('feeds')
-                .select('id, created_at, content, like_count, dislike_count, profiles(username)')
-                .order('created_at', { ascending: false });
-            // console.log('feeds data: ', data);
+                .from("feeds")
+                .select("id, created_at, content, like_count, dislike_count, profiles(username)")
+                .order("created_at", { ascending: false });
             res.locals.results = data;
             next();
         }
@@ -48,7 +47,7 @@ feedController.createFeed = (req, res, next) => __awaiter(void 0, void 0, void 0
     try {
         const { message, authorId } = req.body;
         const { error } = yield supabase_1.default
-            .from('feeds')
+            .from("feeds")
             .insert({ content: message, authorId });
         next();
     }

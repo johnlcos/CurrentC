@@ -1,6 +1,6 @@
-import { db } from '../utils/db';
-import { Request, Response, NextFunction } from 'express';
-import supabase from '../utils/supabase';
+import { db } from "../utils/db";
+import { Request, Response, NextFunction } from "express";
+import supabase from "../utils/supabase";
 
 const feedController = {} as FeedController;
 
@@ -23,11 +23,11 @@ feedController.getFeed = async (
   if (req.query.id) {
     try {
       const { data, error } = await supabase
-        .from('feeds')
+        .from("feeds")
         .select(
-          'id,created_at,content,like_count,dislike_count, profiles(username)'
+          "id, created_at, content, like_count, dislike_count, profiles(username)"
         )
-        .eq('id', req.query.id);
+        .eq("authorId", req.query.id);
       res.locals.results = data;
       next();
     } catch (error) {
@@ -36,12 +36,11 @@ feedController.getFeed = async (
   } else {
     try {
       const { data, error } = await supabase
-        .from('feeds')
+        .from("feeds")
         .select(
-          'id, created_at, content, like_count, dislike_count, profiles(username)'
+          "id, created_at, content, like_count, dislike_count, profiles(username)"
         )
-        .order('created_at', { ascending: false });
-      // console.log('feeds data: ', data);
+        .order("created_at", { ascending: false });
       res.locals.results = data;
       next();
     } catch (error) {
@@ -58,7 +57,7 @@ feedController.createFeed = async (
   try {
     const { message, authorId } = req.body;
     const { error } = await supabase
-      .from('feeds')
+      .from("feeds")
       .insert({ content: message, authorId });
     next();
   } catch (error) {

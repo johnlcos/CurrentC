@@ -35,18 +35,21 @@ export const ReplyFeedModal = () => {
   }, [selectedFeedID, showModal]);
 
   return (
-    <>
+    <div>
       {showModal && (
         <div
           onClick={handleCloseModal}
-          className='fixed left-0 top-0 bg-black bg-opacity-50 w-screen h-screen flex justify-center items-center'
+          className='fixed left-0 top-0 bg-black bg-opacity-50 
+          w-screen h-screen flex justify-center items-center'
         >
           {selectedFeed && (
             <div
-              className='bg-white rounded shadow-md p-2 w-[50%] h-max flex flex-col justify-center items-center gap-y-5'
+              className='bg-[#3E4042] rounded shadow-md p-2 w-[50%] 
+              h-max flex flex-col justify-center items-center 
+              gap-y-5 z-10'
               onClick={handleContentClick}
             >
-              <div className='w-[90%]'>
+              <div className='w-[90%] flex justify-center items-center'>
                 <FeedWrapper
                   author={selectedFeed.profiles.username}
                   id={selectedFeed.id}
@@ -54,16 +57,20 @@ export const ReplyFeedModal = () => {
                   dislikes={selectedFeed.dislike_count}
                   content={selectedFeed.content}
                   created_at={selectedFeed.created_at}
+                  type={'Modal'}
                 />
               </div>
-              <textarea
-                className='outline w-[90%] rounded-lg p-2'
-                placeholder='Post your reply'
-              ></textarea>
+              <div className='w-[80%] flex justify-center items-center'>
+                <textarea
+                  className='outline w-[90%] rounded-lg p-2 bg-[#252526]
+                '
+                  placeholder='Post your reply'
+                ></textarea>
+              </div>
             </div>
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };

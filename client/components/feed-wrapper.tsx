@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { FaUserCircle } from 'react-icons/fa';
 import { BiLike } from 'react-icons/bi';
 import { BiDislike } from 'react-icons/bi';
+import { FaReply } from 'react-icons/fa';
 import { MessageWrapper } from './message-wrapper';
 import { OverviewContext } from '@/app/(protected)/layout';
 import { useContext } from 'react';
@@ -14,6 +15,7 @@ interface FeedWrapperProps {
   dislikes: number;
   content: string;
   created_at: string;
+  type?: string;
 }
 
 export const FeedWrapper = ({
@@ -23,6 +25,7 @@ export const FeedWrapper = ({
   dislikes,
   content,
   created_at,
+  type,
 }: FeedWrapperProps) => {
   const router = useRouter();
   const { showModal, setShowModal, setSelectedFeedID } =
@@ -69,12 +72,12 @@ export const FeedWrapper = ({
             className='w-[90%] flex justify-between items-center ml-3'
           >
             <div className='flex justify-center items-center'>
-              <div className='text-[14px] bolded'>{author}</div>
+              <div className='text-[14px] bolded text-[#E4E6EB]'>{author}</div>
               <div className='opacity- text-[12px] ml-1 text-gray-500'>{`· ${getTimeDifferenceInMinutes(
                 created_at
               )}`}</div>
             </div>
-            <div>...</div>
+            <div className='text-gray-500'>...</div>
           </div>
           <div className='ml-3'>
             <MessageWrapper message={content} />
@@ -92,22 +95,28 @@ export const FeedWrapper = ({
               <span className='feed-like-icon'>
                 <BiLike size={17} />
               </span>
-              <span className='group-hover:text-green-500'>{likes}</span>
+              <span className='group-hover:text-green-500 text-gray-500'>
+                {likes}
+              </span>
             </div>
             <div className='flex items-center justify-center group'>
               <div className='feed-dislike-icon'>
                 <BiDislike size={17} />
               </div>
-              <span className='group-hover:text-red-500'>{dislikes}</span>
+              <span className='group-hover:text-red-500 text-gray-500'>
+                {dislikes}
+              </span>
             </div>
           </div>
         </div>
-        <button
-          onClick={handleReplyClick}
-          className='outline p-1 rounded-lg shadow-lg bg-[#6FC9A6]'
-        >
-          Reply
-        </button>
+        {type !== 'Modal' && (
+          <button
+            onClick={handleReplyClick}
+            className='p-1 rounded-lg shadow-lg text-gray-500'
+          >
+            <FaReply />
+          </button>
+        )}
       </div>
     </div>
   );

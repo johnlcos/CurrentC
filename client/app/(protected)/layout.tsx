@@ -69,7 +69,9 @@ export default function Layout({
         }}
       >
         <div className='w-screen'>
-          <ReplyFeedModal />
+          <div className='z-10 relative'>
+            <ReplyFeedModal />
+          </div>
           {!isLoading && (
             <div className='flex w-full'>
               <div className='w-1/6 p-0 fixed h-screen'>
@@ -82,7 +84,7 @@ export default function Layout({
                 </div>
                 <div className='w-2/6 hidden md:block'></div>
               </div>
-              <div className='w-2/6 p-0 fixed right-0 bg-[#17191A] h-screen hidden md:block'>
+              <div className='w-2/6 p-0 fixed right-0 bg-[#17191A] h-screen hidden md:block z-1'>
                 <UserSearch />
               </div>
             </div>

@@ -62,7 +62,8 @@ export const ReplyFeedModal = () => {
               </div>
               <div className='w-[80%] flex justify-center items-center'>
                 <textarea
-                  className='outline w-[90%] rounded-lg p-2 bg-[#252526]
+                  className='w-[90%] h-auto rounded-lg p-2 bg-[#252526] text-[#E4E6EB] 
+                  text-sm resize-none overflow-auto
                 '
                   placeholder='Post your reply'
                 ></textarea>

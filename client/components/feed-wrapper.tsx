@@ -110,12 +110,11 @@ export const FeedWrapper = ({
           </div>
         </div>
         {type !== 'Modal' && (
-          <button
-            onClick={handleReplyClick}
-            className='p-1 rounded-lg shadow-lg text-gray-500'
-          >
-            <FaReply />
-          </button>
+          <div className='flex items-center justify-center group'>
+            <button onClick={handleReplyClick} className='feed-reply-icon'>
+              <FaReply />
+            </button>
+          </div>
         )}
       </div>
     </div>

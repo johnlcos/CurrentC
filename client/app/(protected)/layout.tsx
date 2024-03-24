@@ -75,14 +75,14 @@ export default function Layout({
               <div className='w-1/6 p-0 fixed h-screen'>
                 <SideNavBar />
               </div>
-              <div className='w-full flex'>
+              <div className='w-full flex bg-[#17191A]'>
                 <div className='w-1/6'></div>
                 <div className='w-5/6 md:w-3/6 flex justify-center'>
                   {children}
                 </div>
                 <div className='w-2/6 hidden md:block'></div>
               </div>
-              <div className='w-2/6 p-0 fixed right-0 bg-green-700 h-screen hidden md:block'>
+              <div className='w-2/6 p-0 fixed right-0 bg-[#17191A] h-screen hidden md:block'>
                 <UserSearch />
               </div>
             </div>

@@ -1,12 +1,11 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { FaUserCircle } from 'react-icons/fa';
-import { CiHeart } from 'react-icons/ci';
+import { BiLike } from 'react-icons/bi';
 import { BiDislike } from 'react-icons/bi';
 import { MessageWrapper } from './message-wrapper';
 import { OverviewContext } from '@/app/(protected)/layout';
 import { useContext } from 'react';
-import { difference } from 'next/dist/build/utils';
 
 interface FeedWrapperProps {
   author: string;
@@ -36,7 +35,7 @@ export const FeedWrapper = ({
     setShowModal(true);
   };
 
-  const getTimeDifferenceInMinutes = (created_at: string): number => {
+  const getTimeDifferenceInMinutes = (created_at: string): string => {
     const createdAtDate: any = new Date(created_at);
     const currentDate: any = new Date();
     const differenceInMilliseconds = currentDate - createdAtDate;
@@ -44,29 +43,30 @@ export const FeedWrapper = ({
       differenceInMilliseconds / (1000 * 60)
     );
     if (differenceInMinutes > 1440) {
-      const differenceInDays = differenceInMinutes / (60 * 24);
-      return differenceInDays;
+      const differenceInDays = Math.floor(differenceInMinutes / (60 * 24));
+      return `${differenceInDays} days`;
     } else if (differenceInMinutes > 60) {
-      const differenceInHours = differenceInMinutes / 60;
-      return differenceInHours;
+      const differenceInHours = Math.floor(differenceInMinutes / 60);
+      return `${differenceInHours} hours`;
     } else {
-      return differenceInMinutes;
+      return `${differenceInMinutes} minutes`;
     }
   };
 
   return (
     <div
-      className='outline rounded-2xl h-[200px] w-[90%] md:w-[80%] max-w-[500px]'
+      className='outline h-[200px] w-[90%] md:w-[80%] max-w-[500px] 
+      flex flex-col justify-between shadow-lg outline-none bg-[#252526] rounded-lg'
       onClick={() => router.push(`/feed/${id}`)}
     >
       <div className='flex m-2 w-full'>
         <div>
-          <FaUserCircle size={35} />
+          <FaUserCircle size={35} style={{ color: '#8A8D91' }} />
         </div>
-        <div className='flex flex-col w-[80%] sm:w-[85%] '>
+        <div className='flex flex-col w-full'>
           <div
             id='feed-wrapper-identifiers'
-            className='w-full flex justify-between items-center ml-3'
+            className='w-[90%] flex justify-between items-center ml-3'
           >
             <div className='flex justify-center items-center'>
               <div className='text-[14px] bolded'>{author}</div>
@@ -82,21 +82,32 @@ export const FeedWrapper = ({
         </div>
       </div>
 
-      <div id='feed-footer' className='text-[13px] p-5 flex justify-between'>
+      <div id='feed-footer' className='text-[13px] mx-3 flex justify-between'>
         <div
           id='views-likes-dislike-box'
           className='flex justify-between w-1/3'
         >
           <div className='flex gap-4'>
-            <div className='flex justify-center items-center hover:bg-red-200 transition-all rounded-md'>
-              <CiHeart size={17} /> {likes}
+            <div className='flex items-center justify-center group'>
+              <span className='feed-like-icon'>
+                <BiLike size={17} />
+              </span>
+              <span className='group-hover:text-green-500'>{likes}</span>
             </div>
-            <span className='flex justify-center items-center'>
-              <BiDislike size={17} /> {dislikes}
-            </span>
+            <div className='flex items-center justify-center group'>
+              <div className='feed-dislike-icon'>
+                <BiDislike size={17} />
+              </div>
+              <span className='group-hover:text-red-500'>{dislikes}</span>
+            </div>
           </div>
         </div>
-        <button onClick={handleReplyClick}>Reply</button>
+        <button
+          onClick={handleReplyClick}
+          className='outline p-1 rounded-lg shadow-lg bg-[#6FC9A6]'
+        >
+          Reply
+        </button>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { UserSearch } from '@/components/user-search';
 
 export default function Home() {
   return (
-    <div className='bg-slate-100 w-full flex flex-col'>
+    <div className='bg-[#17191A] w-full flex flex-col'>
       <MainFeed />
     </div>
   );

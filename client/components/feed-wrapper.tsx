@@ -6,7 +6,8 @@ import { BiDislike } from 'react-icons/bi';
 import { FaReply } from 'react-icons/fa';
 import { MessageWrapper } from './message-wrapper';
 import { OverviewContext } from '@/app/(protected)/layout';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import { DropDown } from './dropdown';
 
 interface FeedWrapperProps {
   author: string;
@@ -30,6 +31,8 @@ export const FeedWrapper = ({
   const router = useRouter();
   const { showModal, setShowModal, setSelectedFeedID } =
     useContext(OverviewContext);
+
+  const [dropDown, setDropDown] = useState(false);
 
   const handleReplyClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -77,7 +80,21 @@ export const FeedWrapper = ({
                 created_at
               )}`}</div>
             </div>
-            <div className='text-gray-500'>...</div>
+            <div className='flex'>
+              <div className='feed-dropdown-icon'>
+                <button
+                  className='text-gray-500 relative'
+                  onClick={() => setDropDown(!dropDown)}
+                >
+                  ...
+                  {dropDown && (
+                    <div className='z-10 absolute bg-[#252526] rounded-xl shadow-md'>
+                      <DropDown menu={['follow', 'add/remove', 'block']} />
+                    </div>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
           <div className='ml-3'>
             <MessageWrapper message={content} />

@@ -21,4 +21,11 @@
     group-hover:text-blue-600 rounded-3xl group-hover:rounded-xl 
     transition-all duration-300;
   }
+
+  .feed-dropdown-icon {
+    @apply flex items-center justify-center h-7 w-7
+    mx-auto text-gray-400 hover:bg-blue-200/10
+    hover:text-blue-600 rounded-3xl hover:rounded-xl 
+    transition-all duration-300;
+  }
 }

@@ -17,8 +17,6 @@ export const UserSearch = () => {
   };
 
   useEffect(() => {
-    console.log("----------------");
-    console.log("pathname: ", pathname);
     if (pathname !== "/overview") return;
     else if (!query) router.push("/overview");
     else handleSearch();

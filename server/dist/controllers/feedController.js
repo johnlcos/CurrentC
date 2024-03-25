@@ -50,7 +50,7 @@ feedController.getProfileFeed = (req, res, next) => __awaiter(void 0, void 0, vo
         const { data, error } = yield supabase_1.default
             .from("feeds")
             .select("id, created_at, content, like_count, dislike_count, profiles(username)")
-            .eq("authorId", req.query.id);
+            .match({ type: "POST", authorId: req.query.id });
         res.locals.results = data;
         next();
     }

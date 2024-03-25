@@ -71,7 +71,7 @@ feedController.getProfileFeed = async (
       .select(
         "id, created_at, content, like_count, dislike_count, profiles(username)"
       )
-      .eq("authorId", req.query.id);
+      .match({ type: "POST", authorId: req.query.id });
     res.locals.results = data;
     next();
   } catch (error) {

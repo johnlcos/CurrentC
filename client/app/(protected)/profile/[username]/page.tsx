@@ -4,6 +4,7 @@ import { FollowButton } from "@/components/follow-button";
 import { SessionContext } from "@/app/(protected)/layout";
 import { FaUserCircle } from "react-icons/fa";
 import { MainFeed } from "@/components/main-feed";
+import Link from "next/link";
 
 export default function UserProfile({
   params,
@@ -37,7 +38,11 @@ export default function UserProfile({
           {searchParams.id ? (
             <FollowButton followed_id={searchParams.id} />
           ) : (
-            <button>Edit Profile </button>
+            <Link href={`/profile/${params.username}/edit`}>
+              <div className="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px] flex justify-center items-center">
+                Edit Profile
+              </div>
+            </Link>
           )}
         </div>
       </div>

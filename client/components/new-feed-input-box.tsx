@@ -61,7 +61,9 @@ export const NewFeedInputBox = ({
             onChange={(e) => setValue(e.target.value)}
           ></textarea>
           <div className='flex justify-end text-[#E4E6EB]'>
-            <button onClick={handleClick}>Post</button>
+            <button onClick={handleClick} disabled={!value}>
+              Post
+            </button>
           </div>
         </div>
       </div>

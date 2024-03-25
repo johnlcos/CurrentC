@@ -1,13 +1,11 @@
-'use client';
-import { userInfo } from 'os';
-import { MainFeed } from '@/components/main-feed';
-import { useEffect, useState } from 'react';
-import { UserSearch } from '@/components/user-search';
+"use client";
+
+import { MainFeed } from "@/components/main-feed";
 
 export default function Home() {
   return (
-    <div className='bg-[#17191A] w-full flex flex-col'>
-      <MainFeed />
+    <div className="w-full flex flex-col">
+      <MainFeed type="main" id="" />
     </div>
   );
 }

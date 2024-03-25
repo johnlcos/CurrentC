@@ -36,10 +36,12 @@ export const FollowButton = ({ followed_id }: FollowButtonProps) => {
 
   return (
     <>
-      {loading ? null : (
+      {loading ? (
+        <div className="bg-green-700 hover:bg-green-800 rounded-lg transition duration-300 w-[100px] h-[32px]"></div>
+      ) : (
         <button
           onClick={fetchToggleFollow}
-          className=" text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-1.5 transition duration-300"
+          className=" text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px]"
         >
           {isFollowing ? "Following" : "Follow"}
         </button>

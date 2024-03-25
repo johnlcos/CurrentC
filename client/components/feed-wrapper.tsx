@@ -6,7 +6,7 @@ import { BiDislike } from 'react-icons/bi';
 import { FaReply } from 'react-icons/fa';
 import { MessageWrapper } from './message-wrapper';
 import { OverviewContext } from '@/app/(protected)/layout';
-import { useContext, useState } from 'react';
+import { useContext, useState, useRef, useEffect } from 'react';
 import { DropDown } from './dropdown';
 
 interface FeedWrapperProps {
@@ -29,6 +29,8 @@ export const FeedWrapper = ({
   type,
 }: FeedWrapperProps) => {
   const router = useRouter();
+  let dropDownRef = useRef<HTMLDivElement>(null);
+
   const { showModal, setShowModal, setSelectedFeedID } =
     useContext(OverviewContext);
 
@@ -38,6 +40,11 @@ export const FeedWrapper = ({
     e.stopPropagation();
     setSelectedFeedID(id);
     setShowModal(true);
+  };
+
+  const handleDropDown = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDropDown(!dropDown);
   };
 
   const getTimeDifferenceInMinutes = (created_at: string): string => {
@@ -57,6 +64,22 @@ export const FeedWrapper = ({
       return `${differenceInMinutes} minutes`;
     }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropDownRef.current &&
+        !dropDownRef.current.contains(e.target as Node)
+      ) {
+        setDropDown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
 
   return (
     <div
@@ -80,10 +103,10 @@ export const FeedWrapper = ({
               )}`}</div>
             </div>
             <div className='flex'>
-              <div className='feed-dropdown-icon'>
+              <div className='feed-dropdown-icon' ref={dropDownRef}>
                 <button
                   className='text-gray-500 relative'
-                  onClick={() => setDropDown(!dropDown)}
+                  onClick={handleDropDown}
                 >
                   ...
                   {dropDown && (

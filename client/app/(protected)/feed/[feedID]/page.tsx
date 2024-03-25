@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { FeedWrapper } from "@/components/feed-wrapper";
-import { FeedSchema } from "@/types";
-import { useState, useEffect, useContext } from "react";
-import { OverviewContext } from "../../layout";
-import { MainFeed } from "@/components/main-feed";
-import fetchSpecificFeed from "@/hooks/fetchSpecficFeed";
+import { FeedWrapper } from '@/components/feed-wrapper';
+import { FeedSchema } from '@/types';
+import { useState, useEffect, useContext } from 'react';
+import { MainFeed } from '@/components/main-feed';
+import fetchSpecificFeed from '@/hooks/fetchSpecficFeed';
+import { NewFeedInputBox } from '@/components/new-feed-input-box';
 
 const FeedPage = ({ params }: { params: { feedID: string } }) => {
   const [currentFeed, setCurrentFeed] = useState<FeedSchema | null>(null);
@@ -17,7 +17,7 @@ const FeedPage = ({ params }: { params: { feedID: string } }) => {
   }, [params.feedID]);
 
   return (
-    <div className="h-full w-full flex justify-center">
+    <div className='h-full w-full flex  flex-col items-center'>
       {currentFeed !== null && (
         <FeedWrapper
           author={currentFeed.profiles.username}
@@ -28,7 +28,8 @@ const FeedPage = ({ params }: { params: { feedID: string } }) => {
           created_at={currentFeed.created_at}
         />
       )}
-      <MainFeed type="reply" id={params.feedID} />
+      <NewFeedInputBox type={'REPLY'} replyToId={params.feedID} />
+      <MainFeed type='reply' id={params.feedID} />
     </div>
   );
 };

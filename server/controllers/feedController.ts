@@ -6,7 +6,11 @@ const feedController = {} as FeedController;
 
 interface FeedController {
   getFeed: (req: Request, res: Response, next: NextFunction) => Promise<void>;
-
+  getProfileFeed: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
   createFeed: (
     req: Request,
     res: Response,
@@ -21,25 +25,28 @@ feedController.getFeed = async (
 ) => {
   console.log(req.query);
   if (req.query.id) {
+    // get a single post when clicked on
     try {
       const { data, error } = await supabase
         .from("feeds")
         .select(
           "id, created_at, content, like_count, dislike_count, profiles(username)"
         )
-        .eq("authorId", req.query.id);
+        .eq("id", req.query.id);
       res.locals.results = data;
       next();
     } catch (error) {
       next(error);
     }
   } else {
+    // get the main feed to display on overview
     try {
       const { data, error } = await supabase
         .from("feeds")
         .select(
           "id, created_at, content, like_count, dislike_count, profiles(username)"
         )
+        .eq("type", "POST")
         .order("created_at", { ascending: false });
       res.locals.results = data;
       next();
@@ -49,19 +56,52 @@ feedController.getFeed = async (
   }
 };
 
+feedController.getProfileFeed = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log(req.query);
+  try {
+    const { data, error } = await supabase
+      .from("feeds")
+      .select(
+        "id, created_at, content, like_count, dislike_count, profiles(username)"
+      )
+      .eq("authorId", req.query.id);
+    res.locals.results = data;
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 feedController.createFeed = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    const { message, authorId } = req.body;
-    const { error } = await supabase
-      .from("feeds")
-      .insert({ content: message, authorId });
-    next();
-  } catch (error) {
-    next(error);
+  if (req.body.type === "POST") {
+    try {
+      const { message, authorId } = req.body;
+      const { error } = await supabase
+        .from("feeds")
+        .insert({ content: message, authorId });
+      next();
+    } catch (error) {
+      next(error);
+    }
+  } else if (req.body.type === "REPLY") {
+    try {
+      const { message, authorId, replyToId, type } = req.body;
+      console.log(replyToId);
+      const { error } = await supabase
+        .from("feeds")
+        .insert({ content: message, authorId, reply_to_id: replyToId, type });
+      next();
+    } catch (error) {
+      next(error);
+    }
   }
 };
 

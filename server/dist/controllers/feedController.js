@@ -17,11 +17,12 @@ const feedController = {};
 feedController.getFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.query);
     if (req.query.id) {
+        // get a single post when clicked on
         try {
             const { data, error } = yield supabase_1.default
                 .from("feeds")
                 .select("id, created_at, content, like_count, dislike_count, profiles(username)")
-                .eq("authorId", req.query.id);
+                .eq("id", req.query.id);
             res.locals.results = data;
             next();
         }
@@ -30,10 +31,12 @@ feedController.getFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         }
     }
     else {
+        // get the main feed to display on overview
         try {
             const { data, error } = yield supabase_1.default
                 .from("feeds")
                 .select("id, created_at, content, like_count, dislike_count, profiles(username)")
+                .eq("type", "POST")
                 .order("created_at", { ascending: false });
             res.locals.results = data;
             next();
@@ -43,16 +46,45 @@ feedController.getFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         }
     }
 });
-feedController.createFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+feedController.getProfileFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.query);
     try {
-        const { message, authorId } = req.body;
-        const { error } = yield supabase_1.default
+        const { data, error } = yield supabase_1.default
             .from("feeds")
-            .insert({ content: message, authorId });
+            .select("id, created_at, content, like_count, dislike_count, profiles(username)")
+            .eq("authorId", req.query.id);
+        res.locals.results = data;
         next();
     }
     catch (error) {
         next(error);
+    }
+});
+feedController.createFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.body.type === "POST") {
+        try {
+            const { message, authorId } = req.body;
+            const { error } = yield supabase_1.default
+                .from("feeds")
+                .insert({ content: message, authorId });
+            next();
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    else if (req.body.type === "REPLY") {
+        try {
+            const { message, authorId, replyToId, type } = req.body;
+            console.log(replyToId);
+            const { error } = yield supabase_1.default
+                .from("feeds")
+                .insert({ content: message, authorId, reply_to_id: replyToId, type });
+            next();
+        }
+        catch (error) {
+            next(error);
+        }
     }
 });
 exports.default = feedController;

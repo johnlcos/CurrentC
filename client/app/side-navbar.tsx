@@ -36,7 +36,7 @@ export const SideNavBar = () => {
   return (
     <div
       id="left-column"
-      className="flex flex-col gap-y-5 items-center p-5 bg-green-700 shadow-2xl h-full w-full px-2"
+      className="flex flex-col gap-y-5 items-center p-5 bg-[#17191A] shadow-2xl h-full w-full px-2"
     >
       <div className="w-[50px] h-[50px] md:w-[100px] md:h-[100px] relative rounded-full overflow-hidden">
         <Image src={"/alerty.png"} fill alt="Alerty Logo"></Image>

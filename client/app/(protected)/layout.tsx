@@ -1,6 +1,5 @@
 "use client";
 import { SideNavBar } from "../side-navbar";
-import { UserSearch } from "@/components/user-search";
 import { useEffect, useState, createContext } from "react";
 import { useRouter } from "next/navigation";
 import { Session } from "@supabase/gotrue-js/src/lib/types";
@@ -14,8 +13,6 @@ interface OverviewContextSchema {
   setShowModal: (bool: boolean) => void;
   selectedFeedID: string;
   setSelectedFeedID: (id: string) => void;
-  selectedFeed: FeedSchema | null;
-  setSelectedFeed: (feed: FeedSchema | null) => void;
 }
 
 export const SessionContext = createContext<Session | null>(null);
@@ -24,8 +21,6 @@ export const OverviewContext = createContext<OverviewContextSchema>({
   setShowModal: () => {},
   selectedFeedID: "",
   setSelectedFeedID: () => {},
-  selectedFeed: null,
-  setSelectedFeed: () => {},
 });
 
 export default function Layout({
@@ -37,7 +32,6 @@ export default function Layout({
   const [userSession, setUserSession] = useState<Session | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedFeedID, setSelectedFeedID] = useState<string>("");
-  const [selectedFeed, setSelectedFeed] = useState<FeedSchema | null>(null);
 
   const router = useRouter();
   useEffect(() => {
@@ -56,13 +50,13 @@ export default function Layout({
     getCurrentSession();
   }, [router]);
 
-  useEffect(() => {
-    console.log("selectedFeedID", selectedFeedID);
-    fetchSpecificFeed({ feedID: selectedFeedID }).then((data) => {
-      console.log(data);
-      setSelectedFeed(data);
-    });
-  }, [selectedFeedID]);
+  // useEffect(() => {
+  //   console.log('selectedFeedID', selectedFeedID);
+  //   fetchSpecificFeed({ feedID: selectedFeedID }).then((data) => {
+  //     console.log(data);
+  //     setSelectedFeed(data);
+  //   });
+  // }, [selectedFeedID]);
 
   return (
     <SessionContext.Provider value={userSession}>
@@ -72,25 +66,25 @@ export default function Layout({
           setShowModal,
           selectedFeedID,
           setSelectedFeedID,
-          selectedFeed,
-          setSelectedFeed,
         }}
       >
-        <div className="w-screen">
-          <ReplyFeedModal />
+        <div className="w-screen h-full">
+          <div className="z-10 relative">
+            <ReplyFeedModal />
+          </div>
           {!isLoading && (
-            <div className="flex w-full">
+            <div className="flex w-full h-full">
               <div className="w-1/6 p-0 fixed h-screen">
                 <SideNavBar />
               </div>
-              <div className="w-full flex">
+              <div className="w-full flex bg-[#17191A]">
                 <div className="w-1/6"></div>
-                <div className="w-5/6 md:w-3/6 flex justify-center">
+                <div className="w-5/6 md:w-3/6 flex justify-center h-full">
                   {children}
                 </div>
                 <div className="w-2/6 hidden md:block"></div>
               </div>
-              <div className="w-2/6 p-0 fixed right-0 bg-green-700 h-screen hidden md:block">
+              <div className="w-2/6 p-0 fixed right-0 bg-[#17191A] h-screen hidden md:block z-1">
                 <RightSideWrapper />
               </div>
             </div>

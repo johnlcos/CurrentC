@@ -3,5 +3,7 @@ interface MessageWrapperProps {
 }
 
 export const MessageWrapper = ({ message }: MessageWrapperProps) => {
-  return <div className='text-[15px] h-[120px] py-3'>{message}</div>;
+  return (
+    <div className='text-[14px] h-[120px] py-3 text-[#E4E6EB]'>{message}</div>
+  );
 };

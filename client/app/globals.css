@@ -1,3 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .feed-like-icon {
+    @apply flex items-center justify-center h-7 w-7 
+    mx-auto text-gray-400 group-hover:bg-green-100/10
+    group-hover:text-green-600 rounded-3xl group-hover:rounded-xl 
+    transition-all duration-300;
+  }
+  .feed-dislike-icon {
+    @apply flex items-center justify-center h-7 w-7 
+    mx-auto text-gray-400 group-hover:bg-red-100/10
+    group-hover:text-red-600 rounded-3xl group-hover:rounded-xl 
+    transition-all duration-300;
+  }
+  .feed-reply-icon {
+    @apply flex items-center justify-center h-7 w-7 
+    mx-auto text-gray-400 group-hover:bg-blue-100/10
+    group-hover:text-blue-600 rounded-3xl group-hover:rounded-xl 
+    transition-all duration-300;
+  }
+
+  .feed-dropdown-icon {
+    @apply flex items-center justify-center h-7 w-7
+    mx-auto text-gray-400 hover:bg-blue-200/10
+    hover:text-blue-600 rounded-3xl hover:rounded-xl 
+    transition-all duration-300;
+  }
+}

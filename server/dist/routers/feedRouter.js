@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const feedController_1 = __importDefault(require("../controllers/feedController"));
 const router = (0, express_1.default)();
 router.get("/profile", feedController_1.default.getProfileFeed, (req, res) => res.status(200).json(res.locals.results));
+router.get("/reply", feedController_1.default.getReplyFeed, (req, res) => res.status(200).json(res.locals.results));
 router.get("/*", feedController_1.default.getFeed, (req, res) => res.status(200).json(res.locals.results));
 router.post("/create", feedController_1.default.createFeed, feedController_1.default.getFeed, (req, res) => {
     res.status(200).json(res.locals.results);

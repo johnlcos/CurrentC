@@ -50,14 +50,6 @@ export default function Layout({
     getCurrentSession();
   }, [router]);
 
-  // useEffect(() => {
-  //   console.log('selectedFeedID', selectedFeedID);
-  //   fetchSpecificFeed({ feedID: selectedFeedID }).then((data) => {
-  //     console.log(data);
-  //     setSelectedFeed(data);
-  //   });
-  // }, [selectedFeedID]);
-
   return (
     <SessionContext.Provider value={userSession}>
       <OverviewContext.Provider

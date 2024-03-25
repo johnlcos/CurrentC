@@ -18,7 +18,6 @@ import { SessionContext } from "@/app/(protected)/layout";
 export const SideNavBar = () => {
   const router = useRouter();
   const session = useContext(SessionContext);
-  console.log(session?.user.user_metadata.username);
 
   const handleSignOut = async (e: React.MouseEvent) => {
     e.preventDefault();

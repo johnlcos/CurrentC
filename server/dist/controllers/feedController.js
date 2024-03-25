@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const supabase_1 = __importDefault(require("../utils/supabase"));
 const feedController = {};
 feedController.getFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.query);
     if (req.query.id) {
         // get a single post when clicked on
         try {
@@ -47,12 +46,25 @@ feedController.getFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     }
 });
 feedController.getProfileFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.query);
     try {
         const { data, error } = yield supabase_1.default
             .from("feeds")
             .select("id, created_at, content, like_count, dislike_count, profiles(username)")
             .eq("authorId", req.query.id);
+        res.locals.results = data;
+        next();
+    }
+    catch (error) {
+        next(error);
+    }
+});
+feedController.getReplyFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const reply_to_id = req.query.id;
+        const { data, error } = yield supabase_1.default
+            .from("feeds")
+            .select("id, created_at, content, like_count, dislike_count, profiles(username)")
+            .match({ type: "REPLY", reply_to_id });
         res.locals.results = data;
         next();
     }
@@ -76,7 +88,6 @@ feedController.createFeed = (req, res, next) => __awaiter(void 0, void 0, void 0
     else if (req.body.type === "REPLY") {
         try {
             const { message, authorId, replyToId, type } = req.body;
-            console.log(replyToId);
             const { error } = yield supabase_1.default
                 .from("feeds")
                 .insert({ content: message, authorId, reply_to_id: replyToId, type });

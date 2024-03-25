@@ -2,7 +2,9 @@
 
 import { FeedWrapper } from "@/components/feed-wrapper";
 import { FeedSchema } from "@/types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { OverviewContext } from "../../layout";
+import { MainFeed } from "@/components/main-feed";
 import fetchSpecificFeed from "@/hooks/fetchSpecficFeed";
 
 const FeedPage = ({ params }: { params: { feedID: string } }) => {
@@ -11,7 +13,6 @@ const FeedPage = ({ params }: { params: { feedID: string } }) => {
   useEffect(() => {
     fetchSpecificFeed({ feedID: params.feedID }).then((data: FeedSchema) => {
       setCurrentFeed(data);
-      console.log("currentFeed: ", currentFeed);
     });
   }, [params.feedID]);
 
@@ -27,6 +28,7 @@ const FeedPage = ({ params }: { params: { feedID: string } }) => {
           created_at={currentFeed.created_at}
         />
       )}
+      <MainFeed type="reply" id={params.feedID} />
     </div>
   );
 };

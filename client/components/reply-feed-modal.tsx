@@ -30,7 +30,6 @@ export const ReplyFeedModal = () => {
       fetchSpecificFeed({ feedID: selectedFeedID }).then((data) => {
         setSelectedFeed(data);
         lastFetchedID.current = selectedFeedID;
-        console.log(data);
       });
     }
   }, [selectedFeedID, showModal]);

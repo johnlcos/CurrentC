@@ -14,11 +14,12 @@ export const MainFeed = ({ type, id }: { type: string; id: string }) => {
       feedUrl = "http://localhost:8080/feed/";
     } else if (type === "profile") {
       feedUrl = `http://localhost:8080/feed/profile?id=${id}`;
+    } else if (type === "reply") {
+      feedUrl = `http://localhost:8080/feed/reply?id=${id}`;
     }
     const response = await fetch(feedUrl);
     const data = await response.json();
     setAllFeed(data);
-    console.log("allFeed: ", allFeed);
   };
 
   useEffect(() => {
@@ -34,7 +35,11 @@ export const MainFeed = ({ type, id }: { type: string; id: string }) => {
   return (
     <div id="main-feed-container" className="p-2 w-full bg-[#17191A]">
       {type === "main" && (
-        <NewFeedInputBox type={"POST"} setAllFeed={setAllFeed} />
+        <NewFeedInputBox
+          type={"POST"}
+          setAllFeed={setAllFeed}
+          replyToId={null}
+        />
       )}
       <div className="flex justify-center items-center flex-col gap-y-5">
         {allFeed.map((feed) => (

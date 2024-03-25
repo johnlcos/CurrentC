@@ -11,6 +11,11 @@ interface FeedController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  getReplyFeed: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
   createFeed: (
     req: Request,
     res: Response,
@@ -23,7 +28,6 @@ feedController.getFeed = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(req.query);
   if (req.query.id) {
     // get a single post when clicked on
     try {
@@ -61,7 +65,6 @@ feedController.getProfileFeed = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(req.query);
   try {
     const { data, error } = await supabase
       .from("feeds")
@@ -69,6 +72,26 @@ feedController.getProfileFeed = async (
         "id, created_at, content, like_count, dislike_count, profiles(username)"
       )
       .eq("authorId", req.query.id);
+    res.locals.results = data;
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+feedController.getReplyFeed = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const reply_to_id = req.query.id;
+    const { data, error } = await supabase
+      .from("feeds")
+      .select(
+        "id, created_at, content, like_count, dislike_count, profiles(username)"
+      )
+      .match({ type: "REPLY", reply_to_id });
     res.locals.results = data;
     next();
   } catch (error) {
@@ -94,7 +117,6 @@ feedController.createFeed = async (
   } else if (req.body.type === "REPLY") {
     try {
       const { message, authorId, replyToId, type } = req.body;
-      console.log(replyToId);
       const { error } = await supabase
         .from("feeds")
         .insert({ content: message, authorId, reply_to_id: replyToId, type });

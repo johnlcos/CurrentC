@@ -18,6 +18,7 @@ export const MainFeed = ({ type, id }: { type: string; id: string }) => {
     const response = await fetch(feedUrl);
     const data = await response.json();
     setAllFeed(data);
+    console.log("allFeed: ", allFeed);
   };
 
   useEffect(() => {

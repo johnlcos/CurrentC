@@ -13,6 +13,9 @@ export default function UserProfile({
   searchParams: { id: string };
 }) {
   const session = useContext(SessionContext);
+  const profileId =
+    !searchParams.id && session ? session.user.id : searchParams.id;
+
   return (
     <div className="w-full flex flex-col">
       <div id="header" className="w-full flex content-between p-4">
@@ -31,12 +34,14 @@ export default function UserProfile({
           </p>
         </div>
         <div className="w-1/6">
-          {searchParams.id && searchParams.id !== session?.user.id && (
+          {searchParams.id ? (
             <FollowButton followed_id={searchParams.id} />
+          ) : (
+            <button>Edit Profile </button>
           )}
         </div>
       </div>
-      <MainFeed type="profile" id={searchParams.id} />
+      <MainFeed type="profile" id={profileId} />
     </div>
   );
 }

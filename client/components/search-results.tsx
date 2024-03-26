@@ -21,7 +21,7 @@ export const SearchResults = ({
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
   const searchParams = useSearchParams();
   const searchValue = searchParams.get("search");
-  const session = useContext(SessionContext);
+  const { userSession } = useContext(SessionContext);
 
   const fetchSearchResults = async () => {
     if (searchValue) {
@@ -58,7 +58,7 @@ export const SearchResults = ({
               <FaUserCircle size={25} />
               <h1>{result.username}</h1>
             </Link>
-            {session && result.id !== session.user.id ? (
+            {userSession && result.id !== userSession.user.id ? (
               <FollowButton followed_id={result.id} />
             ) : null}
           </div>

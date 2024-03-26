@@ -16,6 +16,11 @@ interface FeedController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  getMainFeed: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
   createFeed: (
     req: Request,
     res: Response,
@@ -43,7 +48,7 @@ feedController.getFeed = async (
       next(error);
     }
   } else {
-    // get the main feed to display on overview
+    // get the total feed to display on explore
     try {
       const { data, error } = await supabase
         .from("feeds")
@@ -92,6 +97,28 @@ feedController.getReplyFeed = async (
         "id, created_at, content, like_count, dislike_count, profiles(username)"
       )
       .match({ type: "REPLY", reply_to_id });
+    res.locals.results = data;
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+feedController.getMainFeed = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const follower_id = req.query.id;
+    const { data, error } = await supabase
+      .from("feeds")
+      .select(
+        "id, created_at, content, like_count, dislike_count, profiles(username)"
+      )
+      .eq("type", "POST")
+      .order("created_at", { ascending: false });
+    // console.log("getMainFeed data: ", data);
     res.locals.results = data;
     next();
   } catch (error) {

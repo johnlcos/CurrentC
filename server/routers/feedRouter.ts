@@ -11,6 +11,10 @@ router.get("/reply", feedController.getReplyFeed, (req, res) =>
   res.status(200).json(res.locals.results)
 );
 
+router.get("/main", feedController.getMainFeed, (req, res) =>
+  res.status(200).json(res.locals.results)
+);
+
 router.get("/*", feedController.getFeed, (req, res) =>
   res.status(200).json(res.locals.results)
 );

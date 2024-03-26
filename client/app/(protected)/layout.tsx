@@ -15,7 +15,15 @@ interface OverviewContextSchema {
   setSelectedFeedID: (id: string) => void;
 }
 
-export const SessionContext = createContext<Session | null>(null);
+interface SessionContextSchema {
+  userSession: Session | null;
+  setUserSession: (sess: Session) => void;
+}
+
+export const SessionContext = createContext<SessionContextSchema>({
+  userSession: null,
+  setUserSession: () => {},
+});
 export const OverviewContext = createContext<OverviewContextSchema>({
   showModal: false,
   setShowModal: () => {},
@@ -49,9 +57,9 @@ export default function Layout({
 
     getCurrentSession();
   }, [router]);
-
+  console.log(userSession);
   return (
-    <SessionContext.Provider value={userSession}>
+    <SessionContext.Provider value={{ userSession, setUserSession }}>
       <OverviewContext.Provider
         value={{
           showModal,

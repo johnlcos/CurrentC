@@ -30,7 +30,7 @@ feedController.getFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         }
     }
     else {
-        // get the main feed to display on overview
+        // get the total feed to display on explore
         try {
             const { data, error } = yield supabase_1.default
                 .from("feeds")
@@ -65,6 +65,22 @@ feedController.getReplyFeed = (req, res, next) => __awaiter(void 0, void 0, void
             .from("feeds")
             .select("id, created_at, content, like_count, dislike_count, profiles(username)")
             .match({ type: "REPLY", reply_to_id });
+        res.locals.results = data;
+        next();
+    }
+    catch (error) {
+        next(error);
+    }
+});
+feedController.getMainFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const follower_id = req.query.id;
+        const { data, error } = yield supabase_1.default
+            .from("feeds")
+            .select("id, created_at, content, like_count, dislike_count, profiles(username)")
+            .eq("type", "POST")
+            .order("created_at", { ascending: false });
+        // console.log("getMainFeed data: ", data);
         res.locals.results = data;
         next();
     }

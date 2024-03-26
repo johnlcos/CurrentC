@@ -65,7 +65,8 @@ userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 
     try {
         const { data, error } = yield supabase_1.default
             .from("profiles")
-            .select("id, username");
+            .select("profile_avatar, description")
+            .eq("id", req.query.id);
         res.locals.userInfo = data;
         next();
     }
@@ -139,6 +140,27 @@ userController.toggleFollow = (req, res, next) => __awaiter(void 0, void 0, void
             });
             res.locals.follow = "unfollowed";
         }
+        next();
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log("in edit profile: ", req.body);
+        const { data } = yield supabase_1.default.auth.getSession();
+        // console.log(data);
+        // console.log(data.session.user_metadata)
+        yield supabase_1.default.auth.updateUser({ data: { username: req.body.username } });
+        const { error } = yield supabase_1.default
+            .from("profiles")
+            .update({
+            username: req.body.username,
+            description: req.body.description,
+        })
+            .eq("id", req.body.id);
         next();
     }
     catch (error) {

@@ -34,6 +34,11 @@ interface UserController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  editProfile: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
 }
 
 userController.signup = async (
@@ -103,7 +108,8 @@ userController.getUserInfo = async (
   try {
     const { data, error } = await supabase
       .from("profiles")
-      .select("id, username");
+      .select("profile_avatar, description")
+      .eq("id", req.query.id);
     res.locals.userInfo = data;
     next();
   } catch (error) {
@@ -140,7 +146,6 @@ userController.searchUsers = async (
         .textSearch("username", name);
       res.locals.searchResults = data;
     }
-
     next();
   } catch (error) {
     console.log(error);
@@ -191,6 +196,31 @@ userController.toggleFollow = async (
       });
       res.locals.follow = "unfollowed";
     }
+    next();
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+userController.editProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    console.log("in edit profile: ", req.body);
+    const { data } = await supabase.auth.getSession();
+    // console.log(data);
+    // console.log(data.session.user_metadata)
+    await supabase.auth.updateUser({ data: { username: req.body.username } });
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        username: req.body.username,
+        description: req.body.description,
+      })
+      .eq("id", req.body.id);
     next();
   } catch (error) {
     console.log(error);

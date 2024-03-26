@@ -11,6 +11,8 @@ export const MainFeed = ({ type, id }: { type: string; id: string }) => {
   const fetchFeed = async () => {
     let feedUrl = "";
     if (type === "main") {
+      feedUrl = `http://localhost:8080/feed/main?id=${id}`;
+    } else if (type === "explore") {
       feedUrl = "http://localhost:8080/feed/";
     } else if (type === "profile") {
       feedUrl = `http://localhost:8080/feed/profile?id=${id}`;

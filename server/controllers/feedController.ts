@@ -16,6 +16,11 @@ interface FeedController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  getMainFeed: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
   createFeed: (
     req: Request,
     res: Response,
@@ -43,7 +48,7 @@ feedController.getFeed = async (
       next(error);
     }
   } else {
-    // get the main feed to display on overview
+    // get the total feed to display on explore
     try {
       const { data, error } = await supabase
         .from('feeds')
@@ -71,7 +76,7 @@ feedController.getProfileFeed = async (
       .select(
         'id, created_at, content, like_count, dislike_count, profiles(username)'
       )
-      .eq('authorId', req.query.id);
+      .match({ type: 'POST', authorId: req.query.id });
     res.locals.results = data;
     next();
   } catch (error) {
@@ -94,6 +99,41 @@ feedController.getReplyFeed = async (
       .match({ type: 'REPLY', reply_to_id })
       .order('created_at', { ascending: false });
     res.locals.results = data;
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+feedController.getMainFeed = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // try {
+  //   const follower_id = req.query.id;
+  //   const { data, error } = await supabase
+  //     .from("feeds")
+  //     .select(
+  //       "id, created_at, content, like_count, dislike_count, profiles(username)"
+  //     )
+  //     .eq("type", "POST")
+  //     .order("created_at", { ascending: false });
+  //   // console.log("getMainFeed data: ", data);
+  //   res.locals.results = data;
+  //   next();
+  // } catch (error) {
+  //   next(error);
+  // }
+
+  try {
+    const follower_id = req.query.id;
+    const { data, error } = await supabase
+      .from('relationships')
+      .select('follower_id, followed_id, profiles(id)')
+      .match({});
+
+    console.log(data);
     next();
   } catch (error) {
     next(error);

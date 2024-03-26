@@ -17,10 +17,10 @@ export const NewFeedInputBox = ({
 }: NewFeedInputBoxProps) => {
   const [value, setValue] = useState('');
 
-  const session = useContext(SessionContext);
+  const { userSession } = useContext(SessionContext);
 
   const handleClick = async () => {
-    if (session) {
+    if (userSession) {
       const response = await fetch('http://localhost:8080/feed/create', {
         method: 'POST',
         headers: {
@@ -28,7 +28,7 @@ export const NewFeedInputBox = ({
         },
         body: JSON.stringify({
           message: value,
-          authorId: session.user.id,
+          authorId: userSession.user.id,
           type,
           replyToId,
         }),

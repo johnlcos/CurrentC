@@ -27,13 +27,16 @@ router.get("/signout", userController_1.default.signout, (req, res) => {
 router.get("/", userController_1.default.searchUsers, (req, res) => {
     res.status(200).json({ data: res.locals.searchResults });
 });
-router.get("/getUserInfo", userController_1.default.getUserInfo, (req, res) => {
+router.get("/info", userController_1.default.getUserInfo, (req, res) => {
     res.status(200).json({ data: res.locals.userInfo });
 });
 router.get("/isfollowing", userController_1.default.checkIsFollowing, (req, res) => {
     res.status(200).json({ data: res.locals.isFollowing });
 });
 router.get("/follow", userController_1.default.toggleFollow, (req, res) => {
+    res.status(200).json({});
+});
+router.put("/edit", userController_1.default.editProfile, (req, res) => {
     res.status(200).json({});
 });
 exports.default = router;

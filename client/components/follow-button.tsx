@@ -10,11 +10,11 @@ interface FollowButtonProps {
 export const FollowButton = ({ followed_id }: FollowButtonProps) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const session = useContext(SessionContext);
+  const { userSession } = useContext(SessionContext);
 
   const fetchIsFollowing = async () => {
     const response = await fetch(
-      `http://localhost:8080/users/isfollowing?follower=${session?.user.id}&followed=${followed_id}`
+      `http://localhost:8080/users/isfollowing?follower=${userSession?.user.id}&followed=${followed_id}`
     );
     const json = await response.json();
     setIsFollowing(json.data);
@@ -25,7 +25,7 @@ export const FollowButton = ({ followed_id }: FollowButtonProps) => {
     setIsFollowing((prev) => !prev);
     const response = await fetch(
       `http://localhost:8080/users/follow?follower=${
-        session?.user.id
+        userSession?.user.id
       }&followed=${followed_id}&following=${!isFollowing}`
     );
   };

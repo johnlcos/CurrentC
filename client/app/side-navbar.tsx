@@ -17,7 +17,7 @@ import { SessionContext } from "@/app/(protected)/layout";
 
 export const SideNavBar = () => {
   const router = useRouter();
-  const session = useContext(SessionContext);
+  const { userSession } = useContext(SessionContext);
 
   const handleSignOut = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -49,7 +49,7 @@ export const SideNavBar = () => {
           <p className="hidden lg:block">Home</p>
         </Link>
         <Link
-          href="/"
+          href="/explore"
           className="text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2"
         >
           <BiMapAlt />
@@ -70,7 +70,7 @@ export const SideNavBar = () => {
           <p className="hidden lg:block">Messages</p>
         </Link>
         <Link
-          href={`/profile/${session?.user.user_metadata.username}`}
+          href={`/profile/${userSession?.user.user_metadata.username}`}
           className="text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2"
         >
           <BiSolidUser />

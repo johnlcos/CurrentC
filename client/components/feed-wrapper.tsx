@@ -94,7 +94,7 @@ export const FeedWrapper = ({
         <div className='flex flex-col w-full'>
           <div
             id='feed-wrapper-identifiers'
-            className='w-[90%] flex justify-between items-center ml-3'
+            className='w-[94%] flex justify-between items-center ml-3'
           >
             <div className='flex justify-center items-center'>
               <div className='text-[14px] bolded text-[#E4E6EB]'>{author}</div>

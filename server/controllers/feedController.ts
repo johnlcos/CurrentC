@@ -113,12 +113,12 @@ feedController.getMainFeed = async (
   // try {
   //   const follower_id = req.query.id;
   //   const { data, error } = await supabase
-  //     .from("feeds")
+  //     .from('feeds')
   //     .select(
-  //       "id, created_at, content, like_count, dislike_count, profiles(username)"
+  //       'id, created_at, content, like_count, dislike_count, profiles(username)'
   //     )
-  //     .eq("type", "POST")
-  //     .order("created_at", { ascending: false });
+  //     .eq('type', 'POST')
+  //     .order('created_at', { ascending: false });
   //   // console.log("getMainFeed data: ", data);
   //   res.locals.results = data;
   //   next();
@@ -128,10 +128,21 @@ feedController.getMainFeed = async (
 
   try {
     const follower_id = req.query.id;
-    const { data, error } = await supabase
+    console.log(follower_id);
+    const followersData = await supabase
       .from('relationships')
-      .select('follower_id, followed_id, profiles(id)')
-      .match({});
+      .select('followed_id')
+      .match({ follower_id: follower_id });
+    const followersArray = followersData.data;
+    console.log(followersArray);
+    const { data, error } = await supabase
+      .from('feeds')
+      .select(
+        'id, created_at, content, like_count, dislike_count, profiles(username)'
+      )
+      .match({ authorId: followersArray[0].followed_id, type: 'POST' })
+      .order('created_at', { ascending: false });
+    res.locals.results = data;
 
     console.log(data);
     next();

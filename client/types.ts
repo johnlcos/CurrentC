@@ -3,10 +3,11 @@ export interface FeedProfileSchema {
 }
 
 export interface FeedSchema {
-  profiles: FeedProfileSchema;
+  profiles?: FeedProfileSchema;
   id: string;
   like_count: number;
   dislike_count: number;
   content: string;
   created_at: string;
+  username?: string;
 }

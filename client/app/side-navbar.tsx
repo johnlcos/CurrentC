@@ -12,9 +12,12 @@ import {
   BiSolidUser,
 } from "react-icons/bi";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import { SessionContext } from "@/app/(protected)/layout";
 
 export const SideNavBar = () => {
   const router = useRouter();
+  const { userSession } = useContext(SessionContext);
 
   const handleSignOut = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -32,7 +35,7 @@ export const SideNavBar = () => {
   return (
     <div
       id="left-column"
-      className="flex flex-col gap-y-5 items-center p-5 bg-green-700 shadow-2xl h-full w-full px-2"
+      className="flex flex-col gap-y-5 items-center p-5 bg-[#17191A] shadow-2xl h-full w-full px-2"
     >
       <div className="w-[50px] h-[50px] md:w-[100px] md:h-[100px] relative rounded-full overflow-hidden">
         <Image src={"/alerty.png"} fill alt="Alerty Logo"></Image>
@@ -46,7 +49,7 @@ export const SideNavBar = () => {
           <p className="hidden lg:block">Home</p>
         </Link>
         <Link
-          href="/"
+          href="/explore"
           className="text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2"
         >
           <BiMapAlt />
@@ -67,7 +70,7 @@ export const SideNavBar = () => {
           <p className="hidden lg:block">Messages</p>
         </Link>
         <Link
-          href="/"
+          href={`/profile/${userSession?.user.user_metadata.username}`}
           className="text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2"
         >
           <BiSolidUser />

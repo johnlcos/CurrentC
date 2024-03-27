@@ -13,11 +13,15 @@ interface SearchResultType {
   profile_avatar: string;
 }
 
-export const SearchResults = () => {
+export const SearchResults = ({
+  setText,
+}: {
+  setText: React.Dispatch<React.SetStateAction<string>>;
+}) => {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
   const searchParams = useSearchParams();
   const searchValue = searchParams.get("search");
-  const session = useContext(SessionContext);
+  const { userSession } = useContext(SessionContext);
 
   const fetchSearchResults = async () => {
     if (searchValue) {
@@ -39,19 +43,22 @@ export const SearchResults = () => {
         return (
           <div
             key={result.id}
-            className="flex items-center justify-between bg-white rounded-md shadow-sm py-2 px-1"
+            className="flex items-center justify-between bg-white rounded-md shadow-sm py-2 px-2"
           >
             <Link
               href={{
                 pathname: `/profile/${result.username}`,
                 query: { id: result.id },
               }}
-              className="flex items-center w-full gap-4 "
+              className="flex items-center w-full gap-3 "
+              onClick={() => {
+                setText("");
+              }}
             >
               <FaUserCircle size={25} />
               <h1>{result.username}</h1>
             </Link>
-            {session && result.id !== session.user.id ? (
+            {userSession && result.id !== userSession.user.id ? (
               <FollowButton followed_id={result.id} />
             ) : null}
           </div>

@@ -1,13 +1,14 @@
 "use client";
-import { userInfo } from "os";
+
 import { MainFeed } from "@/components/main-feed";
-import { useEffect, useState } from "react";
-import { UserSearch } from "@/components/user-search";
+import { SessionContext } from "@/app/(protected)/layout";
+import { useContext } from "react";
 
 export default function Home() {
+  const { userSession } = useContext(SessionContext);
   return (
-    <div className="bg-slate-100 w-full flex flex-col">
-      <MainFeed />
+    <div className="w-full flex flex-col">
+      {userSession && <MainFeed type="main" id={userSession.user.id} />}
     </div>
   );
 }

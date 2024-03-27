@@ -37,7 +37,7 @@ router.get("/", userController.searchUsers, (req: Request, res: Response) => {
   res.status(200).json({ data: res.locals.searchResults });
 });
 
-router.get("/getUserInfo", userController.getUserInfo, (req, res) => {
+router.get("/info", userController.getUserInfo, (req, res) => {
   res.status(200).json({ data: res.locals.userInfo });
 });
 
@@ -52,6 +52,14 @@ router.get(
 router.get(
   "/follow",
   userController.toggleFollow,
+  (req: Request, res: Response) => {
+    res.status(200).json({});
+  }
+);
+
+router.put(
+  "/edit",
+  userController.editProfile,
   (req: Request, res: Response) => {
     res.status(200).json({});
   }

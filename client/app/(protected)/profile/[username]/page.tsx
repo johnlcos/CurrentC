@@ -17,6 +17,10 @@ export default function UserProfile({
   const [description, setDescription] = useState<string>("");
   const [profileAvater, setProfileAvatar] = useState<string>("");
   const [editing, setEditing] = useState<boolean>(false);
+  const [prevProfile, setPrevProfile] = useState({
+    username: "",
+    description: "",
+  });
 
   const router = useRouter();
 
@@ -45,6 +49,11 @@ export default function UserProfile({
     getCurrentSession();
   }, []);
 
+  const handleStartEdits = () => {
+    setEditing(true);
+    setPrevProfile({ username: username, description: description });
+  };
+
   const handleSaveEdits = async () => {
     const response = await fetch("http://localhost:8080/users/edit", {
       method: "PUT",
@@ -61,16 +70,25 @@ export default function UserProfile({
     router.push(`http://localhost:3000/profile/${username}`);
   };
 
+  const handleCancelEdits = () => {
+    setUsername(prevProfile.username);
+    setDescription(prevProfile.description);
+    setEditing(false);
+  };
+
   return (
-    <div className="w-full flex flex-col">
-      <div id="header" className="w-full flex content-between px-4 py-8">
-        <div className="flex flex-col items-center w-2/6 gap-2">
+    <div className="w-full flex flex-col items-center">
+      <div
+        id="header"
+        className="w-full flex flex-col items-center lg:flex-row lg:content-between px-4 py-8 gap-8"
+      >
+        <div className="flex flex-col items-center w-min gap-2">
           <FaUserCircle size={200} color="#8A8D91" />
           {!editing ? (
             <h1 className="text-[#E4E6EB]">{username}</h1>
           ) : (
             <input
-              className="text-[#E4E6EB] bg-[#17191A] text-center"
+              className="resize-none rounded-lg text-[#E4E6EB] bg-gray-700 dark-border-gray-600focus:ring-blue-500 focus:border-blue-500 text-center"
               name="username"
               id="edit-profile-username"
               value={username}
@@ -78,12 +96,12 @@ export default function UserProfile({
             ></input>
           )}
         </div>
-        <div className="w-3/6 h-full">
+        <div className="w-full h-full">
           {!editing ? (
-            <p className="w-full h-full text-[#E4E6EB] pr-3">{description}</p>
+            <p className="w-full h-full text-[#E4E6EB] p-2">{description}</p>
           ) : (
             <textarea
-              className="w-full h-full text-[#E4E6EB] bg-[#17191A] pr-3"
+              className="p-2 w-full h-full resize-none rounded-lg text-[#E4E6EB] bg-gray-700 dark-border-gray-600focus:ring-blue-500 focus:border-blue-500"
               name="description"
               id="edit-profile-description"
               maxLength={300}
@@ -92,12 +110,12 @@ export default function UserProfile({
             ></textarea>
           )}
         </div>
-        <div className="w-1/6">
+        <div className="w-min h-full flex flex-col justify-between items-start">
           {searchParams.id ? (
             <FollowButton followed_id={searchParams.id} />
           ) : !editing ? (
             <button
-              onClick={() => setEditing(true)}
+              onClick={handleStartEdits}
               className="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px] flex justify-center items-center"
             >
               Edit Profile
@@ -110,6 +128,14 @@ export default function UserProfile({
               Save Edits
             </button>
           )}
+          {editing ? (
+            <button
+              onClick={handleCancelEdits}
+              className="text-white bg-red-700 hover:bg-red-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px] flex justify-center items-center"
+            >
+              Cancel
+            </button>
+          ) : null}
         </div>
       </div>
       <MainFeed type="profile" id={profileId} />

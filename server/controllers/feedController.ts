@@ -1,6 +1,6 @@
-import { db } from "../utils/db";
-import { Request, Response, NextFunction } from "express";
-import supabase from "../utils/supabase";
+import { db } from '../utils/db';
+import { Request, Response, NextFunction } from 'express';
+import supabase from '../utils/supabase';
 
 const feedController = {} as FeedController;
 
@@ -16,12 +16,17 @@ interface FeedController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
-  getMainFeed: (
+  getFollowedFeed: (
     req: Request,
     res: Response,
     next: NextFunction
   ) => Promise<void>;
   createFeed: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  mergeFeeds: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -37,11 +42,11 @@ feedController.getFeed = async (
     // get a single post when clicked on
     try {
       const { data, error } = await supabase
-        .from("feeds")
+        .from('feeds')
         .select(
-          "id, created_at, content, like_count, dislike_count, profiles(username)"
+          'id, created_at, content, like_count, dislike_count, profiles(username)'
         )
-        .eq("id", req.query.id);
+        .eq('id', req.query.id);
       res.locals.results = data;
       next();
     } catch (error) {
@@ -51,12 +56,12 @@ feedController.getFeed = async (
     // get the total feed to display on explore
     try {
       const { data, error } = await supabase
-        .from("feeds")
+        .from('feeds')
         .select(
-          "id, created_at, content, like_count, dislike_count, profiles(username)"
+          'id, created_at, content, like_count, dislike_count, profiles(username)'
         )
-        .eq("type", "POST")
-        .order("created_at", { ascending: false });
+        .eq('type', 'POST')
+        .order('created_at', { ascending: false });
       res.locals.results = data;
       next();
     } catch (error) {
@@ -72,12 +77,12 @@ feedController.getProfileFeed = async (
 ) => {
   try {
     const { data, error } = await supabase
-      .from("feeds")
+      .from('feeds')
       .select(
-        "id, created_at, content, like_count, dislike_count, profiles(username)"
+        'id, created_at, content, like_count, dislike_count, profiles(username)'
       )
-      .match({ type: "POST", authorId: req.query.id });
-    res.locals.results = data;
+      .match({ type: 'POST', author_id: req.query.id });
+    res.locals.profileFeed = data;
     next();
   } catch (error) {
     next(error);
@@ -92,11 +97,12 @@ feedController.getReplyFeed = async (
   try {
     const reply_to_id = req.query.id;
     const { data, error } = await supabase
-      .from("feeds")
+      .from('feeds')
       .select(
-        "id, created_at, content, like_count, dislike_count, profiles(username)"
+        'id, created_at, content, like_count, dislike_count, profiles(username)'
       )
-      .match({ type: "REPLY", reply_to_id });
+      .match({ type: 'REPLY', reply_to_id })
+      .order('created_at', { ascending: false });
     res.locals.results = data;
     next();
   } catch (error) {
@@ -104,7 +110,7 @@ feedController.getReplyFeed = async (
   }
 };
 
-feedController.getMainFeed = async (
+feedController.getFollowedFeed = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -112,12 +118,12 @@ feedController.getMainFeed = async (
   // try {
   //   const follower_id = req.query.id;
   //   const { data, error } = await supabase
-  //     .from("feeds")
+  //     .from('feeds')
   //     .select(
-  //       "id, created_at, content, like_count, dislike_count, profiles(username)"
+  //       'id, created_at, content, like_count, dislike_count, profiles(username)'
   //     )
-  //     .eq("type", "POST")
-  //     .order("created_at", { ascending: false });
+  //     .eq('type', 'POST')
+  //     .order('created_at', { ascending: false });
   //   // console.log("getMainFeed data: ", data);
   //   res.locals.results = data;
   //   next();
@@ -127,12 +133,19 @@ feedController.getMainFeed = async (
 
   try {
     const follower_id = req.query.id;
+    console.log(follower_id);
+    // const followersData = await supabase
+    //   .from('relationships')
+    //   .select('followed_id')
+    //   .match({ follower_id: follower_id });
+    // const followersArray = followersData.data;
+    // console.log(followersArray);
     const { data, error } = await supabase
-      .from("relationships")
-      .select("follower_id, followed_id, profiles(id)")
-      .match({});
-
-    console.log(data);
+      .from('feed_with_relationship')
+      .select('id, created_at, content, like_count, dislike_count, username')
+      .or(`follower_id.eq.${follower_id}`)
+      .order('created_at', { ascending: false });
+    res.locals.followedFeed = data;
     next();
   } catch (error) {
     next(error);
@@ -144,26 +157,48 @@ feedController.createFeed = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (req.body.type === "POST") {
+  if (req.body.type === 'POST') {
     try {
-      const { message, authorId } = req.body;
+      const { message, author_id } = req.body;
       const { error } = await supabase
-        .from("feeds")
-        .insert({ content: message, authorId });
+        .from('feeds')
+        .insert({ content: message, author_id });
       next();
     } catch (error) {
       next(error);
     }
-  } else if (req.body.type === "REPLY") {
+  } else if (req.body.type === 'REPLY') {
     try {
-      const { message, authorId, replyToId, type } = req.body;
+      const { message, author_id, replyToId, type } = req.body;
       const { error } = await supabase
-        .from("feeds")
-        .insert({ content: message, authorId, reply_to_id: replyToId, type });
+        .from('feeds')
+        .insert({ content: message, author_id, reply_to_id: replyToId, type });
       next();
     } catch (error) {
       next(error);
     }
+  }
+};
+
+feedController.mergeFeeds = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const results = [
+      ...res.locals.profileFeed,
+      ...res.locals.followedFeed,
+    ].sort((a, b) => {
+      a.created_at = new Date(a.created_at);
+      b.created_at = new Date(b.created_at);
+      return b.created_at - a.created_at;
+    });
+    res.locals.results = results;
+    console.log(results);
+    next();
+  } catch (error) {
+    next(error);
   }
 };
 

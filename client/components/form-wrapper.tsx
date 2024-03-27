@@ -36,9 +36,6 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
       if (returnedData) {
         router.push(returnedData.redirectUrl);
       }
-
-      const sessionRes = await fetch('http://localhost:8080/auth/session');
-      const session = await sessionRes.json();
     } catch (error) {
       console.log(error);
     }

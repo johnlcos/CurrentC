@@ -25,12 +25,6 @@ export const MainFeed = ({ type, id }: { type: string; id: string }) => {
   };
 
   useEffect(() => {
-    // const fetchAllFeed = async () => {
-    //   const response = await fetch("http://localhost:8080/feed/");
-    //   const data = await response.json();
-    //   setAllFeed(data);
-    // };
-    // fetchAllFeed();
     fetchFeed();
   }, []);
 

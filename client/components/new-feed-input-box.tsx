@@ -28,7 +28,7 @@ export const NewFeedInputBox = ({
         },
         body: JSON.stringify({
           message: value,
-          authorId: userSession.user.id,
+          author_id: userSession.user.id,
           type,
           replyToId,
         }),

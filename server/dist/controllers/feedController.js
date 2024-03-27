@@ -50,7 +50,7 @@ feedController.getProfileFeed = (req, res, next) => __awaiter(void 0, void 0, vo
         const { data, error } = yield supabase_1.default
             .from('feeds')
             .select('id, created_at, content, like_count, dislike_count, profiles(username)')
-            .match({ type: 'POST', authorId: req.query.id });
+            .match({ type: 'POST', author_id: req.query.id });
         res.locals.results = data;
         next();
     }
@@ -92,16 +92,16 @@ feedController.getMainFeed = (req, res, next) => __awaiter(void 0, void 0, void 
     try {
         const follower_id = req.query.id;
         console.log(follower_id);
-        const followersData = yield supabase_1.default
-            .from('relationships')
-            .select('followed_id')
-            .match({ follower_id: follower_id });
-        const followersArray = followersData.data;
-        console.log(followersArray);
+        // const followersData = await supabase
+        //   .from('relationships')
+        //   .select('followed_id')
+        //   .match({ follower_id: follower_id });
+        // const followersArray = followersData.data;
+        // console.log(followersArray);
         const { data, error } = yield supabase_1.default
-            .from('feeds')
-            .select('id, created_at, content, like_count, dislike_count, profiles(username)')
-            .match({ authorId: followersArray[0].followed_id, type: 'POST' })
+            .from('feed_with_relationship')
+            .select('id, created_at, content, like_count, dislike_count, username')
+            .or(`follower_id.eq.${follower_id}`)
             .order('created_at', { ascending: false });
         res.locals.results = data;
         console.log(data);
@@ -114,10 +114,10 @@ feedController.getMainFeed = (req, res, next) => __awaiter(void 0, void 0, void 
 feedController.createFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.body.type === 'POST') {
         try {
-            const { message, authorId } = req.body;
+            const { message, author_id } = req.body;
             const { error } = yield supabase_1.default
                 .from('feeds')
-                .insert({ content: message, authorId });
+                .insert({ content: message, author_id });
             next();
         }
         catch (error) {
@@ -126,10 +126,10 @@ feedController.createFeed = (req, res, next) => __awaiter(void 0, void 0, void 0
     }
     else if (req.body.type === 'REPLY') {
         try {
-            const { message, authorId, replyToId, type } = req.body;
+            const { message, author_id, replyToId, type } = req.body;
             const { error } = yield supabase_1.default
                 .from('feeds')
-                .insert({ content: message, authorId, reply_to_id: replyToId, type });
+                .insert({ content: message, author_id, reply_to_id: replyToId, type });
             next();
         }
         catch (error) {

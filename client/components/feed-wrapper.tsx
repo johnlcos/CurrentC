@@ -10,7 +10,7 @@ import { useContext, useState, useRef, useEffect } from 'react';
 import { DropDown } from './dropdown';
 
 interface FeedWrapperProps {
-  author: string;
+  author: string | undefined;
   id: string;
   likes: number;
   dislikes: number;

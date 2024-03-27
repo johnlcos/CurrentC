@@ -51,7 +51,7 @@ feedController.getProfileFeed = (req, res, next) => __awaiter(void 0, void 0, vo
             .from('feeds')
             .select('id, created_at, content, like_count, dislike_count, profiles(username)')
             .match({ type: 'POST', author_id: req.query.id });
-        res.locals.results = data;
+        res.locals.profileFeed = data;
         next();
     }
     catch (error) {
@@ -73,7 +73,7 @@ feedController.getReplyFeed = (req, res, next) => __awaiter(void 0, void 0, void
         next(error);
     }
 });
-feedController.getMainFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+feedController.getFollowedFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // try {
     //   const follower_id = req.query.id;
     //   const { data, error } = await supabase
@@ -103,8 +103,7 @@ feedController.getMainFeed = (req, res, next) => __awaiter(void 0, void 0, void 
             .select('id, created_at, content, like_count, dislike_count, username')
             .or(`follower_id.eq.${follower_id}`)
             .order('created_at', { ascending: false });
-        res.locals.results = data;
-        console.log(data);
+        res.locals.followedFeed = data;
         next();
     }
     catch (error) {
@@ -135,6 +134,24 @@ feedController.createFeed = (req, res, next) => __awaiter(void 0, void 0, void 0
         catch (error) {
             next(error);
         }
+    }
+});
+feedController.mergeFeeds = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const results = [
+            ...res.locals.profileFeed,
+            ...res.locals.followedFeed,
+        ].sort((a, b) => {
+            a.created_at = new Date(a.created_at);
+            b.created_at = new Date(b.created_at);
+            return b.created_at - a.created_at;
+        });
+        res.locals.results = results;
+        console.log(results);
+        next();
+    }
+    catch (error) {
+        next(error);
     }
 });
 exports.default = feedController;

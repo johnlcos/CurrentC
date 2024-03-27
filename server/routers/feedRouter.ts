@@ -13,7 +13,7 @@ router.get('/reply', feedController.getReplyFeed, (req, res) =>
 
 router.get(
   '/main',
-  feedController.getMainFeed,
+  feedController.getFollowedFeed,
   feedController.getProfileFeed,
   feedController.mergeFeeds,
   (req, res) => res.status(200).json(res.locals.results)

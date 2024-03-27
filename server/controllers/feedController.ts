@@ -16,7 +16,7 @@ interface FeedController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
-  getMainFeed: (
+  getFollowedFeed: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -82,7 +82,7 @@ feedController.getProfileFeed = async (
         'id, created_at, content, like_count, dislike_count, profiles(username)'
       )
       .match({ type: 'POST', author_id: req.query.id });
-    res.locals.results = data;
+    res.locals.profileFeed = data;
     next();
   } catch (error) {
     next(error);
@@ -110,7 +110,7 @@ feedController.getReplyFeed = async (
   }
 };
 
-feedController.getMainFeed = async (
+feedController.getFollowedFeed = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -145,9 +145,7 @@ feedController.getMainFeed = async (
       .select('id, created_at, content, like_count, dislike_count, username')
       .or(`follower_id.eq.${follower_id}`)
       .order('created_at', { ascending: false });
-    res.locals.results = data;
-
-    console.log(data);
+    res.locals.followedFeed = data;
     next();
   } catch (error) {
     next(error);
@@ -186,6 +184,22 @@ feedController.mergeFeeds = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  try {
+    const results = [
+      ...res.locals.profileFeed,
+      ...res.locals.followedFeed,
+    ].sort((a, b) => {
+      a.created_at = new Date(a.created_at);
+      b.created_at = new Date(b.created_at);
+      return b.created_at - a.created_at;
+    });
+    res.locals.results = results;
+    console.log(results);
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 
 export default feedController;

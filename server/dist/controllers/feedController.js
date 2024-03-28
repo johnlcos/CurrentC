@@ -74,30 +74,8 @@ feedController.getReplyFeed = (req, res, next) => __awaiter(void 0, void 0, void
     }
 });
 feedController.getFollowedFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // try {
-    //   const follower_id = req.query.id;
-    //   const { data, error } = await supabase
-    //     .from('feeds')
-    //     .select(
-    //       'id, created_at, content, like_count, dislike_count, profiles(username)'
-    //     )
-    //     .eq('type', 'POST')
-    //     .order('created_at', { ascending: false });
-    //   // console.log("getMainFeed data: ", data);
-    //   res.locals.results = data;
-    //   next();
-    // } catch (error) {
-    //   next(error);
-    // }
     try {
         const follower_id = req.query.id;
-        console.log(follower_id);
-        // const followersData = await supabase
-        //   .from('relationships')
-        //   .select('followed_id')
-        //   .match({ follower_id: follower_id });
-        // const followersArray = followersData.data;
-        // console.log(followersArray);
         const { data, error } = yield supabase_1.default
             .from('feed_with_relationship')
             .select('id, created_at, content, like_count, dislike_count, username')

@@ -15,7 +15,8 @@ export default function UserProfile({
 }) {
   const [username, setUsername] = useState<string>(params.username);
   const [description, setDescription] = useState<string>("");
-  const [profileAvater, setProfileAvatar] = useState<string>("");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>("");
+  const [uploading, setUploading] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
   const [prevProfile, setPrevProfile] = useState({
     username: "",
@@ -34,7 +35,7 @@ export default function UserProfile({
     );
     const json = await response.json();
     setDescription(json.data[0].description);
-    setProfileAvatar(json.data[0].profile_avatar);
+    setAvatarUrl(json.data[0].profile_avatar);
   };
 
   const getCurrentSession = async () => {
@@ -76,14 +77,40 @@ export default function UserProfile({
     setEditing(false);
   };
 
+  const handleAvatarChange = async () => {
+    if (!editing) return;
+  };
+
   return (
     <div className="w-full flex flex-col items-center">
       <div
         id="header"
-        className="w-full flex flex-col items-center lg:flex-row lg:content-between px-4 py-8 gap-8"
+        className="w-full flex flex-col items-center xl:flex-row xl:content-between px-4 py-8 gap-8"
       >
         <div className="flex flex-col items-center w-min gap-2">
-          <FaUserCircle size={200} color="#8A8D91" />
+          {/* {!avatarUrl && <FaUserCircle size={200} color="#8A8D91" />} */}
+
+          <label
+            htmlFor="avatarUpload"
+            className="relative inline-block w-48 h-48"
+          >
+            {avatarUrl ? null : (
+              <FaUserCircle
+                size={200}
+                color="#8A8D91"
+                className="absolute inset-0"
+              />
+            )}
+            <input
+              type="file"
+              id="avatarUpload"
+              accept="image/*"
+              className="opacity-0 absolute inset-0 w-full h-full enabled:cursor-pointer"
+              onChange={handleAvatarChange}
+              disabled={uploading || !editing}
+            />
+          </label>
+
           {!editing ? (
             <h1 className="text-[#E4E6EB]">{username}</h1>
           ) : (
@@ -124,6 +151,10 @@ export default function UserProfile({
             <button
               onClick={handleSaveEdits}
               className="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px] flex justify-center items-center"
+              disabled={
+                prevProfile.username === username &&
+                prevProfile.description === description
+              }
             >
               Save Edits
             </button>

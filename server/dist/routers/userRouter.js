@@ -36,7 +36,7 @@ router.get("/isfollowing", userController_1.default.checkIsFollowing, (req, res)
 router.get("/follow", userController_1.default.toggleFollow, (req, res) => {
     res.status(200).json({});
 });
-router.put("/edit", userController_1.default.editProfile, (req, res) => {
+router.put("/edit", userController_1.default.editProfile, userController_1.default.upsertAvatar, (req, res) => {
     res.status(200).json({});
 });
 exports.default = router;

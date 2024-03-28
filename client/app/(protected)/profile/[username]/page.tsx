@@ -18,10 +18,19 @@ export default function UserProfile({
   const [avatarUrl, setAvatarUrl] = useState<string | null>("");
   const [uploading, setUploading] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
-  const [prevProfile, setPrevProfile] = useState({
+  const [prevProfile, setPrevProfile] = useState<{
+    username: string;
+    description: string;
+    avatarUrl: string | null;
+  }>({
     username: "",
     description: "",
+    avatarUrl: "",
   });
+  const [newAvatar, setNewAvatar] = useState<{
+    path: string;
+    file: File | null;
+  }>({ path: "", file: null });
 
   const router = useRouter();
 
@@ -52,20 +61,25 @@ export default function UserProfile({
 
   const handleStartEdits = () => {
     setEditing(true);
-    setPrevProfile({ username: username, description: description });
+    setPrevProfile({ username, description, avatarUrl });
   };
 
   const handleSaveEdits = async () => {
+    const formData = new FormData();
+    formData.append("id", profileId);
+    formData.append("username", username);
+    formData.append("description", description);
+    if (newAvatar.file) {
+      formData.append("path", newAvatar.path);
+      formData.append("file", newAvatar.file);
+    }
+    console.log("formData: ", formData);
     const response = await fetch("http://localhost:8080/users/edit", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        id: profileId,
-        username,
-        description,
-      }),
+      body: JSON.stringify(formData),
     });
     setEditing(false);
     router.push(`http://localhost:3000/profile/${username}`);
@@ -77,8 +91,23 @@ export default function UserProfile({
     setEditing(false);
   };
 
-  const handleAvatarChange = async () => {
+  const handleAvatarChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (!editing) return;
+
+    // setUploading(true);
+
+    if (!event.target.files || event.target.files.length === 0) {
+      throw new Error("You must select an image to upload.");
+    }
+
+    const file = event.target.files[0];
+    const fileExt = file.name.split(".").pop();
+    const fileName = `avatar_${profileId}.${fileExt}`;
+    const filePath = `${fileName}`;
+    setNewAvatar({ path: filePath, file: file });
+    // const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
   };
 
   return (
@@ -105,7 +134,7 @@ export default function UserProfile({
               type="file"
               id="avatarUpload"
               accept="image/*"
-              className="opacity-0 absolute inset-0 w-full h-full enabled:cursor-pointer"
+              className="opacity-0 absolute inset-0 w-full h-full enabled:cursor-pointer disabled:invisible"
               onChange={handleAvatarChange}
               disabled={uploading || !editing}
             />

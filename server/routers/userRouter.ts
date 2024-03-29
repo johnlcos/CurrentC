@@ -60,6 +60,7 @@ router.get(
 router.put(
   "/edit",
   userController.editProfile,
+  userController.upsertAvatar,
   (req: Request, res: Response) => {
     res.status(200).json({});
   }

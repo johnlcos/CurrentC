@@ -9,5 +9,6 @@ export interface FeedSchema {
   dislike_count: number;
   content: string;
   created_at: string;
+  author_id: string;
   username?: string;
 }

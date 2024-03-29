@@ -1,16 +1,17 @@
-'use client';
-import { useRouter } from 'next/navigation';
-import { FaUserCircle } from 'react-icons/fa';
-import { BiLike } from 'react-icons/bi';
-import { BiDislike } from 'react-icons/bi';
-import { FaReply } from 'react-icons/fa';
-import { MessageWrapper } from './message-wrapper';
-import { OverviewContext } from '@/app/(protected)/layout';
-import { useContext, useState, useRef, useEffect } from 'react';
-import { DropDown } from './dropdown';
+"use client";
+import { useRouter } from "next/navigation";
+import { FaUserCircle } from "react-icons/fa";
+import { BiLike } from "react-icons/bi";
+import { BiDislike } from "react-icons/bi";
+import { FaReply } from "react-icons/fa";
+import { MessageWrapper } from "./message-wrapper";
+import { OverviewContext, SessionContext } from "@/app/(protected)/layout";
+import { useContext, useState, useRef, useEffect } from "react";
+import { DropDown } from "./dropdown";
 
 interface FeedWrapperProps {
   author: string | undefined;
+  author_id: string;
   id: string;
   likes: number;
   dislikes: number;
@@ -21,6 +22,7 @@ interface FeedWrapperProps {
 
 export const FeedWrapper = ({
   author,
+  author_id,
   id,
   likes,
   dislikes,
@@ -33,6 +35,8 @@ export const FeedWrapper = ({
 
   const { showModal, setShowModal, setSelectedFeedID } =
     useContext(OverviewContext);
+
+  const { userSession } = useContext(SessionContext);
 
   const [dropDown, setDropDown] = useState(false);
 
@@ -74,83 +78,97 @@ export const FeedWrapper = ({
         setDropDown(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   });
 
+  const handleProfileClick = async (e: React.MouseEvent) => {
+    console.log("handleProfileClick");
+    e.stopPropagation();
+    let profileUrl = "";
+    if (userSession?.user.id === author_id) profileUrl = `/profile/${author}`;
+    else profileUrl = `/profile/${author}?id=${author_id}`;
+    router.push(profileUrl);
+  };
+
   return (
     <div
-      className='outline h-[200px] w-[90%] md:w-[80%] max-w-[500px] 
-      flex flex-col justify-between shadow-lg outline-none bg-[#252526] rounded-lg'
+      className="outline h-[200px] w-[90%] md:w-[80%] max-w-[500px] 
+      flex flex-col justify-between shadow-lg outline-none bg-[#252526] rounded-lg"
       onClick={() => router.push(`/feed/${id}`)}
     >
-      <div className='flex m-2 w-full'>
-        <div>
-          <FaUserCircle size={35} style={{ color: '#8A8D91' }} />
+      <div className="flex m-2 w-full">
+        <div onClick={handleProfileClick}>
+          <FaUserCircle size={35} style={{ color: "#8A8D91" }} />
         </div>
-        <div className='flex flex-col w-full'>
+        <div className="flex flex-col w-full">
           <div
-            id='feed-wrapper-identifiers'
-            className='w-[94%] flex justify-between items-center ml-3'
+            id="feed-wrapper-identifiers"
+            className="w-[94%] flex justify-between items-center ml-3"
           >
-            <div className='flex justify-center items-center'>
-              <div className='text-[14px] bolded text-[#E4E6EB]'>{author}</div>
-              <div className='opacity- text-[12px] ml-1 text-gray-500'>{`· ${getTimeDifferenceInMinutes(
+            <div className="flex justify-center items-center">
+              <div
+                className="text-[14px] bolded text-[#E4E6EB]"
+                onClick={handleProfileClick}
+              >
+                {author}
+              </div>
+              <div className="opacity- text-[12px] ml-1 text-gray-500">{`· ${getTimeDifferenceInMinutes(
                 created_at
               )}`}</div>
             </div>
-            <div className='flex'>
-              <div className='feed-dropdown-icon' ref={dropDownRef}>
+            <div className="flex">
+              <div className="feed-dropdown-icon" ref={dropDownRef}>
                 <button
-                  className='text-gray-500 relative'
+                  className="text-gray-500 relative"
                   onClick={handleDropDown}
                 >
                   ...
                   {dropDown && (
-                    <div className='z-10 absolute bg-[#252526] rounded-xl shadow-md'>
-                      <DropDown menu={['follow', 'add/remove', 'block']} />
+                    <div className="z-10 absolute bg-[#252526] rounded-xl shadow-md">
+                      <DropDown menu={["follow", "add/remove", "block"]} />
                     </div>
                   )}
                 </button>
               </div>
             </div>
           </div>
-          <div className='ml-3'>
+          <div className="ml-3">
             <MessageWrapper message={content} />
           </div>
         </div>
       </div>
 
-      <div id='feed-footer' className='text-[13px] mx-3 flex justify-between'>
+      <div id="feed-footer" className="text-[13px] mx-3 flex justify-between">
         <div
-          id='views-likes-dislike-box'
-          className='flex justify-between w-1/3'
+          id="views-likes-dislike-box"
+          className="flex justify-between w-1/3"
         >
-          <div className='flex gap-4'>
-            <div className='flex items-center justify-center group'>
-              <span className='feed-like-icon'>
+          <div className="flex gap-4">
+            <div className="flex items-center justify-center group">
+              <span className="feed-like-icon">
                 <BiLike size={17} />
               </span>
-              <span className='group-hover:text-green-500 text-gray-500'>
+              <span className="group-hover:text-green-500 text-gray-500">
                 {likes}
               </span>
             </div>
-            <div className='flex items-center justify-center group'>
-              <div className='feed-dislike-icon'>
+            <div className="flex items-center justify-center group">
+              <div className="feed-dislike-icon">
                 <BiDislike size={17} />
               </div>
-              <span className='group-hover:text-red-500 text-gray-500'>
+              <span className="group-hover:text-red-500 text-gray-500">
                 {dislikes}
               </span>
             </div>
           </div>
         </div>
-        {type !== 'Modal' && (
-          <div className='flex items-center justify-center group'>
-            <button onClick={handleReplyClick} className='feed-reply-icon'>
+        {type !== "Modal" && (
+          <div className="flex items-center justify-center group">
+            <button onClick={handleReplyClick} className="feed-reply-icon">
               <FaReply />
             </button>
           </div>

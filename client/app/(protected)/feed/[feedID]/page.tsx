@@ -20,7 +20,11 @@ const FeedPage = ({ params }: { params: { feedID: string } }) => {
     <div className='h-full w-full flex  flex-col items-center'>
       {currentFeed !== null && (
         <FeedWrapper
-          author={currentFeed.profiles.username}
+          author={
+            currentFeed.profiles
+              ? currentFeed.profiles.username
+              : currentFeed.username
+          }
           id={currentFeed.id}
           likes={currentFeed.like_count}
           dislikes={currentFeed.dislike_count}

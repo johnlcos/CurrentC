@@ -44,7 +44,7 @@ feedController.getFeed = async (
       const { data, error } = await supabase
         .from("feeds")
         .select(
-          "id, created_at, content, like_count, dislike_count, profiles(username)"
+          "id, created_at, content, like_count, dislike_count, author_id, profiles(username)"
         )
         .eq("id", req.query.id);
       res.locals.results = data;
@@ -58,7 +58,7 @@ feedController.getFeed = async (
       const { data, error } = await supabase
         .from("feeds")
         .select(
-          "id, created_at, content, like_count, dislike_count, profiles(username)"
+          "id, created_at, content, like_count, dislike_count, author_id, profiles(username)"
         )
         .eq("type", "POST")
         .order("created_at", { ascending: false });
@@ -79,7 +79,7 @@ feedController.getProfileFeed = async (
     const { data, error } = await supabase
       .from("feeds")
       .select(
-        "id, created_at, content, like_count, dislike_count, profiles(username)"
+        "id, created_at, content, like_count, dislike_count, author_id, profiles(username)"
       )
       .match({ type: "POST", author_id: req.query.id });
     res.locals.profileFeed = data;
@@ -99,7 +99,7 @@ feedController.getReplyFeed = async (
     const { data, error } = await supabase
       .from("feeds")
       .select(
-        "id, created_at, content, like_count, dislike_count, profiles(username)"
+        "id, created_at, content, like_count, dislike_count, author_id, profiles(username)"
       )
       .match({ type: "REPLY", reply_to_id })
       .order("created_at", { ascending: false });
@@ -142,7 +142,9 @@ feedController.getFollowedFeed = async (
     // console.log(followersArray);
     const { data, error } = await supabase
       .from("feed_with_relationship")
-      .select("id, created_at, content, like_count, dislike_count, username")
+      .select(
+        "id, created_at, content, like_count, dislike_count, author_id, username"
+      )
       .or(`follower_id.eq.${follower_id}`)
       .order("created_at", { ascending: false });
     res.locals.followedFeed = data;

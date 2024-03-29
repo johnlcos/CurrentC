@@ -45,6 +45,7 @@ export const MainFeed = ({ type, id }: { type: string; id: string }) => {
           <FeedWrapper
             key={feed.id}
             author={feed.profiles ? feed.profiles.username : feed.username}
+            author_id={feed.author_id}
             id={feed.id}
             likes={feed.like_count}
             dislikes={feed.dislike_count}

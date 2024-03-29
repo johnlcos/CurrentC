@@ -13,11 +13,14 @@ export default function UserProfile({
   params: { username: string };
   searchParams: { id: string };
 }) {
+  // store the profile information in state
   const [username, setUsername] = useState<string>(params.username);
   const [description, setDescription] = useState<string>("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>("");
+  // store status in state for conditional rendering
   const [uploading, setUploading] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
+  // store the previous profile info in state for canceling updates
   const [prevProfile, setPrevProfile] = useState<{
     username: string;
     description: string;
@@ -27,6 +30,7 @@ export default function UserProfile({
     description: "",
     avatarUrl: "",
   });
+  // store the path and file in state when uploading a new avatar
   const [newAvatar, setNewAvatar] = useState<{
     path: string;
     file: File | null;
@@ -35,6 +39,7 @@ export default function UserProfile({
   const router = useRouter();
 
   const { userSession, setUserSession } = useContext(SessionContext);
+  // get the profileId from session if it is the users profile, or search params if someone else
   const profileId =
     !searchParams.id && userSession ? userSession.user.id : searchParams.id;
 
@@ -47,6 +52,7 @@ export default function UserProfile({
     setAvatarUrl(json.data[0].profile_avatar);
   };
 
+  // after updating info, get the new session which includes updated username in meta data and update the session context
   const getCurrentSession = async () => {
     const response = await fetch("http://localhost:8080/auth/session");
     const json = await response.json();
@@ -54,6 +60,7 @@ export default function UserProfile({
     setUserSession(session);
   };
 
+  // on render and after updates cause router.push, fetch the profile info and the updated session
   useEffect(() => {
     fetchProfileInfo();
     getCurrentSession();

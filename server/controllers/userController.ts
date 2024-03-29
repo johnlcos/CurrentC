@@ -39,6 +39,11 @@ interface UserController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  upsertAvatar: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
 }
 
 userController.signup = async (
@@ -211,9 +216,9 @@ userController.editProfile = async (
   try {
     console.log("in edit profile: ", req.body);
     const { data } = await supabase.auth.getSession();
-    // console.log(data);
-    // console.log(data.session.user_metadata)
+    // update the username stored in auth metadata
     await supabase.auth.updateUser({ data: { username: req.body.username } });
+    // update info in profiles table
     const { error } = await supabase
       .from("profiles")
       .update({
@@ -221,6 +226,27 @@ userController.editProfile = async (
         description: req.body.description,
       })
       .eq("id", req.body.id);
+    next();
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+userController.upsertAvatar = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.body.file) next();
+    const { data, error } = await supabase.storage
+      .from("avatars")
+      .upload(req.body.filePath, req.body.file, {
+        cacheControl: "3600",
+        upsert: true,
+      });
+    console.log("avatar upload error: ", error);
     next();
   } catch (error) {
     console.log(error);

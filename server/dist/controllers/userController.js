@@ -151,9 +151,9 @@ userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 
     try {
         console.log("in edit profile: ", req.body);
         const { data } = yield supabase_1.default.auth.getSession();
-        // console.log(data);
-        // console.log(data.session.user_metadata)
+        // update the username stored in auth metadata
         yield supabase_1.default.auth.updateUser({ data: { username: req.body.username } });
+        // update info in profiles table
         const { error } = yield supabase_1.default
             .from("profiles")
             .update({
@@ -161,6 +161,24 @@ userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 
             description: req.body.description,
         })
             .eq("id", req.body.id);
+        next();
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+userController.upsertAvatar = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.body.file)
+            next();
+        const { data, error } = yield supabase_1.default.storage
+            .from("avatars")
+            .upload(req.body.filePath, req.body.file, {
+            cacheControl: "3600",
+            upsert: true,
+        });
+        console.log("avatar upload error: ", error);
         next();
     }
     catch (error) {

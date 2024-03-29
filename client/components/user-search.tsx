@@ -9,13 +9,17 @@ import { useDebounce } from "use-debounce";
 export const UserSearch = () => {
   const router = useRouter();
   const pathname = usePathname();
+  // store the search bar text in state
   const [text, setText] = useState<string>("");
+
+  // update query after user stops typeing for 0.5s with the current value in input
   const [query] = useDebounce(text, 500);
 
   const handleSearch = () => {
     router.push(`/overview?search=${query}`);
   };
 
+  // when query changes, if it is empty clear search params, else push the story to the search params
   useEffect(() => {
     if (pathname !== "/overview") return;
     else if (!query) router.push("/overview");

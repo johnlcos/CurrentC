@@ -18,9 +18,12 @@ export const SearchResults = ({
 }: {
   setText: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
+  // pull the search params from the url
   const searchParams = useSearchParams();
   const searchValue = searchParams.get("search");
+  // store the search results in state
+  const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
+
   const { userSession } = useContext(SessionContext);
 
   const fetchSearchResults = async () => {
@@ -33,6 +36,7 @@ export const SearchResults = ({
     }
   };
 
+  // whenever the search params change, fetch the backend for results and update state for rendering
   useEffect(() => {
     fetchSearchResults();
   }, [searchValue]);

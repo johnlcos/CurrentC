@@ -69,18 +69,18 @@ export default function Layout({
           setSelectedFeedID,
         }}
       >
-        <div className='w-full h-full bg-[#17191A]'>
+        <div className='w-full h-full bg-[#17191A] flex'>
           <div className='z-10 relative'>
             <ReplyFeedModal />
           </div>
           {!isLoading && (
             <div className='flex w-full h-full'>
-              <div className='w-1/6 p-0 fixed h-full'>
+              <div className='w-1/6 fixed h-full'>
                 <SideNavBar />
               </div>
               <div className='w-1/6 h-screen'></div>
-              <div className='w-3/6 h-full'>{children}</div>
-              <div className='w-2/6 hidden md:block'></div>
+              <div className='flex-grow h-full'>{children}</div>
+              <div className='w-2/6 hidden lg:block'></div>
             </div>
           )}
 

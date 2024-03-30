@@ -75,10 +75,11 @@ export default function Layout({
           </div>
           {!isLoading && (
             <div className='flex w-full h-full'>
-              <div className='w-1/6 p-0 fixed h-screen'>
+              <div className='w-1/6 p-0 fixed h-full'>
                 <SideNavBar />
               </div>
-              {children}
+              <div className='w-1/6 h-screen'></div>
+              <div className='w-5/6 h-full'>{children}</div>
             </div>
           )}
 

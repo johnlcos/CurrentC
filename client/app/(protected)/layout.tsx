@@ -94,7 +94,7 @@ export default function Layout({
             </div>
           )}
 
-          {!isLoading && pathname === '/settings/account' && (
+          {/* {!isLoading && pathname === '/settings/account' && (
             <div className='flex w-full h-full'>
               <div className='w-1/6 p-0 fixed h-screen'>
                 <SideNavBar />
@@ -111,7 +111,7 @@ export default function Layout({
                 <RightSideWrapper />
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </OverviewContext.Provider>
     </SessionContext.Provider>

@@ -1,25 +1,22 @@
+import Link from 'next/link';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 
-const AccountSettingsPage = () => {
+const SettingsPage = () => {
   const settingsMenu = [
-    'Your account',
-    'Monetization',
-    'Premium',
-    'Creator Subscriptions',
-    'Security and account acceess',
-    'Privacy and safety',
-    'Notifications',
-    'Accessibility, display, and languages',
-    'Additional resources',
-    'Help center',
+    { label: 'Your account', href: 'settings/account' },
+    { label: 'Monetization', href: 'settings/monetization' },
+    { label: 'Premium', href: 'settings/premium' },
   ];
   return (
     <div className='text-text-white w-full h-[500px]'>
       <div>
         <div className='mb-5 text-xl'>Settings</div>
         {settingsMenu.map((setting) => (
-          <div key={setting} className='flex justify-between gap-y-2 h-10'>
-            <span>{setting}</span>
+          <div
+            key={setting.label}
+            className='flex justify-between gap-y-2 h-10'
+          >
+            <Link href={setting.href}>{setting.label}</Link>
             <span>
               <MdOutlineKeyboardArrowRight />
             </span>
@@ -30,4 +27,4 @@ const AccountSettingsPage = () => {
   );
 };
 
-export default AccountSettingsPage;
+export default SettingsPage;

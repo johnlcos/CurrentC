@@ -7,8 +7,8 @@ export default function Layout({
 }>) {
   return (
     <div className='w-full h-full flex'>
-      <div className='w-full pl-[16%] lg:pr-[32%]'>{children}</div>
-      <div className='w-2/6 p-0 fixed right-0 bg-[#17191A] hidden h-screen lg:block z-1'>
+      <div className='w-full flex justify-center h-full '>{children}</div>
+      <div className='w-3/6 p-0 fixed right-0 bg-[#17191A] hidden h-screen lg:block z-1'>
         <RightSideWrapper />
       </div>
     </div>

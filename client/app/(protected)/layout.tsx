@@ -69,7 +69,7 @@ export default function Layout({
           setSelectedFeedID,
         }}
       >
-        <div className='w-screen h-full bg-[#17191A]'>
+        <div className='w-full h-full bg-[#17191A]'>
           <div className='z-10 relative'>
             <ReplyFeedModal />
           </div>
@@ -79,7 +79,8 @@ export default function Layout({
                 <SideNavBar />
               </div>
               <div className='w-1/6 h-screen'></div>
-              <div className='w-5/6 h-full'>{children}</div>
+              <div className='w-3/6 h-full'>{children}</div>
+              <div className='w-2/6 hidden md:block'></div>
             </div>
           )}
 

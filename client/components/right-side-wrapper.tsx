@@ -6,10 +6,5 @@ import { AccountSettingForm } from './account-setting-form';
 
 export const RightSideWrapper = () => {
   const pathname = usePathname();
-  return (
-    <div>
-      {pathname === '/overview' && <UserSearch />}
-      {pathname === '/settings/account' && <AccountSettingForm />}
-    </div>
-  );
+  return <div>{pathname === '/overview' && <UserSearch />}</div>;
 };

@@ -21,10 +21,15 @@ export default function Layout({
           {settingsMenu.map((setting) => (
             <div
               key={setting.label}
-              className='flex justify-between gap-y-2 h-10'
+              className='flex justify-between gap-y-2 h-10 hover:bg-box-hover-color'
             >
-              <Link href={setting.href}>{setting.label}</Link>
-              <span>
+              <Link
+                className='flex justify-center items-center'
+                href={setting.href}
+              >
+                {setting.label}
+              </Link>
+              <span className='flex justify-center items-center'>
                 <MdOutlineKeyboardArrowRight />
               </span>
             </div>

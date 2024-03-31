@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         'text-white': '#E4E6EB',
+        'box-hover-color': '#2F3335',
       },
     },
   },

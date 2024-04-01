@@ -72,19 +72,9 @@ export default function UserProfile({
   };
 
   const handleSaveEdits = async (e: React.ChangeEvent<HTMLFormElement>) => {
-    // const formData = new FormData();
-    // formData.append('id', profileId);
-    // formData.append('username', username);
-    // formData.append('description', description);
-    // if (newAvatar.file) {
-    //   formData.append('path', newAvatar.path);
-    //   formData.append('file', newAvatar.file);
-    // }
-    // for (const value of formData.values()) {
-    //   console.log(value);
-    // }
     e.preventDefault();
     const formData = new FormData(e.target);
+    formData.append('id', profileId);
     if (newAvatar.file) {
       formData.append('file', newAvatar.file);
       formData.append('path', newAvatar.path);
@@ -95,14 +85,13 @@ export default function UserProfile({
     }
     const response = await fetch('http://localhost:8080/users/edit', {
       method: 'POST',
-      // headers: {
-      //   'Content-Type': 'multipart/form-data',
-      // },
       body: formData,
     });
     const avatarUrl = await response.json();
     console.log(avatarUrl);
+
     setAvatarUrl(avatarUrl.publicUrl);
+
     setEditing(false);
     router.push(`http://localhost:3000/profile/${username}`);
   };

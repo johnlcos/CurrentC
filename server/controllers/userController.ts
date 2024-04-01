@@ -214,12 +214,15 @@ userController.editProfile = async (
   next: NextFunction
 ) => {
   try {
-    console.log('in edit profile: ', req.body);
-    const { data } = await supabase.auth.getSession();
-    console.log(data);
     // update the username stored in auth metadata
-    await supabase.auth.updateUser({ data: { username: req.body.username } });
+    const updateUserResponse = await supabase.auth.updateUser({
+      data: {
+        username: req.body.username,
+        profile_avatar: res.locals.avatarPublicUrl,
+      },
+    });
     // update info in profiles table
+
     const { error } = await supabase
       .from('profiles')
       .update({
@@ -229,7 +232,6 @@ userController.editProfile = async (
       })
       .eq('id', req.body.id);
 
-    console.log(error);
     next();
   } catch (error) {
     console.log(error);
@@ -243,9 +245,11 @@ userController.upsertAvatar = async (
   next: NextFunction
 ) => {
   try {
-    if (!req.body.file) next();
-    console.log('in upset avatar: ', req.file);
-    const fileContent = await fs.readFileSync(req.file.path);
+    if (!req.file) {
+      return next();
+    }
+    const fileContent = fs.readFileSync(req.file.path);
+
     const avatarData = await supabase.storage
       .from('avatars')
       .upload(req.body.path, fileContent, {
@@ -253,16 +257,14 @@ userController.upsertAvatar = async (
         upsert: true,
         contentType: req.file?.mimetype,
       });
-    // console.log('avatar upload error: ', error);
-    // console.log('avatar data', data);
-    console.log(avatarData.data?.path);
 
-    const { data } = supabase.storage
-      .from('avatars')
-      .getPublicUrl(avatarData.data.path);
-    console.log(data);
-    res.locals.avatarPublicUrl = data.publicUrl;
-    console.log(res.locals.avatarPublicUrl);
+    if (avatarData.data) {
+      const { data } = await supabase.storage
+        .from('avatars')
+        .getPublicUrl(avatarData.data.path);
+
+      res.locals.avatarPublicUrl = data.publicUrl;
+    }
 
     next();
   } catch (error) {

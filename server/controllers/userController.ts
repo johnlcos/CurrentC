@@ -1,7 +1,8 @@
-import { db } from "../utils/db";
-import { Request, Response, NextFunction } from "express";
-import { createClient } from "@supabase/supabase-js";
-import supabase from "../utils/supabase";
+import { db } from '../utils/db';
+import { Request, Response, NextFunction } from 'express';
+import { createClient } from '@supabase/supabase-js';
+import supabase from '../utils/supabase';
+import fs from 'fs';
 
 const userController = {} as UserController;
 
@@ -59,7 +60,6 @@ userController.signup = async (
       options: {
         data: {
           username: username,
-          profile_avatar: "PROFILE",
         },
       },
     });
@@ -112,9 +112,9 @@ userController.getUserInfo = async (
 ) => {
   try {
     const { data, error } = await supabase
-      .from("profiles")
-      .select("profile_avatar, description")
-      .eq("id", req.query.id);
+      .from('profiles')
+      .select('profile_avatar, description')
+      .eq('id', req.query.id);
     res.locals.userInfo = data;
     next();
   } catch (error) {
@@ -143,12 +143,12 @@ userController.searchUsers = async (
   next: NextFunction
 ) => {
   try {
-    if (typeof req.query.name === "string") {
+    if (typeof req.query.name === 'string') {
       const name = req.query.name;
       const { data, error } = await supabase
-        .from("profiles")
-        .select("id, username, profile_avatar")
-        .textSearch("username", name);
+        .from('profiles')
+        .select('id, username, profile_avatar')
+        .textSearch('username', name);
       res.locals.searchResults = data;
     }
     next();
@@ -165,8 +165,8 @@ userController.checkIsFollowing = async (
 ) => {
   try {
     const { data, error } = await supabase
-      .from("relationships")
-      .select("id")
+      .from('relationships')
+      .select('id')
       .match({
         follower_id: req.query.follower,
         followed_id: req.query.followed,
@@ -188,18 +188,18 @@ userController.toggleFollow = async (
   next: NextFunction
 ) => {
   try {
-    if (req.query.following === "true") {
-      const { error } = await supabase.from("relationships").insert({
+    if (req.query.following === 'true') {
+      const { error } = await supabase.from('relationships').insert({
         follower_id: req.query.follower,
         followed_id: req.query.followed,
       });
-      res.locals.follow = "followed";
+      res.locals.follow = 'followed';
     } else {
-      const { error } = await supabase.from("relationships").delete().match({
+      const { error } = await supabase.from('relationships').delete().match({
         follower_id: req.query.follower,
         followed_id: req.query.followed,
       });
-      res.locals.follow = "unfollowed";
+      res.locals.follow = 'unfollowed';
     }
     next();
   } catch (error) {
@@ -214,18 +214,22 @@ userController.editProfile = async (
   next: NextFunction
 ) => {
   try {
-    console.log("in edit profile: ", req.body);
+    console.log('in edit profile: ', req.body);
     const { data } = await supabase.auth.getSession();
+    console.log(data);
     // update the username stored in auth metadata
     await supabase.auth.updateUser({ data: { username: req.body.username } });
     // update info in profiles table
     const { error } = await supabase
-      .from("profiles")
+      .from('profiles')
       .update({
         username: req.body.username,
         description: req.body.description,
+        profile_avatar: res.locals.avatarPublicUrl,
       })
-      .eq("id", req.body.id);
+      .eq('id', req.body.id);
+
+    console.log(error);
     next();
   } catch (error) {
     console.log(error);
@@ -240,13 +244,26 @@ userController.upsertAvatar = async (
 ) => {
   try {
     if (!req.body.file) next();
-    const { data, error } = await supabase.storage
-      .from("avatars")
-      .upload(req.body.filePath, req.body.file, {
-        cacheControl: "3600",
+    console.log('in upset avatar: ', req.file);
+    const fileContent = await fs.readFileSync(req.file.path);
+    const avatarData = await supabase.storage
+      .from('avatars')
+      .upload(req.body.path, fileContent, {
+        cacheControl: '3600',
         upsert: true,
+        contentType: req.file?.mimetype,
       });
-    console.log("avatar upload error: ", error);
+    // console.log('avatar upload error: ', error);
+    // console.log('avatar data', data);
+    console.log(avatarData.data?.path);
+
+    const { data } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(avatarData.data.path);
+    console.log(data);
+    res.locals.avatarPublicUrl = data.publicUrl;
+    console.log(res.locals.avatarPublicUrl);
+
     next();
   } catch (error) {
     console.log(error);

@@ -6,7 +6,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const userController_1 = __importDefault(require("../controllers/userController"));
 const multer_1 = __importDefault(require("multer"));
-const upload = (0, multer_1.default)({ dest: 'uploads/' });
+var storage = multer_1.default.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    },
+});
+var upload = (0, multer_1.default)({ storage: storage });
 const router = (0, express_1.default)();
 router.post('/signup', userController_1.default.signup, (req, res) => {
     res.status(200).json({ redirectUrl: 'http://localhost:3000/overview' });
@@ -38,7 +46,7 @@ router.get('/isfollowing', userController_1.default.checkIsFollowing, (req, res)
 router.get('/follow', userController_1.default.toggleFollow, (req, res) => {
     res.status(200).json({});
 });
-router.post('/edit', upload.single('file'), userController_1.default.editProfile, userController_1.default.upsertAvatar, (req, res) => {
-    res.status(200).json({});
+router.post('/edit', upload.single('file'), userController_1.default.upsertAvatar, userController_1.default.editProfile, (req, res) => {
+    res.status(200).json({ data: res.locals.avatarPublicUrl });
 });
 exports.default = router;

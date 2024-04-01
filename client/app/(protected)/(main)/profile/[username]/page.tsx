@@ -71,23 +71,38 @@ export default function UserProfile({
     setPrevProfile({ username, description, avatarUrl });
   };
 
-  const handleSaveEdits = async () => {
-    const formData = new FormData();
-    formData.append('id', profileId);
-    formData.append('username', username);
-    formData.append('description', description);
+  const handleSaveEdits = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    // const formData = new FormData();
+    // formData.append('id', profileId);
+    // formData.append('username', username);
+    // formData.append('description', description);
+    // if (newAvatar.file) {
+    //   formData.append('path', newAvatar.path);
+    //   formData.append('file', newAvatar.file);
+    // }
+    // for (const value of formData.values()) {
+    //   console.log(value);
+    // }
+    e.preventDefault();
+    const formData = new FormData(e.target);
     if (newAvatar.file) {
-      formData.append('path', newAvatar.path);
       formData.append('file', newAvatar.file);
+      formData.append('path', newAvatar.path);
     }
+    console.log(formData);
     for (const value of formData.values()) {
       console.log(value);
     }
-
     const response = await fetch('http://localhost:8080/users/edit', {
       method: 'POST',
+      // headers: {
+      //   'Content-Type': 'multipart/form-data',
+      // },
       body: formData,
     });
+    const avatarUrl = await response.json();
+    console.log(avatarUrl);
+    setAvatarUrl(avatarUrl.publicUrl);
     setEditing(false);
     router.push(`http://localhost:3000/profile/${username}`);
   };
@@ -120,9 +135,12 @@ export default function UserProfile({
 
   return (
     <div className='w-full flex flex-col items-center'>
-      <div
+      <form
         id='header'
-        className='w-full flex flex-col items-center xl:flex-row xl:content-between px-4 py-8 gap-8'
+        className='w-full flex flex-col items-center xl:flex-row 
+        xl:content-between px-4 py-8 gap-8'
+        encType='multipart/form-data'
+        onSubmit={handleSaveEdits}
       >
         <div className='flex flex-col items-center w-min gap-2'>
           {/* {!avatarUrl && <FaUserCircle size={200} color="#8A8D91" />} */}
@@ -131,7 +149,9 @@ export default function UserProfile({
             htmlFor='avatarUpload'
             className='relative inline-block w-48 h-48'
           >
-            {avatarUrl ? null : (
+            {avatarUrl ? (
+              <img src={avatarUrl} alt='Profile Picture' />
+            ) : (
               <FaUserCircle
                 size={200}
                 color='#8A8D91'
@@ -162,19 +182,22 @@ export default function UserProfile({
         </div>
         <div className='w-full h-full'>
           {!editing ? (
-            <p className='w-full h-full text-[#E4E6EB] p-2'>{description}</p>
+            <p className='w-full h-full text-[#E4E6EB] p-2 break-all'>
+              {description}
+            </p>
           ) : (
             <textarea
               className='p-2 w-full h-full resize-none rounded-lg text-[#E4E6EB] bg-gray-700 dark-border-gray-600focus:ring-blue-500 focus:border-blue-500'
               name='description'
               id='edit-profile-description'
+              wrap='hard'
               maxLength={300}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           )}
         </div>
-        <div className='w-min h-full flex flex-col justify-between items-start'>
+        <div className='w-full h-full flex flex-col justify-between items-start'>
           {searchParams.id ? (
             <FollowButton followed_id={searchParams.id} />
           ) : !editing ? (
@@ -186,7 +209,7 @@ export default function UserProfile({
             </button>
           ) : (
             <button
-              onClick={handleSaveEdits}
+              type='submit'
               className='text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px] flex justify-center items-center'
               disabled={
                 prevProfile.username === username &&
@@ -205,7 +228,7 @@ export default function UserProfile({
             </button>
           ) : null}
         </div>
-      </div>
+      </form>
       <MainFeed type='profile' id={profileId} />
     </div>
   );

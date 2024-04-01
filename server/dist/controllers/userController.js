@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supabase_1 = __importDefault(require("../utils/supabase"));
+const fs_1 = __importDefault(require("fs"));
 const userController = {};
 userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -150,6 +151,7 @@ userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 
     try {
         console.log('in edit profile: ', req.body);
         const { data } = yield supabase_1.default.auth.getSession();
+        console.log(data);
         // update the username stored in auth metadata
         yield supabase_1.default.auth.updateUser({ data: { username: req.body.username } });
         // update info in profiles table
@@ -158,8 +160,10 @@ userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 
             .update({
             username: req.body.username,
             description: req.body.description,
+            profile_avatar: res.locals.avatarPublicUrl,
         })
             .eq('id', req.body.id);
+        console.log(error);
         next();
     }
     catch (error) {
@@ -168,17 +172,28 @@ userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 
     }
 });
 userController.upsertAvatar = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     try {
         if (!req.body.file)
             next();
         console.log('in upset avatar: ', req.file);
-        const { data, error } = yield supabase_1.default.storage
+        const fileContent = yield fs_1.default.readFileSync(req.file.path);
+        const avatarData = yield supabase_1.default.storage
             .from('avatars')
-            .upload(req.body.path, req.file, {
+            .upload(req.body.path, fileContent, {
             cacheControl: '3600',
             upsert: true,
+            contentType: (_a = req.file) === null || _a === void 0 ? void 0 : _a.mimetype,
         });
-        console.log('avatar upload error: ', error);
+        // console.log('avatar upload error: ', error);
+        // console.log('avatar data', data);
+        console.log((_b = avatarData.data) === null || _b === void 0 ? void 0 : _b.path);
+        const { data } = supabase_1.default.storage
+            .from('avatars')
+            .getPublicUrl(avatarData.data.path);
+        console.log(data);
+        res.locals.avatarPublicUrl = data.publicUrl;
+        console.log(res.locals.avatarPublicUrl);
         next();
     }
     catch (error) {

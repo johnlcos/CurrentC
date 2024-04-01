@@ -2,7 +2,15 @@ import Router, { Request, Response } from 'express';
 import userController from '../controllers/userController';
 import multer from 'multer';
 
-const upload = multer({ dest: 'uploads/' });
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+var upload = multer({ storage: storage });
 
 const router = Router();
 
@@ -63,10 +71,10 @@ router.get(
 router.post(
   '/edit',
   upload.single('file'),
-  userController.editProfile,
   userController.upsertAvatar,
+  userController.editProfile,
   (req: Request, res: Response) => {
-    res.status(200).json({});
+    res.status(200).json({ data: res.locals.avatarPublicUrl });
   }
 );
 

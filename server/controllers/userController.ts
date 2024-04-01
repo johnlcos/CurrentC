@@ -2,6 +2,7 @@ import { db } from '../utils/db';
 import { Request, Response, NextFunction } from 'express';
 import { createClient } from '@supabase/supabase-js';
 import supabase from '../utils/supabase';
+import fs from 'fs';
 
 const userController = {} as UserController;
 
@@ -215,6 +216,7 @@ userController.editProfile = async (
   try {
     console.log('in edit profile: ', req.body);
     const { data } = await supabase.auth.getSession();
+    console.log(data);
     // update the username stored in auth metadata
     await supabase.auth.updateUser({ data: { username: req.body.username } });
     // update info in profiles table
@@ -223,8 +225,11 @@ userController.editProfile = async (
       .update({
         username: req.body.username,
         description: req.body.description,
+        profile_avatar: res.locals.avatarPublicUrl,
       })
       .eq('id', req.body.id);
+
+    console.log(error);
     next();
   } catch (error) {
     console.log(error);
@@ -240,13 +245,25 @@ userController.upsertAvatar = async (
   try {
     if (!req.body.file) next();
     console.log('in upset avatar: ', req.file);
-    const { data, error } = await supabase.storage
+    const fileContent = await fs.readFileSync(req.file.path);
+    const avatarData = await supabase.storage
       .from('avatars')
-      .upload(req.body.path, req.file, {
+      .upload(req.body.path, fileContent, {
         cacheControl: '3600',
         upsert: true,
+        contentType: req.file?.mimetype,
       });
-    console.log('avatar upload error: ', error);
+    // console.log('avatar upload error: ', error);
+    // console.log('avatar data', data);
+    console.log(avatarData.data?.path);
+
+    const { data } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(avatarData.data.path);
+    console.log(data);
+    res.locals.avatarPublicUrl = data.publicUrl;
+    console.log(res.locals.avatarPublicUrl);
+
     next();
   } catch (error) {
     console.log(error);

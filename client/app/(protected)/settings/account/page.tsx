@@ -3,9 +3,22 @@ import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 
 const SettingsPage = () => {
   const accountSettingMenu = [
-    { label: 'Account Information', href: '/settings/account' },
-    { label: 'Change your password', href: '/settings/password' },
-    { label: 'Delete your account', href: '/settings/delete' },
+    {
+      label: 'Account Information',
+      href: '/settings/account/info',
+      description:
+        'See your account inforamtion like your email address and name',
+    },
+    {
+      label: 'Change your password',
+      href: '/settings/account/password',
+      description: 'Change your password at any time',
+    },
+    {
+      label: 'Delete your account',
+      href: '/settings/account/delete',
+      description: 'Find out how you can delete your account',
+    },
   ];
   return (
     <div className='text-text-white ml-5 p-5'>
@@ -19,12 +32,10 @@ const SettingsPage = () => {
             key={menuItem.label}
             className='flex hover:bg-box-hover-color h-10 justify-between'
           >
-            <Link
-              href={menuItem.href}
-              className='flex justify-center items-center'
-            >
-              {menuItem.label}
-            </Link>
+            <div className='flex flex-col'>
+              <Link href={menuItem.href}>{menuItem.label}</Link>
+              <p className='text-[#71767A] text-sm'>{menuItem.description}</p>
+            </div>
             <div className='flex justify-center items-center'>
               <MdOutlineKeyboardArrowRight />
             </div>

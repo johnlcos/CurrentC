@@ -5,38 +5,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const userController_1 = __importDefault(require("../controllers/userController"));
+const multer_1 = __importDefault(require("multer"));
+const upload = (0, multer_1.default)({ dest: 'uploads/' });
 const router = (0, express_1.default)();
-router.post("/signup", userController_1.default.signup, (req, res) => {
-    res.status(200).json({ redirectUrl: "http://localhost:3000/overview" });
+router.post('/signup', userController_1.default.signup, (req, res) => {
+    res.status(200).json({ redirectUrl: 'http://localhost:3000/overview' });
 });
-router.post("/signin", userController_1.default.signin, (req, res) => {
+router.post('/signin', userController_1.default.signin, (req, res) => {
     res.status(200).json({
         data: res.locals.loggedinUser,
-        redirectUrl: "http://localhost:3000/overview",
+        redirectUrl: 'http://localhost:3000/overview',
     });
 });
-router.get("/session", userController_1.default.getSession, (req, res) => {
+router.get('/session', userController_1.default.getSession, (req, res) => {
     res.status(200).json({ data: res.locals.data });
 });
-router.get("/signout", userController_1.default.signout, (req, res) => {
+router.get('/signout', userController_1.default.signout, (req, res) => {
     res.status(200).json({
-        success: "User logged out",
-        redirectUrl: "http://localhost:3000/",
+        success: 'User logged out',
+        redirectUrl: 'http://localhost:3000/',
     });
 });
-router.get("/", userController_1.default.searchUsers, (req, res) => {
+router.get('/', userController_1.default.searchUsers, (req, res) => {
     res.status(200).json({ data: res.locals.searchResults });
 });
-router.get("/info", userController_1.default.getUserInfo, (req, res) => {
+router.get('/info', userController_1.default.getUserInfo, (req, res) => {
     res.status(200).json({ data: res.locals.userInfo });
 });
-router.get("/isfollowing", userController_1.default.checkIsFollowing, (req, res) => {
+router.get('/isfollowing', userController_1.default.checkIsFollowing, (req, res) => {
     res.status(200).json({ data: res.locals.isFollowing });
 });
-router.get("/follow", userController_1.default.toggleFollow, (req, res) => {
+router.get('/follow', userController_1.default.toggleFollow, (req, res) => {
     res.status(200).json({});
 });
-router.put("/edit", userController_1.default.editProfile, userController_1.default.upsertAvatar, (req, res) => {
+router.post('/edit', upload.single('file'), userController_1.default.editProfile, userController_1.default.upsertAvatar, (req, res) => {
     res.status(200).json({});
 });
 exports.default = router;

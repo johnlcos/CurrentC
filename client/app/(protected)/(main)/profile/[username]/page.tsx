@@ -72,16 +72,21 @@ export default function UserProfile({
   };
 
   const handleSaveEdits = async () => {
+    const formData = new FormData();
+    formData.append('id', profileId);
+    formData.append('username', username);
+    formData.append('description', description);
+    if (newAvatar.file) {
+      formData.append('path', newAvatar.path);
+      formData.append('file', newAvatar.file);
+    }
+    for (const value of formData.values()) {
+      console.log(value);
+    }
+
     const response = await fetch('http://localhost:8080/users/edit', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: profileId,
-        username,
-        description,
-      }),
+      method: 'POST',
+      body: formData,
     });
     setEditing(false);
     router.push(`http://localhost:3000/profile/${username}`);

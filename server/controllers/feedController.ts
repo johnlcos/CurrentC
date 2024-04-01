@@ -174,7 +174,7 @@ feedController.mergeFeeds = async (
       return b.created_at - a.created_at;
     });
     res.locals.results = results;
-    console.log(results);
+    // console.log(results);
     next();
   } catch (error) {
     next(error);

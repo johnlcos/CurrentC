@@ -1,21 +1,24 @@
-import Router, { Request, Response } from "express";
-import userController from "../controllers/userController";
+import Router, { Request, Response } from 'express';
+import userController from '../controllers/userController';
+import multer from 'multer';
+
+const upload = multer({ dest: 'uploads/' });
 
 const router = Router();
 
-router.post("/signup", userController.signup, (req: Request, res: Response) => {
-  res.status(200).json({ redirectUrl: "http://localhost:3000/overview" });
+router.post('/signup', userController.signup, (req: Request, res: Response) => {
+  res.status(200).json({ redirectUrl: 'http://localhost:3000/overview' });
 });
 
-router.post("/signin", userController.signin, (req, res) => {
+router.post('/signin', userController.signin, (req, res) => {
   res.status(200).json({
     data: res.locals.loggedinUser,
-    redirectUrl: "http://localhost:3000/overview",
+    redirectUrl: 'http://localhost:3000/overview',
   });
 });
 
 router.get(
-  "/session",
+  '/session',
   userController.getSession,
   (req: Request, res: Response) => {
     res.status(200).json({ data: res.locals.data });
@@ -23,26 +26,26 @@ router.get(
 );
 
 router.get(
-  "/signout",
+  '/signout',
   userController.signout,
   (req: Request, res: Response) => {
     res.status(200).json({
-      success: "User logged out",
-      redirectUrl: "http://localhost:3000/",
+      success: 'User logged out',
+      redirectUrl: 'http://localhost:3000/',
     });
   }
 );
 
-router.get("/", userController.searchUsers, (req: Request, res: Response) => {
+router.get('/', userController.searchUsers, (req: Request, res: Response) => {
   res.status(200).json({ data: res.locals.searchResults });
 });
 
-router.get("/info", userController.getUserInfo, (req, res) => {
+router.get('/info', userController.getUserInfo, (req, res) => {
   res.status(200).json({ data: res.locals.userInfo });
 });
 
 router.get(
-  "/isfollowing",
+  '/isfollowing',
   userController.checkIsFollowing,
   (req: Request, res: Response) => {
     res.status(200).json({ data: res.locals.isFollowing });
@@ -50,15 +53,16 @@ router.get(
 );
 
 router.get(
-  "/follow",
+  '/follow',
   userController.toggleFollow,
   (req: Request, res: Response) => {
     res.status(200).json({});
   }
 );
 
-router.put(
-  "/edit",
+router.post(
+  '/edit',
+  upload.single('file'),
   userController.editProfile,
   userController.upsertAvatar,
   (req: Request, res: Response) => {

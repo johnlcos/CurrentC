@@ -23,7 +23,6 @@ userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             options: {
                 data: {
                     username: username,
-                    profile_avatar: "PROFILE",
                 },
             },
         });
@@ -64,9 +63,9 @@ userController.getSession = (req, res, next) => __awaiter(void 0, void 0, void 0
 userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { data, error } = yield supabase_1.default
-            .from("profiles")
-            .select("profile_avatar, description")
-            .eq("id", req.query.id);
+            .from('profiles')
+            .select('profile_avatar, description')
+            .eq('id', req.query.id);
         res.locals.userInfo = data;
         next();
     }
@@ -87,12 +86,12 @@ userController.signout = (req, res, next) => __awaiter(void 0, void 0, void 0, f
 });
 userController.searchUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (typeof req.query.name === "string") {
+        if (typeof req.query.name === 'string') {
             const name = req.query.name;
             const { data, error } = yield supabase_1.default
-                .from("profiles")
-                .select("id, username, profile_avatar")
-                .textSearch("username", name);
+                .from('profiles')
+                .select('id, username, profile_avatar')
+                .textSearch('username', name);
             res.locals.searchResults = data;
         }
         next();
@@ -105,8 +104,8 @@ userController.searchUsers = (req, res, next) => __awaiter(void 0, void 0, void 
 userController.checkIsFollowing = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { data, error } = yield supabase_1.default
-            .from("relationships")
-            .select("id")
+            .from('relationships')
+            .select('id')
             .match({
             follower_id: req.query.follower,
             followed_id: req.query.followed,
@@ -126,19 +125,19 @@ userController.checkIsFollowing = (req, res, next) => __awaiter(void 0, void 0, 
 });
 userController.toggleFollow = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (req.query.following === "true") {
-            const { error } = yield supabase_1.default.from("relationships").insert({
+        if (req.query.following === 'true') {
+            const { error } = yield supabase_1.default.from('relationships').insert({
                 follower_id: req.query.follower,
                 followed_id: req.query.followed,
             });
-            res.locals.follow = "followed";
+            res.locals.follow = 'followed';
         }
         else {
-            const { error } = yield supabase_1.default.from("relationships").delete().match({
+            const { error } = yield supabase_1.default.from('relationships').delete().match({
                 follower_id: req.query.follower,
                 followed_id: req.query.followed,
             });
-            res.locals.follow = "unfollowed";
+            res.locals.follow = 'unfollowed';
         }
         next();
     }
@@ -149,18 +148,18 @@ userController.toggleFollow = (req, res, next) => __awaiter(void 0, void 0, void
 });
 userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("in edit profile: ", req.body);
+        console.log('in edit profile: ', req.body);
         const { data } = yield supabase_1.default.auth.getSession();
         // update the username stored in auth metadata
         yield supabase_1.default.auth.updateUser({ data: { username: req.body.username } });
         // update info in profiles table
         const { error } = yield supabase_1.default
-            .from("profiles")
+            .from('profiles')
             .update({
             username: req.body.username,
             description: req.body.description,
         })
-            .eq("id", req.body.id);
+            .eq('id', req.body.id);
         next();
     }
     catch (error) {
@@ -172,13 +171,14 @@ userController.upsertAvatar = (req, res, next) => __awaiter(void 0, void 0, void
     try {
         if (!req.body.file)
             next();
+        console.log('in upset avatar: ', req.file);
         const { data, error } = yield supabase_1.default.storage
-            .from("avatars")
-            .upload(req.body.filePath, req.body.file, {
-            cacheControl: "3600",
+            .from('avatars')
+            .upload(req.body.path, req.file, {
+            cacheControl: '3600',
             upsert: true,
         });
-        console.log("avatar upload error: ", error);
+        console.log('avatar upload error: ', error);
         next();
     }
     catch (error) {

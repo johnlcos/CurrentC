@@ -125,7 +125,7 @@ feedController.mergeFeeds = (req, res, next) => __awaiter(void 0, void 0, void 0
             return b.created_at - a.created_at;
         });
         res.locals.results = results;
-        console.log(results);
+        // console.log(results);
         next();
     }
     catch (error) {

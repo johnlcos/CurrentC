@@ -16,7 +16,7 @@ const FeedPage = ({ params }: { params: { feedID: string } }) => {
     });
   }, [params.feedID]);
 
-  console.log(currentFeed);
+  // console.log(currentFeed);
   return (
     <div className='h-full w-full flex  flex-col items-center'>
       {currentFeed !== null && (

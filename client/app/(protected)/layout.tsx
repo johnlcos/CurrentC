@@ -4,7 +4,6 @@ import { useEffect, useState, createContext } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Session } from '@supabase/gotrue-js/src/lib/types';
 import { ReplyFeedModal } from '@/components/reply-feed-modal';
-import { RightSideWrapper } from '@/components/right-side-wrapper';
 
 interface OverviewContextSchema {
   showModal: boolean;
@@ -41,8 +40,6 @@ export default function Layout({
 
   const router = useRouter();
   const pathname = usePathname();
-
-  console.log(pathname);
 
   useEffect(() => {
     const getCurrentSession = async () => {

@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         'text-white': '#E4E6EB',
         'box-hover-color': '#2F3335',
+        'subtext-color': '#71767A',
       },
     },
   },

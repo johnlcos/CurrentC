@@ -2,6 +2,7 @@
 
 import { useContext } from 'react';
 import { SessionContext } from '@/app/(protected)/layout';
+import { SettingsHeading } from '@/components/setting-heading';
 
 const AccountSettingInfoPage = () => {
   const { userSession } = useContext(SessionContext);
@@ -22,7 +23,8 @@ const AccountSettingInfoPage = () => {
 
   return (
     <div className='p-5'>
-      Account Information
+      <SettingsHeading heading={'Account Information'} />
+
       <div className='flex flex-col gap-y-5 mt-5'>
         <div>
           <div>Username</div>

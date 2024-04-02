@@ -45,6 +45,11 @@ interface UserController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  getFollowCount: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
 }
 
 userController.signup = async (
@@ -265,6 +270,29 @@ userController.upsertAvatar = async (
       res.locals.avatarPublicUrl = data.publicUrl;
     }
 
+    next();
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+userController.getFollowCount = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const following = await supabase
+      .from("relationships")
+      .select("*", { count: "exact", head: true })
+      .eq("follower_id", req.query.id);
+    const followers = await supabase
+      .from("relationships")
+      .select("*", { count: "exact", head: true })
+      .eq("followed_id", req.query.id);
+    res.locals.following = following.count;
+    res.locals.followers = followers.count;
     next();
   } catch (error) {
     console.log(error);

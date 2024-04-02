@@ -37,6 +37,9 @@ export default function UserProfile({
     path: string;
     file: File | null;
   }>({ path: "", file: null });
+  // store the number of followers and following in state
+  const [followers, setFollowers] = useState<number>(0);
+  const [following, setFollowing] = useState<number>(0);
 
   const router = useRouter();
 
@@ -50,9 +53,11 @@ export default function UserProfile({
       `http://localhost:8080/users/info?id=${profileId}`
     );
     const json = await response.json();
-    console.log("fetchProfileInfo: ", json.data[0]);
+    console.log("fetchProfileInfo: ", json);
     setDescription(json.data[0].description);
     setAvatarUrl(json.data[0].profile_avatar);
+    setFollowers(json.followers);
+    setFollowing(json.following);
   };
 
   // after updating info, get the new session which includes updated username in meta data and update the session context for use in sidebar
@@ -176,6 +181,16 @@ export default function UserProfile({
           )}
         </div>
         <div className="flex w-min justify-center items-center gap-20 xl:flex-col xl:items-start xl:h-full">
+          <div className="flex gap-2 xl:flex-col">
+            <p className="text-white flex gap-1">
+              {following}
+              <span className="text-[#71767A]">Following</span>
+            </p>
+            <p className="text-white flex gap-1">
+              {followers}
+              <span className="text-[#71767A]">Followers</span>
+            </p>
+          </div>
           {searchParams.id ? (
             <FollowButton followed_id={searchParams.id} />
           ) : !editing ? (

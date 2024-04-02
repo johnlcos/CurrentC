@@ -39,7 +39,6 @@ export const SearchResults = ({
       setSearchResults(json.data);
       setLoading(false);
     }
-    console.log(searchResults);
   };
 
   // whenever the search params change, fetch the backend for results and update state for rendering

@@ -199,4 +199,23 @@ userController.upsertAvatar = (req, res, next) => __awaiter(void 0, void 0, void
         next(error);
     }
 });
+userController.getFollowCount = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const following = yield supabase_1.default
+            .from("relationships")
+            .select("*", { count: "exact", head: true })
+            .eq("follower_id", req.query.id);
+        const followers = yield supabase_1.default
+            .from("relationships")
+            .select("*", { count: "exact", head: true })
+            .eq("followed_id", req.query.id);
+        res.locals.following = following.count;
+        res.locals.followers = followers.count;
+        next();
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
 exports.default = userController;

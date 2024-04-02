@@ -127,13 +127,11 @@ export default function UserProfile({
       <form
         id="header"
         className="w-full flex flex-col items-center xl:flex-row 
-        xl:content-between px-4 py-8 gap-8"
+        xl:content-between px-5 py-8 gap-8 h-[575px] md:h-[525px] lg:h-[540px] xl:h-[325px]"
         encType="multipart/form-data"
         onSubmit={handleSaveEdits}
       >
-        <div className="flex flex-col items-center w-min gap-2">
-          {/* {!avatarUrl && <FaUserCircle size={200} color="#8A8D91" />} */}
-
+        <div className="flex flex-col items-center w-min gap-6">
           <label
             htmlFor="avatarUpload"
             className="relative inline-block w-48 h-48"
@@ -161,24 +159,23 @@ export default function UserProfile({
             ></input>
           )}
         </div>
-        <div className="w-full h-full">
+        <div className="flex w-full h-full xl:w-[500px] items-center">
           {!editing ? (
             <p className="w-full h-full text-[#E4E6EB] p-2 break-all">
               {description}
             </p>
           ) : (
             <textarea
-              className="p-2 w-full h-full resize-none rounded-lg text-[#E4E6EB] bg-gray-700 dark-border-gray-600focus:ring-blue-500 focus:border-blue-500"
+              className="p-2 w-full h-full resize-none rounded-lg text-[#E4E6EB] bg-gray-700 dark-border-gray-600 focus:ring-blue-500 focus:border-blue-500 break-all"
               name="description"
               id="edit-profile-description"
-              wrap="hard"
               maxLength={300}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           )}
         </div>
-        <div className="w-full h-full flex flex-col justify-between items-start">
+        <div className="flex w-min justify-center items-center gap-20 xl:flex-col xl:items-start xl:h-full">
           {searchParams.id ? (
             <FollowButton followed_id={searchParams.id} />
           ) : !editing ? (
@@ -215,6 +212,3 @@ export default function UserProfile({
     </div>
   );
 }
-
-// bugs
-// changing only name, requires visiting profile twice for it to be reflected

@@ -5,16 +5,25 @@ export const Avatar = ({
   url,
   type,
 }: {
-  url: string | null;
+  url: string | null | undefined;
   type: "profile" | "feed";
 }) => {
-  console.log("Avatar url: ", url);
   return (
     <div>
       {url ? (
-        <Image src={url} alt="Profile Picture" width={200} height={200} />
+        <Image
+          src={url}
+          alt="Profile Picture"
+          width={type === "profile" ? 200 : 35}
+          height={type === "profile" ? 200 : 35}
+          style={{ borderRadius: "50%" }}
+        />
       ) : (
-        <FaUserCircle size={200} color="#8A8D91" className="absolute inset-0" />
+        <FaUserCircle
+          size={type === "profile" ? 200 : 35}
+          color="#8A8D91"
+          className={type === "profile" ? "absolute inset-0" : ""}
+        />
       )}
     </div>
   );

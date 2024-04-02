@@ -91,8 +91,7 @@ export default function UserProfile({
     if (url && url.publicUrl) {
       setAvatarUrl(url.publicUrl);
     }
-    // router.push(`http://localhost:3000/profile/${username}`);
-    router.refresh();
+    router.push(`http://localhost:3000/profile/${username}`);
     setEditing(false);
   };
 
@@ -195,7 +194,8 @@ export default function UserProfile({
               className="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px] flex justify-center items-center"
               disabled={
                 prevProfile.username === username &&
-                prevProfile.description === description
+                prevProfile.description === description &&
+                prevProfile.avatarUrl === avatarUrl
               }
             >
               Save Edits
@@ -217,4 +217,4 @@ export default function UserProfile({
 }
 
 // bugs
-// changing profile only updates when also changing username, otherwise requires a refresh
+// changing only name, requires visiting profile twice for it to be reflected

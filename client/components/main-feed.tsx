@@ -6,8 +6,10 @@ import { FeedSchema } from '@/types';
 import { NewFeedInputBox } from './new-feed-input-box';
 
 export const MainFeed = ({ type, id }: { type: string; id: string }) => {
+  // store the displayed feed in state
   const [allFeed, setAllFeed] = useState<FeedSchema[]>([]);
 
+  // depending on the type of feed needed, update the request url, fetch the feed and update state
   const fetchFeed = async () => {
     let feedUrl = '';
     if (type === 'main') {
@@ -24,19 +26,14 @@ export const MainFeed = ({ type, id }: { type: string; id: string }) => {
     setAllFeed(data);
   };
 
+  // fetch the feed on component render
   useEffect(() => {
-    // const fetchAllFeed = async () => {
-    //   const response = await fetch("http://localhost:8080/feed/");
-    //   const data = await response.json();
-    //   setAllFeed(data);
-    // };
-    // fetchAllFeed();
     fetchFeed();
   }, []);
 
   return (
     <div id='main-feed-container' className='p-2 w-full bg-[#17191A]'>
-      {type === 'main' && (
+      {(type === 'main' || type === 'explore') && (
         <NewFeedInputBox
           type={'POST'}
           setAllFeed={setAllFeed}
@@ -48,6 +45,7 @@ export const MainFeed = ({ type, id }: { type: string; id: string }) => {
           <FeedWrapper
             key={feed.id}
             author={feed.profiles ? feed.profiles.username : feed.username}
+            author_id={feed.author_id}
             id={feed.id}
             likes={feed.like_count}
             dislikes={feed.dislike_count}

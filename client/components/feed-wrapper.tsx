@@ -5,12 +5,13 @@ import { BiLike } from 'react-icons/bi';
 import { BiDislike } from 'react-icons/bi';
 import { FaReply } from 'react-icons/fa';
 import { MessageWrapper } from './message-wrapper';
-import { OverviewContext } from '@/app/(protected)/layout';
+import { OverviewContext, SessionContext } from '@/app/(protected)/layout';
 import { useContext, useState, useRef, useEffect } from 'react';
 import { DropDown } from './dropdown';
 
 interface FeedWrapperProps {
   author: string | undefined;
+  author_id: string;
   id: string;
   likes: number;
   dislikes: number;
@@ -21,6 +22,7 @@ interface FeedWrapperProps {
 
 export const FeedWrapper = ({
   author,
+  author_id,
   id,
   likes,
   dislikes,
@@ -33,6 +35,8 @@ export const FeedWrapper = ({
 
   const { showModal, setShowModal, setSelectedFeedID } =
     useContext(OverviewContext);
+
+  const { userSession } = useContext(SessionContext);
 
   const [dropDown, setDropDown] = useState(false);
 
@@ -81,6 +85,14 @@ export const FeedWrapper = ({
     };
   });
 
+  const handleProfileClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    let profileUrl = '';
+    if (userSession?.user.id === author_id) profileUrl = `/profile/${author}`;
+    else profileUrl = `/profile/${author}?id=${author_id}`;
+    router.push(profileUrl);
+  };
+
   return (
     <div
       className='outline h-[200px] w-[90%] md:w-[80%] max-w-[500px] 
@@ -88,7 +100,7 @@ export const FeedWrapper = ({
       onClick={() => router.push(`/feed/${id}`)}
     >
       <div className='flex m-2 w-full'>
-        <div>
+        <div onClick={handleProfileClick}>
           <FaUserCircle size={35} style={{ color: '#8A8D91' }} />
         </div>
         <div className='flex flex-col w-full'>
@@ -97,7 +109,12 @@ export const FeedWrapper = ({
             className='w-[94%] flex justify-between items-center ml-3'
           >
             <div className='flex justify-center items-center'>
-              <div className='text-[14px] bolded text-[#E4E6EB]'>{author}</div>
+              <div
+                className='text-[14px] bolded text-[#E4E6EB]'
+                onClick={handleProfileClick}
+              >
+                {author}
+              </div>
               <div className='opacity- text-[12px] ml-1 text-gray-500'>{`· ${getTimeDifferenceInMinutes(
                 created_at
               )}`}</div>

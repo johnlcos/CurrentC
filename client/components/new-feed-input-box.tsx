@@ -44,7 +44,7 @@ export const NewFeedInputBox = ({
   };
   return (
     <div className='flex justify-center h-[150px] w-full mb-5'>
-      <div className='w-[90%] md:w-[80%] max-w-[600px]'>
+      <div className='w-[90%] md:w-[80%] max-w-[500px]'>
         <div className='m-2 flex flex-col'>
           <textarea
             className='p-2 w-full h-[100px] resize-none text-sm text-gray-900 bg-gray-500 

@@ -44,7 +44,7 @@ feedController.getFeed = async (
       const { data, error } = await supabase
         .from('feeds')
         .select(
-          'id, created_at, content, like_count, dislike_count, profiles(username)'
+          'id, created_at, content, like_count, dislike_count, author_id, profiles(username)'
         )
         .eq('id', req.query.id);
       res.locals.results = data;
@@ -58,7 +58,7 @@ feedController.getFeed = async (
       const { data, error } = await supabase
         .from('feeds')
         .select(
-          'id, created_at, content, like_count, dislike_count, profiles(username)'
+          'id, created_at, content, like_count, dislike_count, author_id, profiles(username)'
         )
         .eq('type', 'POST')
         .order('created_at', { ascending: false });
@@ -79,7 +79,7 @@ feedController.getProfileFeed = async (
     const { data, error } = await supabase
       .from('feeds')
       .select(
-        'id, created_at, content, like_count, dislike_count, profiles(username)'
+        'id, created_at, content, like_count, dislike_count, author_id, profiles(username)'
       )
       .match({ type: 'POST', author_id: req.query.id });
     res.locals.profileFeed = data;
@@ -99,7 +99,7 @@ feedController.getReplyFeed = async (
     const { data, error } = await supabase
       .from('feeds')
       .select(
-        'id, created_at, content, like_count, dislike_count, profiles(username)'
+        'id, created_at, content, like_count, dislike_count, author_id, profiles(username)'
       )
       .match({ type: 'REPLY', reply_to_id })
       .order('created_at', { ascending: false });
@@ -115,34 +115,13 @@ feedController.getFollowedFeed = async (
   res: Response,
   next: NextFunction
 ) => {
-  // try {
-  //   const follower_id = req.query.id;
-  //   const { data, error } = await supabase
-  //     .from('feeds')
-  //     .select(
-  //       'id, created_at, content, like_count, dislike_count, profiles(username)'
-  //     )
-  //     .eq('type', 'POST')
-  //     .order('created_at', { ascending: false });
-  //   // console.log("getMainFeed data: ", data);
-  //   res.locals.results = data;
-  //   next();
-  // } catch (error) {
-  //   next(error);
-  // }
-
   try {
     const follower_id = req.query.id;
-    console.log(follower_id);
-    // const followersData = await supabase
-    //   .from('relationships')
-    //   .select('followed_id')
-    //   .match({ follower_id: follower_id });
-    // const followersArray = followersData.data;
-    // console.log(followersArray);
     const { data, error } = await supabase
       .from('feed_with_relationship')
-      .select('id, created_at, content, like_count, dislike_count, username')
+      .select(
+        'id, created_at, content, like_count, dislike_count, author_id, username'
+      )
       .or(`follower_id.eq.${follower_id}`)
       .order('created_at', { ascending: false });
     res.locals.followedFeed = data;
@@ -195,7 +174,7 @@ feedController.mergeFeeds = async (
       return b.created_at - a.created_at;
     });
     res.locals.results = results;
-    console.log(results);
+    // console.log(results);
     next();
   } catch (error) {
     next(error);

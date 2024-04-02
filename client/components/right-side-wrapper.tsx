@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import { usePathname } from "next/navigation";
-import { UserSearch } from "./user-search";
+import { usePathname } from 'next/navigation';
+import { UserSearch } from './user-search';
+import { AccountSettingForm } from './account-setting-form';
 
 export const RightSideWrapper = () => {
   const pathname = usePathname();
-  return <div>{pathname === "/overview" && <UserSearch />}</div>;
+  return <div>{pathname === '/overview' && <UserSearch />}</div>;
 };

@@ -9,7 +9,9 @@ interface FollowButtonProps {
 
 export const FollowButton = ({ followed_id }: FollowButtonProps) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  // loading state in order to render a temporary placeholder before displaying Follow or Following
   const [loading, setLoading] = useState<boolean>(true);
+
   const { userSession } = useContext(SessionContext);
 
   const fetchIsFollowing = async () => {
@@ -21,6 +23,7 @@ export const FollowButton = ({ followed_id }: FollowButtonProps) => {
     setLoading(false);
   };
 
+  // on click, send the follower, followed and wether or not to follow or unfollow to the backend, update state to reflect
   const fetchToggleFollow = async () => {
     setIsFollowing((prev) => !prev);
     const response = await fetch(
@@ -30,6 +33,7 @@ export const FollowButton = ({ followed_id }: FollowButtonProps) => {
     );
   };
 
+  // on render determine if user is following
   useEffect(() => {
     fetchIsFollowing();
   }, []);

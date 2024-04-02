@@ -115,6 +115,8 @@ export default function UserProfile({
     }
 
     const file = event.target.files[0];
+    const previewUrl = URL.createObjectURL(file);
+    setAvatarUrl(previewUrl);
     const fileExt = file.name.split(".").pop();
     const fileName = `avatar_${profileId}.${fileExt}`;
     const filePath = `${fileName}`;

@@ -17,13 +17,14 @@ const PasswordSettingPage = () => {
 
   const onSubmit = async (data: z.infer<typeof ChangePasswordSchema>) => {
     const validatedFields = ChangePasswordSchema.safeParse(data);
+
     if (!validatedFields.success) return;
     const response = await fetch('http://localhost:8080/settings/password', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(validatedFields),
+      body: JSON.stringify(validatedFields.data),
     });
     console.log(response);
   };

@@ -17,14 +17,16 @@ settingsController.changePassword = (req, res, next) => __awaiter(void 0, void 0
         if (confirmNewPassword !== newPassword) {
             throw new Error('Passwords do not match');
         }
+        console.log(currentPassword, newPassword, confirmNewPassword);
+        next();
     }
     catch (err) {
+        console.log('------------------Error------------------\n', err);
         const errObj = {
-            log: JSON.stringify({ 'settingsController.changePassword Error: ': err }),
             status: 500,
             message: { error: 'SettingsController.changePassword error' },
         };
-        next(err);
+        next(errObj);
     }
 });
 exports.default = settingsController;

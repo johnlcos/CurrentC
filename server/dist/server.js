@@ -36,7 +36,6 @@ app.use('/overview', (req, res) => __awaiter(void 0, void 0, void 0, function* (
 }));
 app.use((err, req, res, next) => {
     const errorObj = Object.assign({}, err);
-    console.log(errorObj.log);
     return res.status(errorObj.status).json(errorObj.message);
 });
 app.listen(PORT, () => {

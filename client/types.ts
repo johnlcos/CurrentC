@@ -12,3 +12,9 @@ export interface FeedSchema {
   author_id: string;
   username?: string;
 }
+
+export interface ServerError {
+  status: number;
+  errorType: string;
+  message: string;
+}

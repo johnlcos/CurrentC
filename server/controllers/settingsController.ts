@@ -22,14 +22,13 @@ settingsController.changePassword = async (req, res, next) => {
     next();
   } catch (err) {
     console.log('------------------Error------------------\n', err);
-    if (err instanceof Error) {
-      const errObj: ServerError = {
-        status: 500,
-        errorType: 'Confirmation',
-        message: err.message,
-      };
-      next(errObj);
-    }
+    const error = err as Error;
+    const errObj: ServerError = {
+      status: 500,
+      errorType: 'Confirmation',
+      message: error.message,
+    };
+    next(errObj);
   }
 };
 

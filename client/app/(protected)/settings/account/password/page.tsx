@@ -4,8 +4,11 @@ import { SettingsHeading } from '@/components/setting-heading';
 import { ChangePasswordSchema } from '@/schemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ServerError } from '@/types';
+import { useState } from 'react';
 
 const PasswordSettingPage = () => {
+  const [error, setError] = useState<ServerError | null>(null);
   const {
     register,
     handleSubmit,
@@ -27,7 +30,10 @@ const PasswordSettingPage = () => {
       body: JSON.stringify(validatedFields.data),
     });
     const result = await response.json();
-    console.log(result);
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
   };
 
   return (

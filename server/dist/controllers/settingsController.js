@@ -22,14 +22,12 @@ settingsController.changePassword = (req, res, next) => __awaiter(void 0, void 0
     }
     catch (err) {
         console.log('------------------Error------------------\n', err);
-        if (err instanceof Error) {
-            const errObj = {
-                status: 500,
-                errorType: 'Confirmation',
-                message: err.message,
-            };
-            next(errObj);
-        }
+        const errObj = {
+            status: 500,
+            errorType: 'Confirmation',
+            message: err.message,
+        };
+        next(errObj);
     }
 });
 exports.default = settingsController;

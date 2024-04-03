@@ -26,7 +26,8 @@ const PasswordSettingPage = () => {
       },
       body: JSON.stringify(validatedFields.data),
     });
-    console.log(response);
+    const result = await response.json();
+    console.log(result);
   };
 
   return (

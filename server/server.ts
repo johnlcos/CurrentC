@@ -30,6 +30,7 @@ app.use('/overview', async (req: Request, res: Response) => {
 
 app.use((err: ServerError, req: Request, res: Response, next: NextFunction) => {
   const errorObj: ServerError = Object.assign({}, err);
+  console.log(errorObj);
   return res.status(errorObj.status).json(errorObj.message);
 });
 

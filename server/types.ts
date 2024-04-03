@@ -1,6 +1,5 @@
 export interface ServerError {
   status: number;
-  message: {
-    error: string;
-  };
+  errorType: string;
+  message: string;
 }

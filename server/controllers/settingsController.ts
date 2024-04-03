@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import supabase from '../utils/supabase';
 import { ServerError } from '../types';
 
 const settingsController = {} as SettingsController;
@@ -23,11 +22,14 @@ settingsController.changePassword = async (req, res, next) => {
     next();
   } catch (err) {
     console.log('------------------Error------------------\n', err);
-    const errObj: ServerError = {
-      status: 500,
-      message: { error: 'SettingsController.changePassword error' },
-    };
-    next(errObj);
+    if (err instanceof Error) {
+      const errObj: ServerError = {
+        status: 500,
+        errorType: 'Confirmation',
+        message: err.message,
+      };
+      next(errObj);
+    }
   }
 };
 

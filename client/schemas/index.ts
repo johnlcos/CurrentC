@@ -21,17 +21,16 @@ export const LoginSchema = z.object({
   }),
 });
 
-export const ChangePasswordSchema = z
-  .object({
-    currentPassword: z.string().min(6, {
-      message: 'Current password is required',
-    }),
-    newPassword: z.string().min(6, {
-      message: 'New password is required',
-    }),
-    confirmNewPassword: z.string().min(6, {}),
-  })
-  .refine((data) => data.newPassword === data.confirmNewPassword, {
-    message: 'New Password and confirmation password does not match',
-    path: ['confirmNewPassword'],
-  });
+export const ChangePasswordSchema = z.object({
+  currentPassword: z.string().min(1, {
+    message: 'Current password is required',
+  }),
+  newPassword: z.string().min(1, {
+    message: 'New password is required',
+  }),
+  confirmNewPassword: z.string().min(1, {}),
+});
+// .refine((data) => data.newPassword === data.confirmNewPassword, {
+//   message: 'New Password and confirmation password does not match',
+//   path: ['confirmNewPassword'],
+// });

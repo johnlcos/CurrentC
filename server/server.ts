@@ -15,10 +15,12 @@ app.use(bodyParser.json());
 
 import userRouter from './routers/userRouter';
 import feedRouter from './routers/feedRouter';
+import settingsRouter from './routers/settingsRouter';
 
 app.use('/auth', userRouter);
 app.use('/users', userRouter);
 app.use('/feed', feedRouter);
+app.use('/settings', settingsRouter);
 
 app.use('/overview', async (req: Request, res: Response) => {
   const { data, error } = await supabase.auth.getSession();

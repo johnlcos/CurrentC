@@ -5,9 +5,13 @@ import { SessionContext } from "@/app/(protected)/layout";
 
 interface FollowButtonProps {
   followed_id: string;
+  setFollowers: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const FollowButton = ({ followed_id }: FollowButtonProps) => {
+export const FollowButton = ({
+  followed_id,
+  setFollowers,
+}: FollowButtonProps) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   // loading state in order to render a temporary placeholder before displaying Follow or Following
   const [loading, setLoading] = useState<boolean>(true);
@@ -26,6 +30,8 @@ export const FollowButton = ({ followed_id }: FollowButtonProps) => {
   // on click, send the follower, followed and wether or not to follow or unfollow to the backend, update state to reflect
   const fetchToggleFollow = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (isFollowing) setFollowers((prev) => prev - 1);
+    else setFollowers((prev) => prev + 1);
     setIsFollowing((prev) => !prev);
     const response = await fetch(
       `http://localhost:8080/users/follow?follower=${

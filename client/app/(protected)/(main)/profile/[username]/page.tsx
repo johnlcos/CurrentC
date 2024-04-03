@@ -184,7 +184,7 @@ export default function UserProfile({
             ></textarea>
           )}
         </div>
-        <div className="flex w-min justify-center items-center gap-20 xl:flex-col xl:items-start xl:h-full">
+        <div className="flex w-10/12 items-center justify-start gap-2 flex-col xl:items-start xl:h-full xl:w-min">
           <div className="flex gap-2 xl:flex-col">
             <p className="text-white flex gap-1">
               {following}
@@ -195,36 +195,41 @@ export default function UserProfile({
               <span className="text-[#71767A]">Followers</span>
             </p>
           </div>
-          {userSession && userSession.user.id !== profileId ? (
-            <FollowButton followed_id={profileId} />
-          ) : !editing ? (
-            <button
-              onClick={handleStartEdits}
-              className="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px] flex justify-center items-center"
-            >
-              Edit Profile
-            </button>
-          ) : (
-            <button
-              type="submit"
-              className="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px] flex justify-center items-center"
-              disabled={
-                prevProfile.username === username &&
-                prevProfile.description === description &&
-                prevProfile.avatarUrl === avatarUrl
-              }
-            >
-              Save Edits
-            </button>
-          )}
-          {editing ? (
-            <button
-              onClick={handleCancelEdits}
-              className="text-white bg-red-700 hover:bg-red-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px] flex justify-center items-center"
-            >
-              Cancel
-            </button>
-          ) : null}
+          <div className="flex xl:flex-col gap-2">
+            {userSession && userSession.user.id !== profileId ? (
+              <FollowButton
+                followed_id={profileId}
+                setFollowers={setFollowers}
+              />
+            ) : !editing ? (
+              <button
+                onClick={handleStartEdits}
+                className="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px] flex justify-center items-center"
+              >
+                Edit Profile
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px] flex justify-center items-center"
+                disabled={
+                  prevProfile.username === username &&
+                  prevProfile.description === description &&
+                  prevProfile.avatarUrl === avatarUrl
+                }
+              >
+                Save Edits
+              </button>
+            )}
+            {editing ? (
+              <button
+                onClick={handleCancelEdits}
+                className="text-white bg-red-700 hover:bg-red-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px] flex justify-center items-center"
+              >
+                Cancel
+              </button>
+            ) : null}
+          </div>
         </div>
       </form>
       <MainFeed type="profile" id={profileId} />

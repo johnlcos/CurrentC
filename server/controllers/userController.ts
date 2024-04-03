@@ -143,12 +143,18 @@ userController.searchUsers = async (
   next: NextFunction
 ) => {
   try {
+    console.log(req.query);
     if (typeof req.query.name === 'string') {
+      console.log('inside if', req.query.name);
       const name = req.query.name;
       const { data, error } = await supabase
         .from('profiles')
         .select('id, username, profile_avatar')
-        .textSearch('username', name);
+        .textSearch('username', name, {
+          config: 'simple',
+          type: 'websearch',
+        });
+      console.log(data, error);
       res.locals.searchResults = data;
     }
     next();

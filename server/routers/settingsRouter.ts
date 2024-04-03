@@ -3,7 +3,7 @@ import settingsController from '../controllers/settingsController';
 
 const router = Router();
 
-router.get('/password', settingsController.changePassword, (req, res) => {
+router.post('/password', settingsController.changePassword, (req, res) => {
   res.status(200).json({});
 });
 

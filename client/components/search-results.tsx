@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState, useContext } from "react";
-import { FaUserCircle } from "react-icons/fa";
-import Link from "next/link";
-import { SessionContext } from "@/app/(protected)/layout";
-import { FollowButton } from "./follow-button";
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState, useContext } from 'react';
+import { FaUserCircle } from 'react-icons/fa';
+import Link from 'next/link';
+import { SessionContext } from '@/app/(protected)/layout';
+import { FollowButton } from './follow-button';
 
 interface SearchResultType {
   id: string;
@@ -20,7 +20,7 @@ export const SearchResults = ({
 }) => {
   // pull the search params from the url
   const searchParams = useSearchParams();
-  const searchValue = searchParams.get("search");
+  const searchValue = searchParams.get('search');
   // store the search results in state
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
 
@@ -28,10 +28,13 @@ export const SearchResults = ({
 
   const fetchSearchResults = async () => {
     if (searchValue) {
+      console.log('searching');
       const response = await fetch(
         `http://localhost:8080/users?name=${searchValue}`
       );
+
       const json = await response.json();
+      console.log(json);
       setSearchResults(json.data);
     }
   };
@@ -42,21 +45,21 @@ export const SearchResults = ({
   }, [searchValue]);
 
   return searchResults.length > 0 ? (
-    <div className="py-2">
+    <div className='py-2'>
       {searchResults.map((result) => {
         return (
           <div
             key={result.id}
-            className="flex items-center justify-between bg-white rounded-md shadow-sm py-2 px-2"
+            className='flex items-center justify-between bg-white rounded-md shadow-sm py-2 px-2'
           >
             <Link
               href={{
                 pathname: `/profile/${result.username}`,
                 query: { id: result.id },
               }}
-              className="flex items-center w-full gap-3 "
+              className='flex items-center w-full gap-3 '
               onClick={() => {
-                setText("");
+                setText('');
               }}
             >
               <FaUserCircle size={25} />

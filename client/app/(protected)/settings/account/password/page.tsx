@@ -2,7 +2,7 @@
 import { useForm } from 'react-hook-form';
 import { SettingsHeading } from '@/components/setting-heading';
 import { ChangePasswordSchema } from '@/schemas';
-import { isDirty, z } from 'zod';
+import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const PasswordSettingPage = () => {
@@ -18,14 +18,14 @@ const PasswordSettingPage = () => {
   const onSubmit = async (data: z.infer<typeof ChangePasswordSchema>) => {
     const validatedFields = ChangePasswordSchema.safeParse(data);
     if (!validatedFields.success) return;
-    const response = fetch('http://localhost:8080/settings/password', {
+    const response = await fetch('http://localhost:8080/settings/password', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(validatedFields),
     });
-    reset();
+    console.log(response);
   };
 
   return (

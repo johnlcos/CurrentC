@@ -1,8 +1,9 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import supabase from './utils/supabase';
+import { ServerError } from './types';
 
 dotenv.config();
 
@@ -25,6 +26,12 @@ app.use('/settings', settingsRouter);
 app.use('/overview', async (req: Request, res: Response) => {
   const { data, error } = await supabase.auth.getSession();
   console.log('session', data);
+});
+
+app.use((err: ServerError, req: Request, res: Response, next: NextFunction) => {
+  const errorObj: ServerError = Object.assign({}, err);
+  console.log(errorObj.log);
+  return res.status(errorObj.status).json(errorObj.message);
 });
 
 app.listen(PORT, () => {

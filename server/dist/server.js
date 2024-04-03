@@ -34,6 +34,11 @@ app.use('/overview', (req, res) => __awaiter(void 0, void 0, void 0, function* (
     const { data, error } = yield supabase_1.default.auth.getSession();
     console.log('session', data);
 }));
+app.use((err, req, res, next) => {
+    const errorObj = Object.assign({}, err);
+    console.log(errorObj.log);
+    return res.status(errorObj.status).json(errorObj.message);
+});
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 });

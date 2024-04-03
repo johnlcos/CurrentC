@@ -10,5 +10,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const settingsController = {};
-settingsController.changePassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { });
+settingsController.changePassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { currentPassword, newPassword, confirmNewPassword } = req.body;
+        //Compare confirmation Password and new Password
+        if (confirmNewPassword !== newPassword) {
+            throw new Error('Passwords do not match');
+        }
+    }
+    catch (err) {
+        const errObj = {
+            log: JSON.stringify({ 'settingsController.changePassword Error: ': err }),
+            status: 500,
+            message: { error: 'SettingsController.changePassword error' },
+        };
+        next(err);
+    }
+});
 exports.default = settingsController;

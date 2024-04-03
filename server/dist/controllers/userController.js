@@ -87,12 +87,18 @@ userController.signout = (req, res, next) => __awaiter(void 0, void 0, void 0, f
 });
 userController.searchUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log(req.query);
         if (typeof req.query.name === 'string') {
+            console.log('inside if', req.query.name);
             const name = req.query.name;
             const { data, error } = yield supabase_1.default
                 .from('profiles')
                 .select('id, username, profile_avatar')
-                .textSearch('username', name);
+                .textSearch('username', name, {
+                config: 'simple',
+                type: 'websearch',
+            });
+            console.log(data, error);
             res.locals.searchResults = data;
         }
         next();

@@ -65,9 +65,11 @@ userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 
     try {
         const { data, error } = yield supabase_1.default
             .from("profiles")
-            .select("profile_avatar, description")
-            .eq("id", req.query.id);
+            .select("profile_avatar, description, id")
+            .eq("username", req.query.user);
         res.locals.userInfo = data;
+        if (data)
+            res.locals.id = data[0].id;
         next();
     }
     catch (error) {
@@ -204,11 +206,11 @@ userController.getFollowCount = (req, res, next) => __awaiter(void 0, void 0, vo
         const following = yield supabase_1.default
             .from("relationships")
             .select("*", { count: "exact", head: true })
-            .eq("follower_id", req.query.id);
+            .eq("follower_id", res.locals.id);
         const followers = yield supabase_1.default
             .from("relationships")
             .select("*", { count: "exact", head: true })
-            .eq("followed_id", req.query.id);
+            .eq("followed_id", res.locals.id);
         res.locals.following = following.count;
         res.locals.followers = followers.count;
         next();

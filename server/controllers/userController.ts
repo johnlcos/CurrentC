@@ -118,9 +118,10 @@ userController.getUserInfo = async (
   try {
     const { data, error } = await supabase
       .from("profiles")
-      .select("profile_avatar, description")
-      .eq("id", req.query.id);
+      .select("profile_avatar, description, id")
+      .eq("username", req.query.user);
     res.locals.userInfo = data;
+    if (data) res.locals.id = data[0].id;
     next();
   } catch (error) {
     console.log(error);
@@ -286,11 +287,11 @@ userController.getFollowCount = async (
     const following = await supabase
       .from("relationships")
       .select("*", { count: "exact", head: true })
-      .eq("follower_id", req.query.id);
+      .eq("follower_id", res.locals.id);
     const followers = await supabase
       .from("relationships")
       .select("*", { count: "exact", head: true })
-      .eq("followed_id", req.query.id);
+      .eq("followed_id", res.locals.id);
     res.locals.following = following.count;
     res.locals.followers = followers.count;
     next();

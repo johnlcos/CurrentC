@@ -60,7 +60,6 @@ export const SearchResults = ({
               <Link
                 href={{
                   pathname: `/profile/${result.username}`,
-                  query: { id: result.id },
                 }}
                 className="flex items-center w-full gap-3 "
                 onClick={() => {

@@ -90,10 +90,7 @@ export const FeedWrapper = ({
 
   const handleProfileClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    let profileUrl = "";
-    if (userSession?.user.id === author_id) profileUrl = `/profile/${author}`;
-    else profileUrl = `/profile/${author}?id=${author_id}`;
-    router.push(profileUrl);
+    router.push(`/profile/${author}`);
   };
 
   return (

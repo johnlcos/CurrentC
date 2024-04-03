@@ -19,9 +19,11 @@ export default function UserProfile({
   const [username, setUsername] = useState<string>(params.username);
   const [description, setDescription] = useState<string>("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>("");
+  const [profileId, setProfileId] = useState<string>("");
   // store status in state for conditional rendering
   const [uploading, setUploading] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   // store the previous profile info in state for canceling updates
   const [prevProfile, setPrevProfile] = useState<{
     username: string;
@@ -45,19 +47,21 @@ export default function UserProfile({
 
   const { userSession, setUserSession } = useContext(SessionContext);
   // get the profileId from session if it is the users profile, or search params if someone else
-  const profileId =
-    !searchParams.id && userSession ? userSession.user.id : searchParams.id;
+  // const profileId =
+  //   !searchParams.id && userSession ? userSession.user.id : searchParams.id;
 
   const fetchProfileInfo = async () => {
     const response = await fetch(
-      `http://localhost:8080/users/info?id=${profileId}`
+      `http://localhost:8080/users/info?user=${username}`
     );
     const json = await response.json();
     console.log("fetchProfileInfo: ", json);
+    setProfileId(json.data[0].id);
     setDescription(json.data[0].description);
     setAvatarUrl(json.data[0].profile_avatar);
     setFollowers(json.followers);
     setFollowing(json.following);
+    setLoading(false);
   };
 
   // after updating info, get the new session which includes updated username in meta data and update the session context for use in sidebar
@@ -127,7 +131,7 @@ export default function UserProfile({
     setNewAvatar({ path: filePath, file: file });
   };
 
-  return (
+  return loading ? null : (
     <div className="w-full flex flex-col items-center">
       <form
         id="header"
@@ -191,8 +195,8 @@ export default function UserProfile({
               <span className="text-[#71767A]">Followers</span>
             </p>
           </div>
-          {searchParams.id ? (
-            <FollowButton followed_id={searchParams.id} />
+          {userSession && userSession.user.id !== profileId ? (
+            <FollowButton followed_id={profileId} />
           ) : !editing ? (
             <button
               onClick={handleStartEdits}

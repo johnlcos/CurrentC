@@ -24,7 +24,8 @@ export const FollowButton = ({ followed_id }: FollowButtonProps) => {
   };
 
   // on click, send the follower, followed and wether or not to follow or unfollow to the backend, update state to reflect
-  const fetchToggleFollow = async () => {
+  const fetchToggleFollow = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     setIsFollowing((prev) => !prev);
     const response = await fetch(
       `http://localhost:8080/users/follow?follower=${

@@ -100,9 +100,8 @@ export const FeedWrapper = ({
       onClick={() => router.push(`/feed/${id}`)}
     >
       <div className="flex m-2 w-full">
-        <div onClick={handleProfileClick}>
+        <div onClick={handleProfileClick} className="h-[35px] w-[35px]">
           <Avatar url={profile_avatar} type="feed" />
-          {/* <FaUserCircle size={35} style={{ color: "#8A8D91" }} /> */}
         </div>
         <div className="flex flex-col w-full">
           <div

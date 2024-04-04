@@ -1,5 +1,6 @@
 export interface FeedProfileSchema {
   username: string;
+  profile_avatar: string | null;
 }
 
 export interface FeedSchema {
@@ -11,4 +12,16 @@ export interface FeedSchema {
   created_at: string;
   author_id: string;
   username?: string;
+  profile_avatar?: string | null;
+}
+
+export interface ServerError {
+  status: number;
+  errorType: string;
+  message: string;
+}
+
+export interface Success {
+  status: number;
+  message: string;
 }

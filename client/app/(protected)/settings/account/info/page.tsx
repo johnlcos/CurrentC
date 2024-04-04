@@ -6,7 +6,7 @@ import { SettingsHeading } from '@/components/setting-heading';
 
 const AccountSettingInfoPage = () => {
   const { userSession } = useContext(SessionContext);
-  console.log(userSession);
+  // console.log(userSession);
 
   //Can add more user information in the future such as Languages, Gender, BirthDate, Age, Country, etc...
 

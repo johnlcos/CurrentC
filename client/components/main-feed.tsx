@@ -1,13 +1,16 @@
 'use client';
 
 import { FeedWrapper } from './feed-wrapper';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { FeedSchema } from '@/types';
 import { NewFeedInputBox } from './new-feed-input-box';
+import { SessionContext } from '@/app/(protected)/layout';
 
 export const MainFeed = ({ type, id }: { type: string; id: string }) => {
   // store the displayed feed in state
   const [allFeed, setAllFeed] = useState<FeedSchema[]>([]);
+
+  const { userSession } = useContext(SessionContext);
 
   // depending on the type of feed needed, update the request url, fetch the feed and update state
   const fetchFeed = async () => {
@@ -46,6 +49,7 @@ export const MainFeed = ({ type, id }: { type: string; id: string }) => {
             key={feed.id}
             author={feed.profiles ? feed.profiles.username : feed.username}
             author_id={feed.author_id}
+            profile_avatar={userSession?.user.user_metadata.profile_avatar}
             id={feed.id}
             likes={feed.like_count}
             dislikes={feed.dislike_count}

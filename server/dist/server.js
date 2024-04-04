@@ -25,13 +25,20 @@ app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
 const userRouter_1 = __importDefault(require("./routers/userRouter"));
 const feedRouter_1 = __importDefault(require("./routers/feedRouter"));
+const settingsRouter_1 = __importDefault(require("./routers/settingsRouter"));
 app.use('/auth', userRouter_1.default);
 app.use('/users', userRouter_1.default);
 app.use('/feed', feedRouter_1.default);
+app.use('/settings', settingsRouter_1.default);
 app.use('/overview', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { data, error } = yield supabase_1.default.auth.getSession();
     console.log('session', data);
 }));
+app.use((err, req, res, next) => {
+    const errorObj = Object.assign({}, err);
+    console.log(errorObj);
+    return res.status(errorObj.status).json({ error: errorObj });
+});
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 });

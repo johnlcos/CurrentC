@@ -45,6 +45,11 @@ interface UserController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  getFollowCount: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
 }
 
 userController.signup = async (
@@ -113,9 +118,10 @@ userController.getUserInfo = async (
   try {
     const { data, error } = await supabase
       .from('profiles')
-      .select('profile_avatar, description')
-      .eq('id', req.query.id);
+      .select('profile_avatar, description, id')
+      .eq('username', req.query.user);
     res.locals.userInfo = data;
+    if (data) res.locals.id = data[0].id;
     next();
   } catch (error) {
     console.log(error);
@@ -222,7 +228,6 @@ userController.editProfile = async (
       },
     });
     // update info in profiles table
-
     const { error } = await supabase
       .from('profiles')
       .update({
@@ -248,12 +253,12 @@ userController.upsertAvatar = async (
     if (!req.file) {
       return next();
     }
+    console.log(req.file);
     const fileContent = fs.readFileSync(req.file.path);
 
     const avatarData = await supabase.storage
       .from('avatars')
-      .upload(req.body.path, fileContent, {
-        cacheControl: '3600',
+      .upload(req.file.originalname, fileContent, {
         upsert: true,
         contentType: req.file?.mimetype,
       });
@@ -266,6 +271,29 @@ userController.upsertAvatar = async (
       res.locals.avatarPublicUrl = data.publicUrl;
     }
 
+    next();
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+userController.getFollowCount = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const following = await supabase
+      .from('relationships')
+      .select('*', { count: 'exact', head: true })
+      .eq('follower_id', res.locals.id);
+    const followers = await supabase
+      .from('relationships')
+      .select('*', { count: 'exact', head: true })
+      .eq('followed_id', res.locals.id);
+    res.locals.following = following.count;
+    res.locals.followers = followers.count;
     next();
   } catch (error) {
     console.log(error);

@@ -65,9 +65,11 @@ userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 
     try {
         const { data, error } = yield supabase_1.default
             .from('profiles')
-            .select('profile_avatar, description')
-            .eq('id', req.query.id);
+            .select('profile_avatar, description, id')
+            .eq('username', req.query.user);
         res.locals.userInfo = data;
+        if (data)
+            res.locals.id = data[0].id;
         next();
     }
     catch (error) {
@@ -178,11 +180,11 @@ userController.upsertAvatar = (req, res, next) => __awaiter(void 0, void 0, void
         if (!req.file) {
             return next();
         }
+        console.log(req.file);
         const fileContent = fs_1.default.readFileSync(req.file.path);
         const avatarData = yield supabase_1.default.storage
             .from('avatars')
-            .upload(req.body.path, fileContent, {
-            cacheControl: '3600',
+            .upload(req.file.originalname, fileContent, {
             upsert: true,
             contentType: (_a = req.file) === null || _a === void 0 ? void 0 : _a.mimetype,
         });
@@ -192,6 +194,25 @@ userController.upsertAvatar = (req, res, next) => __awaiter(void 0, void 0, void
                 .getPublicUrl(avatarData.data.path);
             res.locals.avatarPublicUrl = data.publicUrl;
         }
+        next();
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+userController.getFollowCount = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const following = yield supabase_1.default
+            .from('relationships')
+            .select('*', { count: 'exact', head: true })
+            .eq('follower_id', res.locals.id);
+        const followers = yield supabase_1.default
+            .from('relationships')
+            .select('*', { count: 'exact', head: true })
+            .eq('followed_id', res.locals.id);
+        res.locals.following = following.count;
+        res.locals.followers = followers.count;
         next();
     }
     catch (error) {

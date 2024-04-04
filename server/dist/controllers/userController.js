@@ -180,11 +180,11 @@ userController.upsertAvatar = (req, res, next) => __awaiter(void 0, void 0, void
         if (!req.file) {
             return next();
         }
+        console.log(req.file);
         const fileContent = fs_1.default.readFileSync(req.file.path);
         const avatarData = yield supabase_1.default.storage
             .from('avatars')
-            .upload(req.body.path, fileContent, {
-            cacheControl: '3600',
+            .upload(req.file.originalname, fileContent, {
             upsert: true,
             contentType: (_a = req.file) === null || _a === void 0 ? void 0 : _a.mimetype,
         });

@@ -253,12 +253,12 @@ userController.upsertAvatar = async (
     if (!req.file) {
       return next();
     }
+    console.log(req.file);
     const fileContent = fs.readFileSync(req.file.path);
 
     const avatarData = await supabase.storage
       .from('avatars')
-      .upload(req.body.path, fileContent, {
-        cacheControl: '3600',
+      .upload(req.file.originalname, fileContent, {
         upsert: true,
         contentType: req.file?.mimetype,
       });

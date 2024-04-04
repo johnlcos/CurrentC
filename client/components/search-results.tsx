@@ -37,7 +37,7 @@ export const SearchResults = ({
       );
 
       const json = await response.json();
-      console.log(json);
+      // console.log(json);
       setSearchResults(json.data);
       setLoading(false);
     }

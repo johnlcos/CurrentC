@@ -25,14 +25,13 @@ export const Avatar = ({
       break;
   }
   return (
-    <div>
+    <div className={`h-[${size}px] w-[${size}px] relative`}>
       {url ? (
         <Image
           src={url}
           alt="Profile Picture"
-          width={size}
-          height={size}
           style={{ borderRadius: "50%" }}
+          fill
         />
       ) : (
         <FaUserCircle

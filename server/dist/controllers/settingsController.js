@@ -19,35 +19,43 @@ settingsController.changePassword = (req, res, next) => __awaiter(void 0, void 0
         const { currentPassword, newPassword, confirmNewPassword } = req.body;
         //Compare confirmation Password and new Password
         if (confirmNewPassword !== newPassword) {
-            throw new Error('Passwords do not match');
+            throw new Error('Do Not Match');
         }
         console.log(currentPassword, newPassword, confirmNewPassword);
         const { data: { user }, } = yield supabase_1.default.auth.getUser();
-        console.log(user);
         if (user && user.email) {
-            console.log('in here');
-            const { data, error } = yield supabase_1.default.rpc('changepassword', {
+            const { data } = yield supabase_1.default.rpc('changepassword', {
                 current_plain_password: currentPassword,
                 new_plain_password: newPassword,
                 current_id: user.id,
             });
-            console.log('data', data);
-            console.log('error', error);
+            console.log(data);
+            if (data === 'incorrect') {
+                console.log('error');
+                throw new Error('Incorrect');
+            }
         }
-        // const {data,error} = await supabase.auth.signInWithPassword({
-        //   password: currentPassword
-        // })
         next();
     }
     catch (err) {
         console.log('------------------Error------------------\n', err);
         const error = err;
-        const errObj = {
-            status: 500,
-            errorType: 'Confirmation',
-            message: error.message,
-        };
-        next(errObj);
+        if (error.message === 'Do Not Match') {
+            const errObj = {
+                status: 500,
+                errorType: 'Confirmation',
+                message: 'Passwords do not match',
+            };
+            next(errObj);
+        }
+        else if (error.message === 'Incorrect') {
+            const errObj = {
+                status: 500,
+                errorType: 'Incorrect',
+                message: 'The password you entered was incorrect',
+            };
+            next(errObj);
+        }
     }
 });
 exports.default = settingsController;

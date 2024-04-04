@@ -4,11 +4,12 @@ import { SettingsHeading } from '@/components/setting-heading';
 import { ChangePasswordSchema } from '@/schemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ServerError } from '@/types';
+import { ServerError, Success } from '@/types';
 import { useState } from 'react';
 
 const PasswordSettingPage = () => {
   const [error, setError] = useState<ServerError | null>(null);
+  const [success, setSuccess] = useState<Success | null>();
   const {
     register,
     handleSubmit,
@@ -35,6 +36,8 @@ const PasswordSettingPage = () => {
       setError(result.error);
       return;
     }
+    if (result.success) {
+    }
   };
   console.log(error);
   return (
@@ -45,15 +48,17 @@ const PasswordSettingPage = () => {
           onSubmit={handleSubmit(onSubmit)}
           className='flex flex-col gap-y-5 w-2/4'
         >
-          <input
-            {...register('currentPassword')}
-            type='password'
-            placeholder='Current password'
-            className='text-black px-1'
-          />
-          {/* {errors.currentPassword && (
-            <div className='text-green'>{errors.currentPassword.message}</div>
-          )} */}
+          <div>
+            <input
+              {...register('currentPassword')}
+              type='password'
+              placeholder='Current password'
+              className='text-black px-1 w-full'
+            />
+            {error?.errorType === 'Incorrect' && (
+              <div className='text-red-600 text-sm'>{error.message}</div>
+            )}
+          </div>
           <input
             {...register('newPassword')}
             type='password'

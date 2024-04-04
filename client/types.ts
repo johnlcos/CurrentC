@@ -18,3 +18,7 @@ export interface ServerError {
   errorType: string;
   message: string;
 }
+
+export interface Success {
+  success: string;
+}

@@ -4,7 +4,11 @@ import settingsController from '../controllers/settingsController';
 const router = Router();
 
 router.post('/password', settingsController.changePassword, (req, res) => {
-  res.status(200).json({ success: 'Your password has been changed' });
+  res
+    .status(200)
+    .json({
+      success: { status: 200, message: 'Sucessfully changed password' },
+    });
 });
 
 export default router;

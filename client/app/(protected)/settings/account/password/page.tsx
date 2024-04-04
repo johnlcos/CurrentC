@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 const PasswordSettingPage = () => {
   const [error, setError] = useState<ServerError | null>(null);
-  const [success, setSuccess] = useState<Success | null>();
+  const [success, setSuccess] = useState<Success | null>(null);
   const {
     register,
     handleSubmit,
@@ -21,6 +21,7 @@ const PasswordSettingPage = () => {
 
   const onSubmit = async (data: z.infer<typeof ChangePasswordSchema>) => {
     setError(null);
+    setSuccess(null);
     const validatedFields = ChangePasswordSchema.safeParse(data);
 
     if (!validatedFields.success) return;
@@ -32,14 +33,17 @@ const PasswordSettingPage = () => {
       body: JSON.stringify(validatedFields.data),
     });
     const result = await response.json();
+    console.log(result);
     if (result.error) {
       setError(result.error);
       return;
     }
     if (result.success) {
+      setSuccess(result.success);
+      return;
     }
   };
-  console.log(error);
+  console.log(success);
   return (
     <div className='p-5'>
       <SettingsHeading heading={'Change your password'} />
@@ -80,6 +84,9 @@ const PasswordSettingPage = () => {
             {error?.errorType === 'Confirmation' && (
               <div className='text-red-600 text-sm'>{error.message}</div>
             )}
+            {success && (
+              <div className='text-green-600 text-sm'>{success.message}</div>
+            )}
           </div>
           <button
             disabled={!isDirty || !isValid}
@@ -95,15 +102,3 @@ const PasswordSettingPage = () => {
 };
 
 export default PasswordSettingPage;
-
-// <div className='flex justify-end text-[#E4E6EB]'>
-//   <button
-//     onClick={handleClick}
-//     disabled={!value}
-//     className='bg-[#D7DBDC] rounded-xl px-3 py-0.5 my-2
-//               text-[#0F1419] hover:bg-[#aeb1b2]
-//               disabled:text-[#88898A] disabled:hover:bg-[#D7DBDC]'
-//   >
-//     Post
-//   </button>
-// </div>;

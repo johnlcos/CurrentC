@@ -20,5 +20,6 @@ export interface ServerError {
 }
 
 export interface Success {
-  success: string;
+  status: number;
+  message: string;
 }

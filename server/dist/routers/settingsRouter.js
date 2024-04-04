@@ -7,6 +7,10 @@ const express_1 = __importDefault(require("express"));
 const settingsController_1 = __importDefault(require("../controllers/settingsController"));
 const router = (0, express_1.default)();
 router.post('/password', settingsController_1.default.changePassword, (req, res) => {
-    res.status(200).json({ success: 'Your password has been changed' });
+    res
+        .status(200)
+        .json({
+        success: { status: 200, message: 'Sucessfully changed password' },
+    });
 });
 exports.default = router;

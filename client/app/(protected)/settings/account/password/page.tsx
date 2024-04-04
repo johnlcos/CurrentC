@@ -43,7 +43,7 @@ const PasswordSettingPage = () => {
       return;
     }
   };
-  console.log(success);
+
   return (
     <div className='p-5'>
       <SettingsHeading heading={'Change your password'} />

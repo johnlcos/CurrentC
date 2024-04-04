@@ -62,7 +62,6 @@ export default function UserProfile({
     setFollowers(json.followers);
     setFollowing(json.following);
     setLoading(false);
-    console.log('profile avatar', json.data[0].profile_avatar);
   };
 
   // after updating info, get the new session which includes updated username in meta data and update the session context for use in sidebar
@@ -70,6 +69,7 @@ export default function UserProfile({
     const response = await fetch('http://localhost:8080/auth/session');
     const json = await response.json();
     const session = await json.data.session;
+    console.log(session);
     setUserSession(session);
   };
 
@@ -101,7 +101,7 @@ export default function UserProfile({
     if (url && url.publicUrl) {
       setAvatarUrl(url.publicUrl);
     }
-    router.push(`http://localhost:3000/profile/${username}`);
+    getCurrentSession();
     setEditing(false);
   };
 

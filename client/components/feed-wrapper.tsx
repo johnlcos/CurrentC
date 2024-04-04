@@ -96,7 +96,7 @@ export const FeedWrapper = ({
   return (
     <div
       className="outline h-[200px] w-[90%] md:w-[80%] max-w-[500px] 
-      flex flex-col justify-between shadow-lg outline-none bg-[#252526] rounded-lg"
+      flex flex-col justify-between shadow-lg outline-none bg-[#252526] rounded-lg cursor-pointer"
       onClick={() => router.push(`/feed/${id}`)}
     >
       <div className="flex m-2 w-full">

@@ -64,10 +64,12 @@ userController.getSession = (req, res, next) => __awaiter(void 0, void 0, void 0
 userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { data, error } = yield supabase_1.default
-            .from('profiles')
-            .select('profile_avatar, description')
-            .eq('id', req.query.id);
+            .from("profiles")
+            .select("profile_avatar, description, id")
+            .eq("username", req.query.user);
         res.locals.userInfo = data;
+        if (data)
+            res.locals.id = data[0].id;
         next();
     }
     catch (error) {
@@ -90,6 +92,7 @@ userController.searchUsers = (req, res, next) => __awaiter(void 0, void 0, void 
         console.log(req.query);
         if (typeof req.query.name === 'string') {
             console.log('inside if', req.query.name);
+        if (typeof req.query.name === "string") {
             const name = req.query.name;
             const { data, error } = yield supabase_1.default
                 .from('profiles')
@@ -99,6 +102,9 @@ userController.searchUsers = (req, res, next) => __awaiter(void 0, void 0, void 
                 type: 'websearch',
             });
             console.log(data, error);
+                .from("profiles")
+                .select("id, username, profile_avatar")
+                .textSearch("username", name);
             res.locals.searchResults = data;
         }
         next();
@@ -111,8 +117,8 @@ userController.searchUsers = (req, res, next) => __awaiter(void 0, void 0, void 
 userController.checkIsFollowing = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { data, error } = yield supabase_1.default
-            .from('relationships')
-            .select('id')
+            .from("relationships")
+            .select("id")
             .match({
             follower_id: req.query.follower,
             followed_id: req.query.followed,
@@ -132,19 +138,19 @@ userController.checkIsFollowing = (req, res, next) => __awaiter(void 0, void 0, 
 });
 userController.toggleFollow = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (req.query.following === 'true') {
-            const { error } = yield supabase_1.default.from('relationships').insert({
+        if (req.query.following === "true") {
+            const { error } = yield supabase_1.default.from("relationships").insert({
                 follower_id: req.query.follower,
                 followed_id: req.query.followed,
             });
-            res.locals.follow = 'followed';
+            res.locals.follow = "followed";
         }
         else {
-            const { error } = yield supabase_1.default.from('relationships').delete().match({
+            const { error } = yield supabase_1.default.from("relationships").delete().match({
                 follower_id: req.query.follower,
                 followed_id: req.query.followed,
             });
-            res.locals.follow = 'unfollowed';
+            res.locals.follow = "unfollowed";
         }
         next();
     }
@@ -164,13 +170,13 @@ userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 
         });
         // update info in profiles table
         const { error } = yield supabase_1.default
-            .from('profiles')
+            .from("profiles")
             .update({
             username: req.body.username,
             description: req.body.description,
             profile_avatar: res.locals.avatarPublicUrl,
         })
-            .eq('id', req.body.id);
+            .eq("id", req.body.id);
         next();
     }
     catch (error) {
@@ -186,18 +192,37 @@ userController.upsertAvatar = (req, res, next) => __awaiter(void 0, void 0, void
         }
         const fileContent = fs_1.default.readFileSync(req.file.path);
         const avatarData = yield supabase_1.default.storage
-            .from('avatars')
+            .from("avatars")
             .upload(req.body.path, fileContent, {
-            cacheControl: '3600',
+            cacheControl: "3600",
             upsert: true,
             contentType: (_a = req.file) === null || _a === void 0 ? void 0 : _a.mimetype,
         });
         if (avatarData.data) {
             const { data } = yield supabase_1.default.storage
-                .from('avatars')
+                .from("avatars")
                 .getPublicUrl(avatarData.data.path);
             res.locals.avatarPublicUrl = data.publicUrl;
         }
+        next();
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+userController.getFollowCount = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const following = yield supabase_1.default
+            .from("relationships")
+            .select("*", { count: "exact", head: true })
+            .eq("follower_id", res.locals.id);
+        const followers = yield supabase_1.default
+            .from("relationships")
+            .select("*", { count: "exact", head: true })
+            .eq("followed_id", res.locals.id);
+        res.locals.following = following.count;
+        res.locals.followers = followers.count;
         next();
     }
     catch (error) {

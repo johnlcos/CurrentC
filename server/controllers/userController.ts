@@ -45,6 +45,11 @@ interface UserController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  getFollowCount: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
 }
 
 userController.signup = async (
@@ -113,9 +118,10 @@ userController.getUserInfo = async (
   try {
     const { data, error } = await supabase
       .from('profiles')
-      .select('profile_avatar, description')
-      .eq('id', req.query.id);
+      .select('profile_avatar, description, id')
+      .eq('username', req.query.user);
     res.locals.userInfo = data;
+    if (data) res.locals.id = data[0].id;
     next();
   } catch (error) {
     console.log(error);
@@ -143,18 +149,12 @@ userController.searchUsers = async (
   next: NextFunction
 ) => {
   try {
-    console.log(req.query);
     if (typeof req.query.name === 'string') {
-      console.log('inside if', req.query.name);
       const name = req.query.name;
       const { data, error } = await supabase
         .from('profiles')
         .select('id, username, profile_avatar')
-        .textSearch('username', name, {
-          config: 'simple',
-          type: 'websearch',
-        });
-      console.log(data, error);
+        .textSearch('username', name);
       res.locals.searchResults = data;
     }
     next();
@@ -228,7 +228,6 @@ userController.editProfile = async (
       },
     });
     // update info in profiles table
-
     const { error } = await supabase
       .from('profiles')
       .update({
@@ -272,6 +271,29 @@ userController.upsertAvatar = async (
       res.locals.avatarPublicUrl = data.publicUrl;
     }
 
+    next();
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+userController.getFollowCount = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const following = await supabase
+      .from('relationships')
+      .select('*', { count: 'exact', head: true })
+      .eq('follower_id', res.locals.id);
+    const followers = await supabase
+      .from('relationships')
+      .select('*', { count: 'exact', head: true })
+      .eq('followed_id', res.locals.id);
+    res.locals.following = following.count;
+    res.locals.followers = followers.count;
     next();
   } catch (error) {
     console.log(error);

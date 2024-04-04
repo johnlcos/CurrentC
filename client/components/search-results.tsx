@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState, useContext } from "react";
-import { FaUserCircle } from "react-icons/fa";
-import Link from "next/link";
-import { SessionContext } from "@/app/(protected)/layout";
-import { FollowButton } from "./follow-button";
-import { Avatar } from "./avatar";
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState, useContext } from 'react';
+import { FaUserCircle } from 'react-icons/fa';
+import Link from 'next/link';
+import { SessionContext } from '@/app/(protected)/layout';
+import { FollowButton } from './follow-button';
+import { Avatar } from './avatar';
 
 interface SearchResultType {
   id: string;
@@ -21,7 +21,7 @@ export const SearchResults = ({
 }) => {
   // pull the search params from the url
   const searchParams = useSearchParams();
-  const searchValue = searchParams.get("search");
+  const searchValue = searchParams.get('search');
   // store the search results in state
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
 
@@ -35,7 +35,9 @@ export const SearchResults = ({
       const response = await fetch(
         `http://localhost:8080/users?name=${searchValue}`
       );
+
       const json = await response.json();
+      console.log(json);
       setSearchResults(json.data);
       setLoading(false);
     }
@@ -48,25 +50,25 @@ export const SearchResults = ({
 
   return searchResults.length > 0 ? (
     loading ? (
-      "loading"
+      'loading'
     ) : (
-      <div className="py-2 flex flex-col gap-2">
+      <div className='py-2 flex flex-col gap-2'>
         {searchResults.map((result) => {
           return (
             <div
               key={result.id}
-              className="flex items-center justify-between bg-white rounded-md shadow-sm py-2 px-2"
+              className='flex items-center justify-between bg-white rounded-md shadow-sm py-2 px-2'
             >
               <Link
                 href={{
                   pathname: `/profile/${result.username}`,
                 }}
-                className="flex items-center w-full gap-3 "
+                className='flex items-center w-full gap-3 '
                 onClick={() => {
-                  setText("");
+                  setText('');
                 }}
               >
-                <Avatar url={result.profile_avatar} type="search" />
+                <Avatar url={result.profile_avatar} type='search' />
                 <h1>{result.username}</h1>
               </Link>
               {userSession && result.id !== userSession.user.id ? (

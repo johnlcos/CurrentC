@@ -126,7 +126,7 @@ export default function UserProfile({
     const previewUrl = URL.createObjectURL(file);
     setAvatarUrl(previewUrl);
     const fileExt = file.name.split(".").pop();
-    const fileName = `avatar_${profileId}.${fileExt}`;
+    const fileName = `avatar_${profileId}.${fileExt}?date=${Date.now()}`;
     const filePath = `${fileName}`;
     setNewAvatar({ path: filePath, file: file });
   };

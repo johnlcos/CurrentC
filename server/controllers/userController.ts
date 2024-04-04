@@ -1,8 +1,8 @@
-import { db } from '../utils/db';
-import { Request, Response, NextFunction } from 'express';
-import { createClient } from '@supabase/supabase-js';
-import supabase from '../utils/supabase';
-import fs from 'fs';
+import { db } from "../utils/db";
+import { Request, Response, NextFunction } from "express";
+import { createClient } from "@supabase/supabase-js";
+import supabase from "../utils/supabase";
+import fs from "fs";
 
 const userController = {} as UserController;
 
@@ -117,9 +117,9 @@ userController.getUserInfo = async (
 ) => {
   try {
     const { data, error } = await supabase
-      .from('profiles')
-      .select('profile_avatar, description, id')
-      .eq('username', req.query.user);
+      .from("profiles")
+      .select("profile_avatar, description, id")
+      .eq("username", req.query.user);
     res.locals.userInfo = data;
     if (data) res.locals.id = data[0].id;
     next();
@@ -149,12 +149,12 @@ userController.searchUsers = async (
   next: NextFunction
 ) => {
   try {
-    if (typeof req.query.name === 'string') {
+    if (typeof req.query.name === "string") {
       const name = req.query.name;
       const { data, error } = await supabase
-        .from('profiles')
-        .select('id, username, profile_avatar')
-        .textSearch('username', name);
+        .from("profiles")
+        .select("id, username, profile_avatar")
+        .textSearch("username", name);
       res.locals.searchResults = data;
     }
     next();
@@ -171,8 +171,8 @@ userController.checkIsFollowing = async (
 ) => {
   try {
     const { data, error } = await supabase
-      .from('relationships')
-      .select('id')
+      .from("relationships")
+      .select("id")
       .match({
         follower_id: req.query.follower,
         followed_id: req.query.followed,
@@ -194,18 +194,18 @@ userController.toggleFollow = async (
   next: NextFunction
 ) => {
   try {
-    if (req.query.following === 'true') {
-      const { error } = await supabase.from('relationships').insert({
+    if (req.query.following === "true") {
+      const { error } = await supabase.from("relationships").insert({
         follower_id: req.query.follower,
         followed_id: req.query.followed,
       });
-      res.locals.follow = 'followed';
+      res.locals.follow = "followed";
     } else {
-      const { error } = await supabase.from('relationships').delete().match({
+      const { error } = await supabase.from("relationships").delete().match({
         follower_id: req.query.follower,
         followed_id: req.query.followed,
       });
-      res.locals.follow = 'unfollowed';
+      res.locals.follow = "unfollowed";
     }
     next();
   } catch (error) {
@@ -229,13 +229,13 @@ userController.editProfile = async (
     });
     // update info in profiles table
     const { error } = await supabase
-      .from('profiles')
+      .from("profiles")
       .update({
         username: req.body.username,
         description: req.body.description,
         profile_avatar: res.locals.avatarPublicUrl,
       })
-      .eq('id', req.body.id);
+      .eq("id", req.body.id);
 
     next();
   } catch (error) {
@@ -254,18 +254,17 @@ userController.upsertAvatar = async (
       return next();
     }
     const fileContent = fs.readFileSync(req.file.path);
-
     const avatarData = await supabase.storage
-      .from('avatars')
+      .from("avatars")
       .upload(req.body.path, fileContent, {
-        cacheControl: '3600',
+        cacheControl: "3600",
         upsert: true,
         contentType: req.file?.mimetype,
       });
 
     if (avatarData.data) {
       const { data } = await supabase.storage
-        .from('avatars')
+        .from("avatars")
         .getPublicUrl(avatarData.data.path);
 
       res.locals.avatarPublicUrl = data.publicUrl;
@@ -285,13 +284,13 @@ userController.getFollowCount = async (
 ) => {
   try {
     const following = await supabase
-      .from('relationships')
-      .select('*', { count: 'exact', head: true })
-      .eq('follower_id', res.locals.id);
+      .from("relationships")
+      .select("*", { count: "exact", head: true })
+      .eq("follower_id", res.locals.id);
     const followers = await supabase
-      .from('relationships')
-      .select('*', { count: 'exact', head: true })
-      .eq('followed_id', res.locals.id);
+      .from("relationships")
+      .select("*", { count: "exact", head: true })
+      .eq("followed_id", res.locals.id);
     res.locals.following = following.count;
     res.locals.followers = followers.count;
     next();

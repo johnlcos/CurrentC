@@ -35,7 +35,7 @@ const PasswordSettingPage = () => {
       return;
     }
   };
-
+  console.log(error);
   return (
     <div className='p-5'>
       <SettingsHeading heading={'Change your password'} />
@@ -59,16 +59,22 @@ const PasswordSettingPage = () => {
             placeholder='New password'
             className='text-black px-1'
           />
-          {/* {errors.newPassword && <div>{errors.newPassword.message}</div>} */}
-          <input
-            {...register('confirmNewPassword')}
-            type='password'
-            placeholder='Re-type new password'
-            className='text-black px-1'
-          />
-          {/* {errors.confirmNewPassword && (
-            <div>{errors.confirmNewPassword.message}</div>
-          )} */}
+
+          <div>
+            <input
+              {...register('confirmNewPassword')}
+              type='password'
+              placeholder='Re-type new password'
+              className={`text-black px-1 w-full ${
+                error?.errorType === 'Confirmation'
+                  ? 'border border-2 border-red-600'
+                  : ''
+              }`}
+            />
+            {error?.errorType === 'Confirmation' && (
+              <div className='text-red-600 text-sm'>{error.message}</div>
+            )}
+          </div>
           <button
             disabled={!isDirty || !isValid}
             type='submit'

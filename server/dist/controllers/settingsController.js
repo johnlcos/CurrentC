@@ -22,10 +22,11 @@ settingsController.changePassword = (req, res, next) => __awaiter(void 0, void 0
     }
     catch (err) {
         console.log('------------------Error------------------\n', err);
+        const error = err;
         const errObj = {
             status: 500,
             errorType: 'Confirmation',
-            message: err.message,
+            message: error.message,
         };
         next(errObj);
     }

@@ -8,7 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const supabase_1 = __importDefault(require("../utils/supabase"));
 const settingsController = {};
 settingsController.changePassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -18,6 +22,21 @@ settingsController.changePassword = (req, res, next) => __awaiter(void 0, void 0
             throw new Error('Passwords do not match');
         }
         console.log(currentPassword, newPassword, confirmNewPassword);
+        const { data: { user }, } = yield supabase_1.default.auth.getUser();
+        console.log(user);
+        if (user && user.email) {
+            console.log('in here');
+            const { data, error } = yield supabase_1.default.rpc('changepassword', {
+                current_plain_password: currentPassword,
+                new_plain_password: newPassword,
+                current_id: user.id,
+            });
+            console.log('data', data);
+            console.log('error', error);
+        }
+        // const {data,error} = await supabase.auth.signInWithPassword({
+        //   password: currentPassword
+        // })
         next();
     }
     catch (err) {

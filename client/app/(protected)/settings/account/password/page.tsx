@@ -19,6 +19,7 @@ const PasswordSettingPage = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof ChangePasswordSchema>) => {
+    setError(null);
     const validatedFields = ChangePasswordSchema.safeParse(data);
 
     if (!validatedFields.success) return;
@@ -67,7 +68,7 @@ const PasswordSettingPage = () => {
               placeholder='Re-type new password'
               className={`text-black px-1 w-full ${
                 error?.errorType === 'Confirmation'
-                  ? 'border border-2 border-red-600'
+                  ? 'border-2 border-red-600'
                   : ''
               }`}
             />

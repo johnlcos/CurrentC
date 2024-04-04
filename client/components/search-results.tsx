@@ -70,7 +70,7 @@ export const SearchResults = ({
                 <h1>{result.username}</h1>
               </Link>
               {userSession && result.id !== userSession.user.id ? (
-                <FollowButton followed_id={result.id} />
+                <FollowButton followed_id={result.id} setFollowers={null} />
               ) : null}
             </div>
           );

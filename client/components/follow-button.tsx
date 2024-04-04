@@ -5,7 +5,7 @@ import { SessionContext } from "@/app/(protected)/layout";
 
 interface FollowButtonProps {
   followed_id: string;
-  setFollowers: React.Dispatch<React.SetStateAction<number>>;
+  setFollowers: React.Dispatch<React.SetStateAction<number>> | null;
 }
 
 export const FollowButton = ({
@@ -30,8 +30,10 @@ export const FollowButton = ({
   // on click, send the follower, followed and wether or not to follow or unfollow to the backend, update state to reflect
   const fetchToggleFollow = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (isFollowing) setFollowers((prev) => prev - 1);
-    else setFollowers((prev) => prev + 1);
+    if (setFollowers) {
+      if (isFollowing) setFollowers((prev) => prev - 1);
+      else setFollowers((prev) => prev + 1);
+    }
     setIsFollowing((prev) => !prev);
     const response = await fetch(
       `http://localhost:8080/users/follow?follower=${

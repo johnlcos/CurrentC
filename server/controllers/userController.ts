@@ -224,7 +224,7 @@ userController.editProfile = async (
     // update the username stored in auth metadata
     const updateUserResponse = await supabase.auth.updateUser({
       data: {
-        username: req.body.username,
+        display_name: req.body.displayName,
         profile_avatar: res.locals.avatarPublicUrl,
       },
     });
@@ -232,7 +232,7 @@ userController.editProfile = async (
     const { error } = await supabase
       .from('profiles')
       .update({
-        username: req.body.username,
+        display_name: req.body.displayName,
         description: req.body.description,
         profile_avatar: res.locals.avatarPublicUrl,
       })

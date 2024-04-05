@@ -166,8 +166,8 @@ export default function UserProfile({
           ) : (
             <input
               className='resize-none rounded-lg text-[#E4E6EB] bg-gray-700 dark-border-gray-600focus:ring-blue-500 focus:border-blue-500 text-center'
-              name='username'
-              id='edit-profile-username'
+              name='displayName'
+              id='edit-profile-displayName'
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
             ></input>

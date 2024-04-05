@@ -155,7 +155,7 @@ userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 
         // update the username stored in auth metadata
         const updateUserResponse = yield supabase_1.default.auth.updateUser({
             data: {
-                username: req.body.username,
+                display_name: req.body.displayName,
                 profile_avatar: res.locals.avatarPublicUrl,
             },
         });
@@ -163,7 +163,7 @@ userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 
         const { error } = yield supabase_1.default
             .from('profiles')
             .update({
-            username: req.body.username,
+            display_name: req.body.displayName,
             description: req.body.description,
             profile_avatar: res.locals.avatarPublicUrl,
         })

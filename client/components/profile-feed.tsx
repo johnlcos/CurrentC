@@ -29,7 +29,7 @@ export const ProfileFeed = () => {
         {allFeed.map((feed) => (
           <FeedWrapper
             key={feed.id}
-            author={userSession?.user.user_metadata.username}
+            author={userSession?.user.user_metadata.display_name}
             author_id={feed.author_id}
             profile_avatar={userSession?.user.user_metadata.profile_avatar}
             id={feed.id}

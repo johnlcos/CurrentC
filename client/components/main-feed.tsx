@@ -38,6 +38,7 @@ export const MainFeed = ({ type }: MainFeedProps) => {
     fetchFeed();
   }, []);
 
+  console.log(allFeed);
   return (
     <div id='main-feed-container' className='p-2 w-full bg-[#17191A]'>
       {(type === 'main' || type === 'explore') && (
@@ -51,7 +52,7 @@ export const MainFeed = ({ type }: MainFeedProps) => {
         {allFeed.map((feed) => (
           <FeedWrapper
             key={feed.id}
-            author={feed.profiles ? feed.profiles.username : feed.username}
+            author={feed.profiles ? feed.profiles.display_name : feed.username}
             author_id={feed.author_id}
             profile_avatar={
               feed.profiles ? feed.profiles.profile_avatar : feed.profile_avatar

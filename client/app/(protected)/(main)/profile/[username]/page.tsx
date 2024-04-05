@@ -16,8 +16,11 @@ export default function UserProfile({
   params: { username: string };
   searchParams: { id: string };
 }) {
+  const { userSession, setUserSession } = useContext(SessionContext);
+  console.log(userSession);
   // store the profile information in state
-  const [username, setUsername] = useState<string>(params.username);
+  // const [username, setUsername] = useState<string>(params.username);
+  const [displayName, setDisplayName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [avatarUrl, setAvatarUrl] = useState<string | null>('');
   const [profileId, setProfileId] = useState<string>('');
@@ -27,11 +30,11 @@ export default function UserProfile({
   const [loading, setLoading] = useState<boolean>(true);
   // store the previous profile info in state for canceling updates
   const [prevProfile, setPrevProfile] = useState<{
-    username: string;
+    displayName: string;
     description: string;
     avatarUrl: string | null;
   }>({
-    username: '',
+    displayName: '',
     description: '',
     avatarUrl: '',
   });
@@ -46,15 +49,15 @@ export default function UserProfile({
 
   const router = useRouter();
 
-  const { userSession, setUserSession } = useContext(SessionContext);
   // get the profileId from session if it is the users profile, or search params if someone else
 
   const fetchProfileInfo = async () => {
     const response = await fetch(
-      `http://localhost:8080/users/info?user=${username}`
+      `http://localhost:8080/users/info?user=${params.username}`
     );
     const json = await response.json();
     console.log('fetchProfileInfo: ', json);
+    setDisplayName(json.data[0].display_name);
     setProfileId(json.data[0].id);
     setDescription(json.data[0].description || '');
     setAvatarUrl(json.data[0].profile_avatar);
@@ -80,7 +83,7 @@ export default function UserProfile({
 
   const handleStartEdits = () => {
     setEditing(true);
-    setPrevProfile({ username, description, avatarUrl });
+    setPrevProfile({ displayName, description, avatarUrl });
   };
 
   const handleSaveEdits = async (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -101,12 +104,11 @@ export default function UserProfile({
       setAvatarUrl(url.publicUrl);
     }
     getCurrentSession();
-    router.push(`http://localhost:3000/profile/${username}`);
     setEditing(false);
   };
 
   const handleCancelEdits = () => {
-    setUsername(prevProfile.username);
+    setDisplayName(prevProfile.displayName);
     setDescription(prevProfile.description);
     setAvatarUrl(prevProfile.avatarUrl);
     setEditing(false);
@@ -160,14 +162,14 @@ export default function UserProfile({
           </label>
 
           {!editing ? (
-            <h1 className='text-[#E4E6EB]'>{username}</h1>
+            <h1 className='text-[#E4E6EB]'>{displayName}</h1>
           ) : (
             <input
               className='resize-none rounded-lg text-[#E4E6EB] bg-gray-700 dark-border-gray-600focus:ring-blue-500 focus:border-blue-500 text-center'
               name='username'
               id='edit-profile-username'
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
             ></input>
           )}
         </div>
@@ -216,7 +218,7 @@ export default function UserProfile({
                 type='submit'
                 className='text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm transition duration-300 w-[100px] h-[32px] flex justify-center items-center'
                 disabled={
-                  prevProfile.username === username &&
+                  prevProfile.displayName === displayName &&
                   prevProfile.description === description &&
                   prevProfile.avatarUrl === avatarUrl
                 }

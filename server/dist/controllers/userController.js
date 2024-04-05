@@ -66,7 +66,7 @@ userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 
     try {
         const { data, error } = yield supabase_1.default
             .from('profiles')
-            .select('profile_avatar, description, id')
+            .select('profile_avatar, description, id, display_name')
             .eq('username', req.query.user);
         res.locals.userInfo = data;
         if (data)

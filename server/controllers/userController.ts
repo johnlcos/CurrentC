@@ -119,7 +119,7 @@ userController.getUserInfo = async (
   try {
     const { data, error } = await supabase
       .from('profiles')
-      .select('profile_avatar, description, id')
+      .select('profile_avatar, description, id, display_name')
       .eq('username', req.query.user);
     res.locals.userInfo = data;
     if (data) res.locals.id = data[0].id;

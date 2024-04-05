@@ -23,7 +23,8 @@ userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             password: password,
             options: {
                 data: {
-                    username: username,
+                    username: username + Math.random().toString(26).slice(5),
+                    display_name: username,
                 },
             },
         });

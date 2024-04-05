@@ -7,6 +7,7 @@ import { MainFeed } from '@/components/main-feed';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Avatar } from '@/components/avatar';
+import { ProfileFeed } from '@/components/profile-feed';
 
 export default function UserProfile({
   params,
@@ -47,8 +48,6 @@ export default function UserProfile({
 
   const { userSession, setUserSession } = useContext(SessionContext);
   // get the profileId from session if it is the users profile, or search params if someone else
-  // const profileId =
-  //   !searchParams.id && userSession ? userSession.user.id : searchParams.id;
 
   const fetchProfileInfo = async () => {
     const response = await fetch(
@@ -57,7 +56,7 @@ export default function UserProfile({
     const json = await response.json();
     console.log('fetchProfileInfo: ', json);
     setProfileId(json.data[0].id);
-    setDescription(json.data[0].description);
+    setDescription(json.data[0].description || '');
     setAvatarUrl(json.data[0].profile_avatar);
     setFollowers(json.followers);
     setFollowing(json.following);
@@ -102,6 +101,7 @@ export default function UserProfile({
       setAvatarUrl(url.publicUrl);
     }
     getCurrentSession();
+    router.push(`http://localhost:3000/profile/${username}`);
     setEditing(false);
   };
 
@@ -131,6 +131,8 @@ export default function UserProfile({
     const filePath = `${fileName}`;
     setNewAvatar({ path: filePath, file: file });
   };
+
+  console.log(description);
   // console.log('avatar url', avatarUrl);
   return loading ? null : (
     <div className='w-full flex flex-col items-center'>
@@ -233,7 +235,8 @@ export default function UserProfile({
           </div>
         </div>
       </form>
-      <MainFeed type='profile' id={profileId} />
+      {/* <MainFeed type='profile' id={profileId} /> */}
+      <ProfileFeed />
     </div>
   );
 }

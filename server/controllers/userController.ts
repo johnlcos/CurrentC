@@ -64,7 +64,8 @@ userController.signup = async (
       password: password,
       options: {
         data: {
-          username: username,
+          username: username + Math.random().toString(26).slice(5),
+          display_name: username,
         },
       },
     });

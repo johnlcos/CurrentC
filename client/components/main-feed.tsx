@@ -4,22 +4,28 @@ import { FeedWrapper } from './feed-wrapper';
 import { useState, useEffect, useContext } from 'react';
 import { FeedSchema } from '@/types';
 import { NewFeedInputBox } from './new-feed-input-box';
+import { SessionContext } from '@/app/(protected)/layout';
 
-export const MainFeed = ({ type, id }: { type: string; id: string }) => {
+interface MainFeedProps {
+  type: string;
+}
+
+export const MainFeed = ({ type }: MainFeedProps) => {
   // store the displayed feed in state
   const [allFeed, setAllFeed] = useState<FeedSchema[]>([]);
+  const { userSession } = useContext(SessionContext);
 
   // depending on the type of feed needed, update the request url, fetch the feed and update state
   const fetchFeed = async () => {
     let feedUrl = '';
     if (type === 'main') {
-      feedUrl = `http://localhost:8080/feed/main?id=${id}`;
+      feedUrl = `http://localhost:8080/feed/main?id=${userSession?.user.id}`;
     } else if (type === 'explore') {
       feedUrl = 'http://localhost:8080/feed/';
     } else if (type === 'profile') {
-      feedUrl = `http://localhost:8080/feed/profile?id=${id}`;
+      feedUrl = `http://localhost:8080/feed/profile?id=${userSession?.user.id}`;
     } else if (type === 'reply') {
-      feedUrl = `http://localhost:8080/feed/reply?id=${id}`;
+      feedUrl = `http://localhost:8080/feed/reply?id=${userSession?.user.id}`;
     }
     const response = await fetch(feedUrl);
     const data = await response.json();

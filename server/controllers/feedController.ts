@@ -79,7 +79,7 @@ feedController.getProfileFeed = async (
     const { data, error } = await supabase
       .from('feeds')
       .select(
-        'id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar)'
+        'id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar, display_name)'
       )
       .match({ type: 'POST', author_id: req.query.id })
       .order('created_at', { ascending: false });
@@ -123,10 +123,12 @@ feedController.getFollowedFeed = async (
     const { data, error } = await supabase
       .from('feed_with_relationship')
       .select(
-        'id, created_at, content, like_count, dislike_count, author_id, username, profile_avatar'
+        'id, created_at, content, like_count, dislike_count, author_id, username, profile_avatar, display_name'
       )
       .or(`follower_id.eq.${follower_id}`)
       .order('created_at', { ascending: false });
+    console.log('getFollowedFeed', data);
+    console.log('getFollowedFeed error', error);
     res.locals.followedFeed = data;
     console.log('getFollowedFeed: ', data);
     next();

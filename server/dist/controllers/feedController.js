@@ -20,7 +20,7 @@ feedController.getFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         try {
             const { data, error } = yield supabase_1.default
                 .from('feeds')
-                .select('id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar)')
+                .select('id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar, display_name)')
                 .eq('id', req.query.id);
             res.locals.results = data;
             next();
@@ -34,7 +34,7 @@ feedController.getFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         try {
             const { data, error } = yield supabase_1.default
                 .from('feeds')
-                .select('id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar)')
+                .select('id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar, display_name)')
                 .eq('type', 'POST')
                 .order('created_at', { ascending: false });
             res.locals.results = data;

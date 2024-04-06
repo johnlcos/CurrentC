@@ -1,6 +1,7 @@
 export interface FeedProfileSchema {
   username: string;
   profile_avatar: string | null;
+  display_name: string;
 }
 
 export interface FeedSchema {
@@ -13,6 +14,7 @@ export interface FeedSchema {
   author_id: string;
   username?: string;
   profile_avatar?: string | null;
+  display_name: string;
 }
 
 export interface ServerError {

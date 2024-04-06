@@ -33,7 +33,7 @@ const PasswordSettingPage = () => {
       body: JSON.stringify(validatedFields.data),
     });
     const result = await response.json();
-    console.log(result);
+
     if (result.error) {
       setError(result.error);
       return;

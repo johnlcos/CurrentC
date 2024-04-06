@@ -64,7 +64,8 @@ userController.signup = async (
       password: password,
       options: {
         data: {
-          username: username,
+          username: username + Math.random().toString(26).slice(5),
+          display_name: username,
         },
       },
     });
@@ -118,7 +119,7 @@ userController.getUserInfo = async (
   try {
     const { data, error } = await supabase
       .from("profiles")
-      .select("profile_avatar, description, id")
+      .select("profile_avatar, description, id, display_name")
       .eq("username", req.query.user);
     res.locals.userInfo = data;
     if (data) res.locals.id = data[0].id;
@@ -223,7 +224,7 @@ userController.editProfile = async (
     // update the username stored in auth metadata
     const updateUserResponse = await supabase.auth.updateUser({
       data: {
-        username: req.body.username,
+        display_name: req.body.displayName,
         profile_avatar: res.locals.avatarPublicUrl,
       },
     });
@@ -231,7 +232,7 @@ userController.editProfile = async (
     const { error } = await supabase
       .from("profiles")
       .update({
-        username: req.body.username,
+        display_name: req.body.displayName,
         description: req.body.description,
         profile_avatar: res.locals.avatarPublicUrl,
       })
@@ -253,6 +254,7 @@ userController.upsertAvatar = async (
     if (!req.file) {
       return next();
     }
+    console.log(req.file);
     const fileContent = fs.readFileSync(req.file.path);
     const avatarData = await supabase.storage
       .from("avatars")

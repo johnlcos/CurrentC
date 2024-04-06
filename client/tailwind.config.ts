@@ -9,9 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "text-white": "#E4E6EB",
+        "text-white": "#E6E6E6",
         "box-hover-color": "#2F3335",
-        "subtext-color": "#71767A",
+        "subtext-color": "#A0A0A0",
         background: "#17191A",
         surface: "#252526",
         primary: {

@@ -34,4 +34,10 @@
     text-[#0F1419] hover:bg-[#aeb1b2] 
     disabled:text-[#88898A] disabled:hover:bg-[#D7DBDC];
   }
+
+  .auth-button {
+    @apply w-full text-center bg-primary-500 p-3 rounded-full 
+    text-text-white font-semibold shadow-md hover:bg-primary-600 
+    transition duration-300 flex items-center justify-center gap-2;
+  }
 }

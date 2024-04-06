@@ -56,7 +56,7 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
               placeholder="Email"
               type="email"
               name="email"
-              className="bg-[#17191A] border border-gray-300 text-text-white text-sm rounded-lg w-full p-2.5"
+              className="bg-background border border-gray-300 text-text-white text-sm rounded-lg w-full p-2.5 focus:ring-primary-500 focus:border-primary-500 focus:ring-2 focus:outline-none"
             ></input>
           </label>
           {formType === "register" && (
@@ -69,7 +69,7 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
                 placeholder="Username"
                 type="text"
                 name="username"
-                className="bg-[#17191A] border border-gray-300 text-text-white  text-sm rounded-lg w-full p-2.5"
+                className="bg-background border border-gray-300 text-text-white  text-sm rounded-lg w-full p-2.5 focus:ring-primary-500 focus:border-primary-500 focus:ring-2 focus:outline-none"
               ></input>
             </label>
           )}
@@ -82,33 +82,24 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
               placeholder="Password"
               type="password"
               name="password"
-              className="bg-[#17191A] border border-gray-300 text-text-white  text-sm rounded-lg w-full p-2.5"
+              className="bg-background border border-gray-300 text-text-white  text-sm rounded-lg w-full p-2.5 focus:ring-primary-500 focus:border-primary-500 focus:ring-2 focus:outline-none"
             ></input>
           </label>
-          <button
-            type="submit"
-            className="w-full text-center bg-green-700 p-3 rounded-lg text-gray-50 font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2"
-          >
+          <button type="submit" className="auth-button">
             {formType === "register" ? "Sign Up" : "Log In"}
           </button>
         </div>
       </form>
       {formType === "register" && (
         <div className="flex justify-center my-5">
-          <Link
-            href="/login"
-            className="w-full text-center bg-green-700 p-3 rounded-lg text-text-white font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2"
-          >
+          <Link href="/login" className="auth-button">
             Do you have an account already?
           </Link>
         </div>
       )}
       {formType === "login" && (
         <div className="flex justify-center my-5">
-          <Link
-            href="/signup"
-            className="w-full text-center bg-green-700 p-3 rounded-lg text-text-white font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2"
-          >
+          <Link href="/signup" className="auth-button">
             Do not have an account already?
           </Link>
         </div>

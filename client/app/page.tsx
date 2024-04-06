@@ -4,8 +4,8 @@ import { FaGoogle } from "react-icons/fa";
 
 export default function Home() {
   return (
-    <div className="h-screen w-screen flex justify-center items-center bg-[#17191A]">
-      <div className="flex flex-col items-center md:flex-row bg-[#252526] p-8 py-4 gap-4 rounded-lg shadow-2xl">
+    <div className="h-screen w-screen flex justify-center items-center bg-background">
+      <div className="flex flex-col items-center md:flex-row bg-surface p-8 py-4 gap-4 rounded-lg shadow-2xl">
         <Image
           src="/alerty.png"
           width={200}
@@ -22,18 +22,12 @@ export default function Home() {
           </p>
           <ul className="flex flex-col gap-2">
             <li>
-              <Link
-                href="/"
-                className="w-full text-center bg-green-700 p-3 rounded-lg text-text-white font-semibold shadow-md hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2"
-              >
+              <Link href="/" className="auth-button">
                 <FaGoogle /> Sign up with Google
               </Link>
             </li>
             <li>
-              <Link
-                href="/signup"
-                className="block w-full text-center bg-green-700 p-3 rounded-lg text-text-white font-semibold shadow-md hover:bg-green-600 transition duration-300"
-              >
+              <Link href="/signup" className="auth-button">
                 Create Account
               </Link>
             </li>
@@ -43,10 +37,7 @@ export default function Home() {
               </p>
             </li>
             <li>
-              <Link
-                href="/login"
-                className="block w-full text-center bg-green-700 p-3 rounded-lg text-text-white font-semibold shadow-md hover:bg-green-600 transition duration-300"
-              >
+              <Link href="/login" className="auth-button">
                 Sign In
               </Link>
             </li>

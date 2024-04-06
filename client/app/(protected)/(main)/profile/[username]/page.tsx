@@ -238,7 +238,7 @@ export default function UserProfile({
         </div>
       </form>
       {/* <MainFeed type='profile' id={profileId} /> */}
-      <ProfileFeed />
+      <ProfileFeed id={profileId} />
     </div>
   );
 }

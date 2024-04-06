@@ -21,19 +21,23 @@ export const NewFeedInputBox = ({
 
   const handleClick = async () => {
     if (userSession) {
-      const response = await fetch('http://localhost:8080/feed/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: value,
-          author_id: userSession.user.id,
-          type,
-          replyToId,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:8080/feed/create?id=${userSession.user.id}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: value,
+            author_id: userSession.user.id,
+            type,
+            replyToId,
+          }),
+        }
+      );
       const data = await response.json();
+      console.log(data);
       if (type === 'POST') {
         if (setAllFeed) setAllFeed(data);
       }

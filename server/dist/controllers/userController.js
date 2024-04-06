@@ -23,7 +23,8 @@ userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             password: password,
             options: {
                 data: {
-                    username: username,
+                    username: username + Math.random().toString(26).slice(5),
+                    display_name: username,
                 },
             },
         });
@@ -65,7 +66,7 @@ userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 
     try {
         const { data, error } = yield supabase_1.default
             .from('profiles')
-            .select('profile_avatar, description, id')
+            .select('profile_avatar, description, id, display_name')
             .eq('username', req.query.user);
         res.locals.userInfo = data;
         if (data)
@@ -154,7 +155,7 @@ userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 
         // update the username stored in auth metadata
         const updateUserResponse = yield supabase_1.default.auth.updateUser({
             data: {
-                username: req.body.username,
+                display_name: req.body.displayName,
                 profile_avatar: res.locals.avatarPublicUrl,
             },
         });
@@ -162,7 +163,7 @@ userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 
         const { error } = yield supabase_1.default
             .from('profiles')
             .update({
-            username: req.body.username,
+            display_name: req.body.displayName,
             description: req.body.description,
             profile_avatar: res.locals.avatarPublicUrl,
         })

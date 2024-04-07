@@ -2,8 +2,10 @@
 
 import { useContext, useState, useRef, useEffect } from 'react';
 import { SessionContext } from '@/app/(protected)/layout';
+import { useRouter } from 'next/navigation';
 
 const AccountDeletionPage = () => {
+  const router = useRouter();
   const [showModal, setShowModal] = useState<boolean>(false);
   const { userSession } = useContext(SessionContext);
 
@@ -17,6 +19,10 @@ const AccountDeletionPage = () => {
       },
       body: JSON.stringify({ id: userSession?.user.id }),
     });
+    const result = await response.json();
+    if (result.success) {
+      router.push('http://localhost:3000/');
+    }
   };
 
   useEffect(() => {

@@ -60,7 +60,9 @@ settingsController.changePassword = (req, res, next) => __awaiter(void 0, void 0
 });
 settingsController.accountDeletion = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { data, error } = yield supabase_1.default.rpc('delete_user');
+        yield supabase_1.default.rpc('delete_user');
+        const { error } = yield supabase_1.default.auth.signOut();
+        console.log(error);
         next();
     }
     catch (err) {

@@ -66,7 +66,9 @@ settingsController.changePassword = async (req, res, next) => {
 
 settingsController.accountDeletion = async (req, res, next) => {
   try {
-    const { data, error } = await supabase.rpc('delete_user');
+    await supabase.rpc('delete_user');
+    const { error } = await supabase.auth.signOut();
+    console.log(error);
     next();
   } catch (err) {
     console.log('------------------Error------------------\n', err);

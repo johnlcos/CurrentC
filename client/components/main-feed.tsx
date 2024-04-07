@@ -52,7 +52,8 @@ export const MainFeed = ({ type }: MainFeedProps) => {
         {allFeed.map((feed) => (
           <FeedWrapper
             key={feed.id}
-            author={feed.profiles ? feed.profiles.display_name : feed.username}
+            author={feed.profiles?.display_name}
+            author_username={feed.profiles?.username}
             author_id={feed.author_id}
             profile_avatar={
               feed.profiles ? feed.profiles.profile_avatar : feed.profile_avatar

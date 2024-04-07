@@ -36,7 +36,7 @@ const FeedPage = ({ params }: { params: { feedID: string } }) => {
         />
       )}
       <NewFeedInputBox type={'REPLY'} replyToId={params.feedID} />
-      <MainFeed type='reply' id={params.feedID} />
+      <MainFeed type='reply' />
     </div>
   );
 };

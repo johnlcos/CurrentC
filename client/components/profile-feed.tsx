@@ -37,6 +37,7 @@ export const ProfileFeed = ({ id }: { id: string }) => {
                 ? userSession?.user.user_metadata.display_name
                 : feed.profiles?.display_name
             }
+            author_username={feed.username}
             author_id={feed.author_id}
             profile_avatar={
               isActiveUsersProfile

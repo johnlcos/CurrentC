@@ -49,8 +49,6 @@ export const SearchResults = ({
     fetchSearchResults();
   }, [searchValue]);
 
-  console.log(searchResults[0].profile_avatar);
-
   return searchResults.length > 0 ? (
     loading ? (
       'loading'

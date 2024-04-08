@@ -10,6 +10,11 @@ interface SettingsController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  accountDeletion: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
 }
 
 settingsController.changePassword = async (req, res, next) => {
@@ -56,6 +61,17 @@ settingsController.changePassword = async (req, res, next) => {
       };
       next(errObj);
     }
+  }
+};
+
+settingsController.accountDeletion = async (req, res, next) => {
+  try {
+    await supabase.rpc('delete_user');
+    const { error } = await supabase.auth.signOut();
+    next();
+  } catch (err) {
+    console.log('------------------Error------------------\n', err);
+    next(err);
   }
 };
 

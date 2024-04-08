@@ -23,8 +23,8 @@ const FeedPage = ({ params }: { params: { feedID: string } }) => {
         <FeedWrapper
           author={
             currentFeed.profiles
-              ? currentFeed.profiles.username
-              : currentFeed.username
+              ? currentFeed.profiles.display_name
+              : currentFeed.display_name
           }
           author_id={currentFeed.author_id}
           id={currentFeed.id}
@@ -32,10 +32,11 @@ const FeedPage = ({ params }: { params: { feedID: string } }) => {
           dislikes={currentFeed.dislike_count}
           content={currentFeed.content}
           created_at={currentFeed.created_at}
+          profile_avatar={currentFeed.profiles?.profile_avatar}
         />
       )}
       <NewFeedInputBox type={'REPLY'} replyToId={params.feedID} />
-      <MainFeed type='reply' id={params.feedID} />
+      <MainFeed type='reply' />
     </div>
   );
 };

@@ -12,6 +12,7 @@ interface SearchResultType {
   id: string;
   username: string;
   profile_avatar: string;
+  display_name: string;
 }
 
 export const SearchResults = ({
@@ -69,7 +70,7 @@ export const SearchResults = ({
                 }}
               >
                 <Avatar url={result.profile_avatar} type='search' />
-                <h1>{result.username}</h1>
+                <h1>{result.display_name}</h1>
               </Link>
               {userSession && result.id !== userSession.user.id ? (
                 <FollowButton followed_id={result.id} setFollowers={null} />

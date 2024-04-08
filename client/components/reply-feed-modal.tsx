@@ -53,9 +53,11 @@ export const ReplyFeedModal = () => {
                 <FeedWrapper
                   author={
                     selectedFeed.profiles
-                      ? selectedFeed.profiles.username
+                      ? selectedFeed.profiles.display_name
                       : undefined
                   }
+                  profile_avatar={selectedFeed.profile_avatar}
+                  author_id={selectedFeed.author_id}
                   id={selectedFeedID}
                   likes={selectedFeed.like_count}
                   dislikes={selectedFeed.dislike_count}

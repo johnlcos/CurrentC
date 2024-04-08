@@ -44,7 +44,7 @@ feedController.getFeed = async (
       const { data, error } = await supabase
         .from('feeds')
         .select(
-          'id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar)'
+          'id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar, display_name)'
         )
         .eq('id', req.query.id);
       res.locals.results = data;
@@ -58,7 +58,7 @@ feedController.getFeed = async (
       const { data, error } = await supabase
         .from('feeds')
         .select(
-          'id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar)'
+          'id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar, display_name)'
         )
         .eq('type', 'POST')
         .order('created_at', { ascending: false });

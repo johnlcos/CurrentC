@@ -7,14 +7,6 @@ import fs from 'fs';
 const userController = {} as UserController;
 
 interface UserController {
-  signup: (req: Request, res: Response, next: NextFunction) => Promise<void>;
-  signin: (req: Request, res: Response, next: NextFunction) => Promise<void>;
-  signout: (req: Request, res: Response, next: NextFunction) => Promise<void>;
-  getSession: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => Promise<void>;
   getUserInfo: (
     req: Request,
     res: Response,
@@ -52,65 +44,6 @@ interface UserController {
   ) => Promise<void>;
 }
 
-userController.signup = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { email, password, username } = req.body;
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-      options: {
-        data: {
-          username: username + Math.random().toString(26).slice(5),
-          display_name: username,
-        },
-      },
-    });
-    res.locals.data = data;
-    console.log(error);
-    next();
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
-
-userController.signin = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { email, password } = req.body;
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    res.locals.loggedinUser = data;
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
-
-userController.getSession = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { data, error } = await supabase.auth.getSession();
-    res.locals.data = data;
-    next();
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-};
-
 userController.getUserInfo = async (
   req: Request,
   res: Response,
@@ -123,20 +56,6 @@ userController.getUserInfo = async (
       .eq('username', req.query.user);
     res.locals.userInfo = data;
     if (data) res.locals.id = data[0].id;
-    next();
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
-
-userController.signout = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { error } = await supabase.auth.signOut();
     next();
   } catch (error) {
     console.log(error);

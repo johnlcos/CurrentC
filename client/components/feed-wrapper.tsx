@@ -92,7 +92,7 @@ export const FeedWrapper = ({
 
   const handleProfileClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    router.push(`/profile/${author_username}`);
+    router.push(`/${author_username}`);
   };
 
   return (

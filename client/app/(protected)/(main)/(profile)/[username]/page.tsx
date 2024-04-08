@@ -141,6 +141,9 @@ export default function UserProfile({
         method: 'POST',
       }
     );
+    const result = await response.json();
+    const chatId = result.chatId;
+    router.push(`/${params.username}/${chatId}`);
   };
 
   console.log(description);

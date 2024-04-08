@@ -23,8 +23,9 @@ messageController.getRoom = (req, res, next) => __awaiter(void 0, void 0, void 0
             .select('id')
             .or(`user_1.eq.${user === null || user === void 0 ? void 0 : user.id},user_2.eq.${user === null || user === void 0 ? void 0 : user.id}`)
             .or(`user_1.eq.${req.query.userId}, user_2.eq.${req.query.userId}`);
-        console.log('data', data);
-        console.log('error', error);
+        if (data && data[0]) {
+            res.locals.room = data[0].id;
+        }
         next();
     }
     catch (err) {
@@ -33,9 +34,13 @@ messageController.getRoom = (req, res, next) => __awaiter(void 0, void 0, void 0
 });
 messageController.createRoom = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     if (res.locals.room)
-        next();
+        return next();
     const { data, error } = yield supabase_1.default
         .from('chatrooms')
-        .insert({ user_1: res.locals.currentUser.id, user_2: req.query.userId });
+        .insert({ user_1: res.locals.currentUser.id, user_2: req.query.userId })
+        .select();
+    console.log(data);
+    if (data)
+        res.locals.room = data[0].id;
 });
 exports.default = messageController;

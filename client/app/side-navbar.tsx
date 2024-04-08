@@ -70,7 +70,7 @@ export const SideNavBar = () => {
           <p className='hidden lg:block'>Messages</p>
         </Link>
         <Link
-          href={`/profile/${userSession?.user.user_metadata.username}`}
+          href={`/${userSession?.user.user_metadata.username}`}
           className='text-center bg-background p-3 text-text-white font-semibold border-b border-surface shadow-md flex items-center justify-center gap-2 hover:border-primary-500 transition duration-300'
         >
           <BiSolidUser />

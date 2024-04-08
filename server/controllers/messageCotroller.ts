@@ -28,10 +28,9 @@ messageController.getRoom = async (
       .select('id')
       .or(`user_1.eq.${user?.id},user_2.eq.${user?.id}`)
       .or(`user_1.eq.${req.query.userId}, user_2.eq.${req.query.userId}`);
-
-    console.log('data', data);
-    console.log('error', error);
-
+    if (data && data[0]) {
+      res.locals.room = data[0].id;
+    }
     next();
   } catch (err) {
     console.log('------------------Error------------------\n', err);
@@ -43,10 +42,13 @@ messageController.createRoom = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (res.locals.room) next();
+  if (res.locals.room) return next();
   const { data, error } = await supabase
     .from('chatrooms')
-    .insert({ user_1: res.locals.currentUser.id, user_2: req.query.userId });
+    .insert({ user_1: res.locals.currentUser.id, user_2: req.query.userId })
+    .select();
+  console.log(data);
+  if (data) res.locals.room = data[0].id;
 };
 
 export default messageController;

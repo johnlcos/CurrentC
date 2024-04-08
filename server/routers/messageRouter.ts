@@ -8,7 +8,9 @@ router.post(
   messageController.getRoom,
   messageController.createRoom,
   (req: Request, res: Response) => {
-    res.status(200).json({});
+    res
+      .status(200)
+      .json({ success: 'Successfully created room', chatId: res.locals.room });
   }
 );
 

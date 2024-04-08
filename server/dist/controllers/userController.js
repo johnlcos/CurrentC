@@ -15,53 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const supabase_1 = __importDefault(require("../utils/supabase"));
 const fs_1 = __importDefault(require("fs"));
 const userController = {};
-userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { email, password, username } = req.body;
-        const { data, error } = yield supabase_1.default.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-                data: {
-                    username: username + Math.random().toString(26).slice(5),
-                    display_name: username,
-                },
-            },
-        });
-        res.locals.data = data;
-        console.log(error);
-        next();
-    }
-    catch (error) {
-        console.log(error);
-        next(error);
-    }
-});
-userController.signin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { email, password } = req.body;
-        const { data, error } = yield supabase_1.default.auth.signInWithPassword({
-            email,
-            password,
-        });
-        res.locals.loggedinUser = data;
-        next();
-    }
-    catch (error) {
-        next(error);
-    }
-});
-userController.getSession = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { data, error } = yield supabase_1.default.auth.getSession();
-        res.locals.data = data;
-        next();
-    }
-    catch (error) {
-        console.error(error);
-        next(error);
-    }
-});
 userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { data, error } = yield supabase_1.default
@@ -71,16 +24,6 @@ userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 
         res.locals.userInfo = data;
         if (data)
             res.locals.id = data[0].id;
-        next();
-    }
-    catch (error) {
-        console.log(error);
-        next(error);
-    }
-});
-userController.signout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { error } = yield supabase_1.default.auth.signOut();
         next();
     }
     catch (error) {

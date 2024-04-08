@@ -16,31 +16,11 @@ var storage = multer_1.default.diskStorage({
 });
 var upload = (0, multer_1.default)({ storage: storage });
 const router = (0, express_1.default)();
-router.post("/signup", userController_1.default.signup, (req, res) => {
-    res.status(200).json({ redirectUrl: "http://localhost:3000/overview" });
-});
-router.post("/signin", userController_1.default.signin, (req, res) => {
-    res.status(200).json({
-        data: res.locals.loggedinUser,
-        redirectUrl: "http://localhost:3000/overview",
-    });
-});
-router.get("/session", userController_1.default.getSession, (req, res) => {
-    res.status(200).json({ data: res.locals.data });
-});
-router.get("/signout", userController_1.default.signout, (req, res) => {
-    res.status(200).json({
-        success: "User logged out",
-        redirectUrl: "http://localhost:3000/",
-    });
-});
 router.get("/", userController_1.default.searchUsers, (req, res) => {
     res.status(200).json({ data: res.locals.searchResults });
 });
 router.get("/info", userController_1.default.getUserInfo, userController_1.default.getFollowCount, (req, res) => {
-    res
-        .status(200)
-        .json({
+    res.status(200).json({
         data: res.locals.userInfo,
         following: res.locals.following,
         followers: res.locals.followers,

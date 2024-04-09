@@ -33,14 +33,54 @@ messageController.getRoom = (req, res, next) => __awaiter(void 0, void 0, void 0
     }
 });
 messageController.createRoom = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    if (res.locals.room)
-        return next();
-    const { data, error } = yield supabase_1.default
-        .from('chatrooms')
-        .insert({ user_1: res.locals.currentUser.id, user_2: req.query.userId })
-        .select();
-    console.log(data);
-    if (data)
-        res.locals.room = data[0].id;
+    try {
+        if (res.locals.room)
+            return next();
+        const { data, error } = yield supabase_1.default
+            .from('chatrooms')
+            .insert({ user_1: res.locals.currentUser.id, user_2: req.query.userId })
+            .select();
+        console.log(data);
+        if (data)
+            res.locals.room = data[0].id;
+    }
+    catch (err) {
+        next(err);
+    }
+});
+messageController.createNewMessage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { chatid, sender_id, content } = req.body;
+        const { data, error } = yield supabase_1.default.from('messages').insert(req.body);
+        next();
+    }
+    catch (err) {
+        next(err);
+    }
+});
+messageController.getAllMessages = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { data, error } = yield supabase_1.default
+            .from('messages')
+            .select('content, created_at, profiles(display_name)')
+            .eq('chat_id', req.query.chatId);
+        if (data) {
+            console.log('getAllMessages data: ', data);
+            const messages = data.map((message) => {
+                return {
+                    display_name: message.profiles.display_name,
+                    content: message.content,
+                    created_at: message.created_at,
+                };
+            });
+            // console.log('getAllMessages messages: ', messages);
+            res.locals.messages = messages;
+            next();
+        }
+    }
+    catch (err) {
+        console.log('------------------Error------------------\n', err);
+        next(err);
+    }
 });
 exports.default = messageController;

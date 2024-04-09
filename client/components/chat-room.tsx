@@ -1,22 +1,23 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { socket } from '@/socket';
+import { SessionContext } from '@/app/(protected)/layout';
 
 interface ChatRoomProps {
   chatId: string;
-  username: string;
 }
 
 interface MessageType {
   chatId: string;
   content: string;
   user: string;
-  time: Date;
+  created_at: Date;
 }
 
-export const ChatRoom = ({ chatId, username }: ChatRoomProps) => {
+export const ChatRoom = ({ chatId }: ChatRoomProps) => {
   const [message, setMessage] = useState<string>('');
   const [allMessages, setAllMessages] = useState<MessageType[]>([]);
+  const { userSession } = useContext(SessionContext);
 
   useEffect(() => {
     console.log('ChatRoom useEffect firing on socket');
@@ -28,19 +29,41 @@ export const ChatRoom = ({ chatId, username }: ChatRoomProps) => {
     return () => socket.off('receive_message', handleMessageReceive);
   }, [socket]);
 
+  useEffect(() => {
+    const getIntialMessage = async () => {
+      const response = await fetch(
+        `http://localhost:8080/messages/?chatId=${chatId}`
+      );
+      const result = await response.json();
+      setAllMessages(result);
+    };
+    getIntialMessage();
+  }, []);
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     console.log('In handleSendMessage: ', message);
     if (message !== '') {
       const messageData = {
-        chatId,
+        chat_id: chatId,
         content: message,
-        user: username,
-        time: new Date(),
+        user: userSession?.user.user_metadata.display_name,
+        created_at: new Date(),
       };
       console.log('emit');
       await socket.emit('send_message', messageData);
       setMessage('');
+      await fetch('http://localhost:8080/messages/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          sender_id: userSession?.user.id,
+          content: message,
+        }),
+      });
     }
   };
 
@@ -54,7 +77,7 @@ export const ChatRoom = ({ chatId, username }: ChatRoomProps) => {
             <div key={message.content}>
               <p>{message.content}</p>
               <p>{message.user}</p>
-              <p>{`${message.time}`}</p>
+              <p>{`${message.created_at}`}</p>
             </div>
           );
         })}

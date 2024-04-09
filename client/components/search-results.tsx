@@ -62,7 +62,7 @@ export const SearchResults = ({
             >
               <Link
                 href={{
-                  pathname: `/profile/${result.username}`,
+                  pathname: `/${result.username}`,
                 }}
                 className='flex items-center w-full gap-3 '
                 onClick={() => {

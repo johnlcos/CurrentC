@@ -9,7 +9,7 @@ interface ChatRoomPageProps {
 const ChatRoomPage = ({ params }: ChatRoomPageProps) => {
   return (
     <div className='text-text-white p-5'>
-      <ChatRoom chatId={params.chatId} username={params.username} />
+      <ChatRoom chatId={params.chatId} />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Avatar } from '@/components/avatar';
 import { ProfileFeed } from '@/components/profile-feed';
+import { socket } from '@/socket';
 
 export default function UserProfile({
   params,
@@ -17,7 +18,6 @@ export default function UserProfile({
   searchParams: { id: string };
 }) {
   const { userSession, setUserSession } = useContext(SessionContext);
-  console.log(userSession);
   // store the profile information in state
   // const [username, setUsername] = useState<string>(params.username);
   const [displayName, setDisplayName] = useState<string>('');
@@ -65,7 +65,7 @@ export default function UserProfile({
     setFollowing(json.following);
     setLoading(false);
   };
-
+  //! Might not need this
   // after updating info, get the new session which includes updated username in meta data and update the session context for use in sidebar
   const getCurrentSession = async () => {
     const response = await fetch('http://localhost:8080/auth/session');
@@ -143,10 +143,16 @@ export default function UserProfile({
     );
     const result = await response.json();
     const chatId = result.chatId;
+    const user1 = userSession?.user.user_metadata.display_name;
+    const user2 = displayName;
+    console.log(chatId);
+    if (chatId) {
+      socket.emit('join_room', { chatId, user1, user2 });
+    }
+
     router.push(`/${params.username}/${chatId}`);
   };
 
-  console.log(description);
   // console.log('avatar url', avatarUrl);
   return loading ? null : (
     <div className='w-full flex flex-col items-center'>

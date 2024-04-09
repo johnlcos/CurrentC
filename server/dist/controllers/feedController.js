@@ -77,16 +77,16 @@ feedController.getReplyFeed = (req, res, next) => __awaiter(void 0, void 0, void
 feedController.getFollowedFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const follower_id = req.query.id;
-        console.log(follower_id);
+        // console.log(follower_id);
         const { data, error } = yield supabase_1.default
             .from('feed_with_relationship')
             .select('id, created_at, content, like_count, dislike_count, author_id, username, profile_avatar, display_name')
             .or(`follower_id.eq.${follower_id}`)
             .order('created_at', { ascending: false });
-        console.log('getFollowedFeed', data);
-        console.log('getFollowedFeed error', error);
+        // console.log('getFollowedFeed', data);
+        // console.log('getFollowedFeed error', error);
         res.locals.followedFeed = data;
-        console.log('getFollowedFeed: ', data);
+        // console.log('getFollowedFeed: ', data);
         next();
     }
     catch (error) {

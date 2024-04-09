@@ -23,7 +23,12 @@ dotenv_1.default.config();
 const PORT = process.env.PORT || 8080;
 const app = (0, express_1.default)();
 const server = (0, node_http_1.createServer)(app);
-const io = new socket_io_1.Server(server);
+const io = new socket_io_1.Server(server, {
+    cors: {
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST'],
+    },
+});
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
@@ -39,7 +44,7 @@ app.use('/settings', settingsRouter_1.default);
 app.use('/messages', messageRouter_1.default);
 app.use('/overview', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { data, error } = yield supabase_1.default.auth.getSession();
-    console.log('session', data);
+    // console.log('session', data);
 }));
 app.use((err, req, res, next) => {
     const errorObj = Object.assign({}, err);
@@ -47,8 +52,28 @@ app.use((err, req, res, next) => {
     return res.status(errorObj.status).json({ error: errorObj });
 });
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log(`a user connected ${socket.id}}`);
+    socket.on('join_room', (data) => {
+        const { chatId, user1, user2 } = data;
+        console.log(chatId, user1, user2);
+        socket.join(chatId);
+        console.log(`user-${user1} joined room - ${chatId}`);
+        // let createdTime = Date.now();
+        // socket.to(chatId).emit('receive_message', {
+        //   message: `${user1} has joined the chatroom`,
+        //   username: 'Server',
+        //   createdTime,
+        // });
+    });
+    socket.on('send_message', (data) => {
+        console.log('DATA', data);
+        // socket.to(data.chatId).emit('receive_message', data);
+        io.in(data.chatId).emit('receive_message', data);
+    });
+    socket.on('disconnect', () => {
+        console.log('A user disconnected:', socket.id);
+    });
 });
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 });

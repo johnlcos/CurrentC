@@ -21,7 +21,7 @@ settingsController.changePassword = (req, res, next) => __awaiter(void 0, void 0
         if (confirmNewPassword !== newPassword) {
             throw new Error('Do Not Match');
         }
-        console.log(currentPassword, newPassword, confirmNewPassword);
+        // console.log(currentPassword, newPassword, confirmNewPassword);
         const { data: { user }, } = yield supabase_1.default.auth.getUser();
         if (user && user.email) {
             const { data } = yield supabase_1.default.rpc('changepassword', {
@@ -29,7 +29,7 @@ settingsController.changePassword = (req, res, next) => __awaiter(void 0, void 0
                 new_plain_password: newPassword,
                 current_id: user.id,
             });
-            console.log(data);
+            // console.log(data);
             if (data === 'incorrect') {
                 console.log('error');
                 throw new Error('Incorrect');

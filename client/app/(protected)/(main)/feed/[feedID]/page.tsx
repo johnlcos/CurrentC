@@ -16,26 +16,28 @@ const FeedPage = ({ params }: { params: { feedID: string } }) => {
     });
   }, [params.feedID]);
 
-  // console.log(currentFeed);
+  console.log(currentFeed);
   return (
     <div className='h-full w-full flex  flex-col items-center'>
       {currentFeed !== null && (
         <FeedWrapper
           author={
             currentFeed.profiles
-              ? currentFeed.profiles.username
-              : currentFeed.username
+              ? currentFeed.profiles.display_name
+              : currentFeed.display_name
           }
+          author_username={currentFeed.profiles?.username}
           author_id={currentFeed.author_id}
           id={currentFeed.id}
           likes={currentFeed.like_count}
           dislikes={currentFeed.dislike_count}
           content={currentFeed.content}
           created_at={currentFeed.created_at}
+          profile_avatar={currentFeed.profiles?.profile_avatar}
         />
       )}
       <NewFeedInputBox type={'REPLY'} replyToId={params.feedID} />
-      <MainFeed type='reply' id={params.feedID} />
+      <MainFeed type='reply' />
     </div>
   );
 };

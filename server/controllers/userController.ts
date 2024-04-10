@@ -7,14 +7,6 @@ import fs from 'fs';
 const userController = {} as UserController;
 
 interface UserController {
-  signup: (req: Request, res: Response, next: NextFunction) => Promise<void>;
-  signin: (req: Request, res: Response, next: NextFunction) => Promise<void>;
-  signout: (req: Request, res: Response, next: NextFunction) => Promise<void>;
-  getSession: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => Promise<void>;
   getUserInfo: (
     req: Request,
     res: Response,
@@ -52,64 +44,6 @@ interface UserController {
   ) => Promise<void>;
 }
 
-userController.signup = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { email, password, username } = req.body;
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-      options: {
-        data: {
-          username: username,
-        },
-      },
-    });
-    res.locals.data = data;
-    console.log(error);
-    next();
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
-
-userController.signin = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { email, password } = req.body;
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    res.locals.loggedinUser = data;
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
-
-userController.getSession = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { data, error } = await supabase.auth.getSession();
-    res.locals.data = data;
-    next();
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-};
-
 userController.getUserInfo = async (
   req: Request,
   res: Response,
@@ -118,24 +52,10 @@ userController.getUserInfo = async (
   try {
     const { data, error } = await supabase
       .from('profiles')
-      .select('profile_avatar, description, id')
+      .select('profile_avatar, description, id, display_name')
       .eq('username', req.query.user);
     res.locals.userInfo = data;
     if (data) res.locals.id = data[0].id;
-    next();
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
-
-userController.signout = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { error } = await supabase.auth.signOut();
     next();
   } catch (error) {
     console.log(error);
@@ -153,8 +73,8 @@ userController.searchUsers = async (
       const name = req.query.name;
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, username, profile_avatar')
-        .textSearch('username', name);
+        .select('id, username, profile_avatar, display_name')
+        .textSearch('display_name', name);
       res.locals.searchResults = data;
     }
     next();
@@ -223,7 +143,7 @@ userController.editProfile = async (
     // update the username stored in auth metadata
     const updateUserResponse = await supabase.auth.updateUser({
       data: {
-        username: req.body.username,
+        display_name: req.body.displayName,
         profile_avatar: res.locals.avatarPublicUrl,
       },
     });
@@ -231,7 +151,7 @@ userController.editProfile = async (
     const { error } = await supabase
       .from('profiles')
       .update({
-        username: req.body.username,
+        display_name: req.body.displayName,
         description: req.body.description,
         profile_avatar: res.locals.avatarPublicUrl,
       })
@@ -255,10 +175,10 @@ userController.upsertAvatar = async (
     }
     console.log(req.file);
     const fileContent = fs.readFileSync(req.file.path);
-
     const avatarData = await supabase.storage
       .from('avatars')
-      .upload(req.file.originalname, fileContent, {
+      .upload(req.body.path, fileContent, {
+        cacheControl: '3600',
         upsert: true,
         contentType: req.file?.mimetype,
       });

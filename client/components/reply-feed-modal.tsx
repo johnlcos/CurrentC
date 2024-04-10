@@ -1,9 +1,9 @@
-import { OverviewContext } from '@/app/(protected)/layout';
-import fetchSpecificFeed from '@/hooks/fetchSpecficFeed';
-import { FeedSchema } from '@/types';
-import { useContext, useEffect, useState, useRef } from 'react';
-import { FeedWrapper } from './feed-wrapper';
-import { NewFeedInputBox } from './new-feed-input-box';
+import { OverviewContext } from "@/app/(protected)/layout";
+import fetchSpecificFeed from "@/hooks/fetchSpecficFeed";
+import { FeedSchema } from "@/types";
+import { useContext, useEffect, useState, useRef } from "react";
+import { FeedWrapper } from "./feed-wrapper";
+import { NewFeedInputBox } from "./new-feed-input-box";
 
 export const ReplyFeedModal = () => {
   const [selectedFeed, setSelectedFeed] = useState<FeedSchema | null>(null);
@@ -39,32 +39,39 @@ export const ReplyFeedModal = () => {
       {showModal && (
         <div
           onClick={handleCloseModal}
-          className='fixed left-0 top-0 bg-black bg-opacity-50 
-          w-screen h-screen flex justify-center items-center'
+          className="fixed left-0 top-0 bg-black bg-opacity-50 
+          w-screen h-screen flex justify-center items-center"
         >
           {selectedFeed && (
             <div
-              className='bg-[#3E4042] rounded shadow-md p-2 w-[50%] 
+              className="bg-[#3E4042] rounded shadow-md p-2 w-[50%] 
               h-max flex flex-col justify-center items-center 
-              gap-y-5 z-10'
+              gap-y-5 z-10"
               onClick={handleContentClick}
             >
-              <div className='w-[90%] flex justify-center items-center'>
+              <div className="w-[90%] flex justify-center items-center">
                 <FeedWrapper
                   author={
                     selectedFeed.profiles
-                      ? selectedFeed.profiles.username
+                      ? selectedFeed.profiles.display_name
                       : undefined
                   }
+                  author_username={selectedFeed.profiles?.username}
+                  profile_avatar={
+                    selectedFeed.profiles
+                      ? selectedFeed.profiles.profile_avatar
+                      : undefined
+                  }
+                  author_id={selectedFeed.author_id}
                   id={selectedFeedID}
                   likes={selectedFeed.like_count}
                   dislikes={selectedFeed.dislike_count}
                   content={selectedFeed.content}
                   created_at={selectedFeed.created_at}
-                  type={'Modal'}
+                  type={"Modal"}
                 />
               </div>
-              <NewFeedInputBox type='REPLY' replyToId={selectedFeedID} />
+              <NewFeedInputBox type="REPLY" replyToId={selectedFeedID} />
             </div>
           )}
         </div>

@@ -9,6 +9,7 @@ import { OverviewContext, SessionContext } from "@/app/(protected)/layout";
 import { useContext, useState, useRef, useEffect } from "react";
 import { DropDown } from "./dropdown";
 import { Avatar } from "./avatar";
+import { getTimeDifferenceInMinutes } from "@/utils";
 
 interface FeedWrapperProps {
   author: string | undefined;
@@ -20,6 +21,7 @@ interface FeedWrapperProps {
   content: string;
   created_at: string;
   type?: string;
+  author_username: string | null | undefined;
 }
 
 export const FeedWrapper = ({
@@ -32,6 +34,7 @@ export const FeedWrapper = ({
   content,
   created_at,
   type,
+  author_username,
 }: FeedWrapperProps) => {
   const router = useRouter();
   let dropDownRef = useRef<HTMLDivElement>(null);
@@ -54,23 +57,23 @@ export const FeedWrapper = ({
     setDropDown(!dropDown);
   };
 
-  const getTimeDifferenceInMinutes = (created_at: string): string => {
-    const createdAtDate: any = new Date(created_at);
-    const currentDate: any = new Date();
-    const differenceInMilliseconds = currentDate - createdAtDate;
-    const differenceInMinutes = Math.floor(
-      differenceInMilliseconds / (1000 * 60)
-    );
-    if (differenceInMinutes > 1440) {
-      const differenceInDays = Math.floor(differenceInMinutes / (60 * 24));
-      return `${differenceInDays} days`;
-    } else if (differenceInMinutes > 60) {
-      const differenceInHours = Math.floor(differenceInMinutes / 60);
-      return `${differenceInHours} hours`;
-    } else {
-      return `${differenceInMinutes} minutes`;
-    }
-  };
+  // const getTimeDifferenceInMinutes = (created_at: string): string => {
+  //   const createdAtDate: any = new Date(created_at);
+  //   const currentDate: any = new Date();
+  //   const differenceInMilliseconds = currentDate - createdAtDate;
+  //   const differenceInMinutes = Math.floor(
+  //     differenceInMilliseconds / (1000 * 60)
+  //   );
+  //   if (differenceInMinutes > 1440) {
+  //     const differenceInDays = Math.floor(differenceInMinutes / (60 * 24));
+  //     return `${differenceInDays} days`;
+  //   } else if (differenceInMinutes > 60) {
+  //     const differenceInHours = Math.floor(differenceInMinutes / 60);
+  //     return `${differenceInHours} hours`;
+  //   } else {
+  //     return `${differenceInMinutes} minutes`;
+  //   }
+  // };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -90,13 +93,13 @@ export const FeedWrapper = ({
 
   const handleProfileClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    router.push(`/profile/${author}`);
+    router.push(`/${author_username}`);
   };
 
   return (
     <div
       className="outline h-[200px] w-[90%] md:w-[80%] max-w-[500px] 
-      flex flex-col justify-between shadow-lg outline-none bg-[#252526] rounded-lg"
+      flex flex-col justify-between shadow-lg outline-none bg-surface rounded-lg cursor-pointer"
       onClick={() => router.push(`/feed/${id}`)}
     >
       <div className="flex m-2 w-full">
@@ -110,24 +113,25 @@ export const FeedWrapper = ({
           >
             <div className="flex justify-center items-center">
               <div
-                className="text-[14px] bolded text-[#E4E6EB]"
+                className="text-[14px] bolded text-text-white"
                 onClick={handleProfileClick}
               >
                 {author}
               </div>
-              <div className="opacity- text-[12px] ml-1 text-gray-500">{`· ${getTimeDifferenceInMinutes(
+              <p className="opacity- text-[12px] ml-1 text-subtext-color">{`@${author_username}`}</p>
+              <div className="opacity- text-[12px] ml-1 text-subtext-color">{`· ${getTimeDifferenceInMinutes(
                 created_at
               )}`}</div>
             </div>
             <div className="flex">
               <div className="feed-dropdown-icon" ref={dropDownRef}>
                 <button
-                  className="text-gray-500 relative"
+                  className="text-subtext-color relative"
                   onClick={handleDropDown}
                 >
                   ...
                   {dropDown && (
-                    <div className="z-10 absolute bg-[#252526] rounded-xl shadow-md">
+                    <div className="z-10 absolute bg-surface rounded-xl shadow-md">
                       <DropDown menu={["follow", "add/remove", "block"]} />
                     </div>
                   )}
@@ -151,7 +155,7 @@ export const FeedWrapper = ({
               <span className="feed-like-icon">
                 <BiLike size={17} />
               </span>
-              <span className="group-hover:text-green-500 text-gray-500">
+              <span className="group-hover:text-green-500 text-subtext-color">
                 {likes}
               </span>
             </div>
@@ -159,7 +163,7 @@ export const FeedWrapper = ({
               <div className="feed-dislike-icon">
                 <BiDislike size={17} />
               </div>
-              <span className="group-hover:text-red-500 text-gray-500">
+              <span className="group-hover:text-red-500 text-subtext-color">
                 {dislikes}
               </span>
             </div>

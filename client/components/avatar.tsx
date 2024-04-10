@@ -17,7 +17,7 @@ export const Avatar = ({
       size = 35;
       break;
     case "search":
-      size = 25;
+      size = 35;
       break;
     default:
       // Default size if type doesn't match any case

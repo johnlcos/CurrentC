@@ -43,48 +43,48 @@ export const SideNavBar = () => {
       <div className='flex flex-col gap-3 w-full md:w-5/6'>
         <Link
           href='/overview'
-          className='text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2'
+          className='text-center bg-background p-3 text-text-white font-semibold border-b border-surface shadow-md flex items-center justify-center gap-2 hover:border-primary-500 transition duration-300'
         >
           <BiHome />
           <p className='hidden lg:block'>Home</p>
         </Link>
         <Link
           href='/explore'
-          className='text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2'
+          className='text-center bg-background p-3 text-text-white font-semibold border-b border-surface shadow-md flex items-center justify-center gap-2 hover:border-primary-500 transition duration-300'
         >
           <BiMapAlt />
           <p className='hidden lg:block'>Explore</p>
         </Link>
         <Link
           href='/'
-          className='text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2'
+          className='text-center bg-background p-3 text-text-white font-semibold border-b border-surface shadow-md flex items-center justify-center gap-2 hover:border-primary-500 transition duration-300'
         >
           <BiBell />
           <p className='hidden lg:block'>Notifications</p>
         </Link>
         <Link
-          href='/'
-          className='text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2'
+          href='/messages'
+          className='text-center bg-background p-3 text-text-white font-semibold border-b border-surface shadow-md flex items-center justify-center gap-2 hover:border-primary-500 transition duration-300'
         >
           <BiEnvelope />
           <p className='hidden lg:block'>Messages</p>
         </Link>
         <Link
-          href={`/profile/${userSession?.user.user_metadata.username}`}
-          className='text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2'
+          href={`/${userSession?.user.user_metadata.username}`}
+          className='text-center bg-background p-3 text-text-white font-semibold border-b border-surface shadow-md flex items-center justify-center gap-2 hover:border-primary-500 transition duration-300'
         >
           <BiSolidUser />
           <p className='hidden lg:block'>Profile</p>
         </Link>
         <Link
           href='/settings/account'
-          className='text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2'
+          className='text-center bg-background p-3 text-text-white font-semibold border-b border-surface shadow-md flex items-center justify-center gap-2 hover:border-primary-500 transition duration-300'
         >
           <BiCog />
           <p className='hidden lg:block'>Settings</p>
         </Link>
         <button
-          className='text-center bg-white p-3 rounded-lg text-green-900 font-semibold shadow-md hover:bg-slate-100 transition duration-300 flex items-center justify-center gap-2'
+          className='text-center bg-background p-3 text-text-white font-semibold border-b border-surface shadow-md flex items-center justify-center gap-2 hover:border-primary-500 transition duration-300'
           onClick={handleSignOut}
         >
           <BiExit />

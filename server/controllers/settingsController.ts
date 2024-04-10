@@ -10,6 +10,11 @@ interface SettingsController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  accountDeletion: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
 }
 
 settingsController.changePassword = async (req, res, next) => {
@@ -19,7 +24,7 @@ settingsController.changePassword = async (req, res, next) => {
     if (confirmNewPassword !== newPassword) {
       throw new Error('Do Not Match');
     }
-    console.log(currentPassword, newPassword, confirmNewPassword);
+    // console.log(currentPassword, newPassword, confirmNewPassword);
 
     const {
       data: { user },
@@ -31,7 +36,7 @@ settingsController.changePassword = async (req, res, next) => {
         new_plain_password: newPassword,
         current_id: user.id,
       });
-      console.log(data);
+      // console.log(data);
       if (data === 'incorrect') {
         console.log('error');
         throw new Error('Incorrect');
@@ -56,6 +61,17 @@ settingsController.changePassword = async (req, res, next) => {
       };
       next(errObj);
     }
+  }
+};
+
+settingsController.accountDeletion = async (req, res, next) => {
+  try {
+    await supabase.rpc('delete_user');
+    const { error } = await supabase.auth.signOut();
+    next();
+  } catch (err) {
+    console.log('------------------Error------------------\n', err);
+    next(err);
   }
 };
 

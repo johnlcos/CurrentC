@@ -15,71 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const supabase_1 = __importDefault(require("../utils/supabase"));
 const fs_1 = __importDefault(require("fs"));
 const userController = {};
-userController.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { email, password, username } = req.body;
-        const { data, error } = yield supabase_1.default.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-                data: {
-                    username: username,
-                },
-            },
-        });
-        res.locals.data = data;
-        console.log(error);
-        next();
-    }
-    catch (error) {
-        console.log(error);
-        next(error);
-    }
-});
-userController.signin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { email, password } = req.body;
-        const { data, error } = yield supabase_1.default.auth.signInWithPassword({
-            email,
-            password,
-        });
-        res.locals.loggedinUser = data;
-        next();
-    }
-    catch (error) {
-        next(error);
-    }
-});
-userController.getSession = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { data, error } = yield supabase_1.default.auth.getSession();
-        res.locals.data = data;
-        next();
-    }
-    catch (error) {
-        console.error(error);
-        next(error);
-    }
-});
 userController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { data, error } = yield supabase_1.default
             .from('profiles')
-            .select('profile_avatar, description, id')
+            .select('profile_avatar, description, id, display_name')
             .eq('username', req.query.user);
         res.locals.userInfo = data;
         if (data)
             res.locals.id = data[0].id;
-        next();
-    }
-    catch (error) {
-        console.log(error);
-        next(error);
-    }
-});
-userController.signout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { error } = yield supabase_1.default.auth.signOut();
         next();
     }
     catch (error) {
@@ -93,8 +37,8 @@ userController.searchUsers = (req, res, next) => __awaiter(void 0, void 0, void 
             const name = req.query.name;
             const { data, error } = yield supabase_1.default
                 .from('profiles')
-                .select('id, username, profile_avatar')
-                .textSearch('username', name);
+                .select('id, username, profile_avatar, display_name')
+                .textSearch('display_name', name);
             res.locals.searchResults = data;
         }
         next();
@@ -154,7 +98,7 @@ userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 
         // update the username stored in auth metadata
         const updateUserResponse = yield supabase_1.default.auth.updateUser({
             data: {
-                username: req.body.username,
+                display_name: req.body.displayName,
                 profile_avatar: res.locals.avatarPublicUrl,
             },
         });
@@ -162,7 +106,7 @@ userController.editProfile = (req, res, next) => __awaiter(void 0, void 0, void 
         const { error } = yield supabase_1.default
             .from('profiles')
             .update({
-            username: req.body.username,
+            display_name: req.body.displayName,
             description: req.body.description,
             profile_avatar: res.locals.avatarPublicUrl,
         })
@@ -184,7 +128,8 @@ userController.upsertAvatar = (req, res, next) => __awaiter(void 0, void 0, void
         const fileContent = fs_1.default.readFileSync(req.file.path);
         const avatarData = yield supabase_1.default.storage
             .from('avatars')
-            .upload(req.file.originalname, fileContent, {
+            .upload(req.body.path, fileContent, {
+            cacheControl: '3600',
             upsert: true,
             contentType: (_a = req.file) === null || _a === void 0 ? void 0 : _a.mimetype,
         });

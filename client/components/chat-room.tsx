@@ -2,6 +2,8 @@
 import { useContext, useEffect, useState } from "react";
 import { socket } from "@/socket";
 import { SessionContext } from "@/app/(protected)/layout";
+import { getTimeDifferenceInMinutes } from "@/utils";
+import { Message } from "./message";
 
 interface ChatRoomProps {
   chatId: string;
@@ -12,6 +14,7 @@ interface MessageType {
   content: string;
   display_name: string;
   created_at: Date;
+  sender_id: string;
 }
 
 export const ChatRoom = ({ chatId }: ChatRoomProps) => {
@@ -38,13 +41,14 @@ export const ChatRoom = ({ chatId }: ChatRoomProps) => {
     getIntialMessages();
   }, []);
 
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (message !== "") {
       const messageData = {
         chat_id: chatId,
         content: message,
         display_name: userSession?.user.user_metadata.display_name,
+        sender_id: userSession?.user.id,
         created_at: new Date(),
       };
       console.log("emit");
@@ -65,15 +69,19 @@ export const ChatRoom = ({ chatId }: ChatRoomProps) => {
   };
 
   return (
-    <div className="text-text-white">
+    <div className="text-text-white bg-surface m-4 p-4 h-full w-full flex flex-col">
       <div>
-        {allMessages.map((message) => {
+        {allMessages.map((message, index) => {
           return (
-            <div key={message.content}>
-              <p>{message.content}</p>
-              <p>{message.display_name}</p>
-              <p>{`${message.created_at}`}</p>
-            </div>
+            <Message
+              key={index}
+              content={message.content}
+              display_name={message.display_name}
+              created_at={getTimeDifferenceInMinutes(`${message.created_at}`)}
+              type={
+                message.sender_id === userSession?.user.id ? "sent" : "received"
+              }
+            />
           );
         })}
       </div>

@@ -1,4 +1,4 @@
-import { ChatRoom } from '@/components/chat-room';
+import { ChatRoom } from "@/components/chat-room";
 
 interface ChatRoomPageProps {
   params: {
@@ -8,7 +8,7 @@ interface ChatRoomPageProps {
 }
 const ChatRoomPage = ({ params }: ChatRoomPageProps) => {
   return (
-    <div className='text-text-white p-5'>
+    <div className="h-full w-full">
       <ChatRoom chatId={params.chatId} />
     </div>
   );

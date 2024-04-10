@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useContext } from 'react';
-import { FeedSchema } from '@/types';
-import { SessionContext } from '@/app/(protected)/layout';
-import { FeedWrapper } from './feed-wrapper';
+import { useState, useEffect, useContext } from "react";
+import { FeedSchema } from "@/types";
+import { SessionContext } from "@/app/(protected)/layout";
+import { FeedWrapper } from "./feed-wrapper";
 
 export const ProfileFeed = ({ id }: { id: string }) => {
   const [allFeed, setAllFeed] = useState<FeedSchema[]>([]);
@@ -11,12 +11,11 @@ export const ProfileFeed = ({ id }: { id: string }) => {
   const { userSession } = useContext(SessionContext);
 
   const fetchFeed = async () => {
-    let feedUrl = '';
+    let feedUrl = "";
     // const id = userSession?.user.id;
     feedUrl = `http://localhost:8080/feed/profile?id=${id}`;
     const response = await fetch(feedUrl);
     const data = await response.json();
-    console.log('profile feed: ', data);
     setAllFeed(data);
   };
 
@@ -27,8 +26,8 @@ export const ProfileFeed = ({ id }: { id: string }) => {
   }, [userSession]);
 
   return (
-    <div className='p-2 w-full bg-[#17191A]'>
-      <div className='flex justify-center items-center flex-col gap-y-5'>
+    <div className="p-2 w-full bg-[#17191A]">
+      <div className="flex justify-center items-center flex-col gap-y-5">
         {allFeed.map((feed) => (
           <FeedWrapper
             key={feed.id}
@@ -37,7 +36,11 @@ export const ProfileFeed = ({ id }: { id: string }) => {
                 ? userSession?.user.user_metadata.display_name
                 : feed.profiles?.display_name
             }
-            author_username={feed.username}
+            author_username={
+              isActiveUsersProfile
+                ? userSession?.user.user_metadata.username
+                : feed.profiles?.username
+            }
             author_id={feed.author_id}
             profile_avatar={
               isActiveUsersProfile

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { FeedWrapper } from './feed-wrapper';
-import { useState, useEffect, useContext } from 'react';
-import { FeedSchema } from '@/types';
-import { NewFeedInputBox } from './new-feed-input-box';
-import { SessionContext } from '@/app/(protected)/layout';
+import { FeedWrapper } from "./feed-wrapper";
+import { useState, useEffect, useContext } from "react";
+import { FeedSchema } from "@/types";
+import { NewFeedInputBox } from "./new-feed-input-box";
+import { SessionContext } from "@/app/(protected)/layout";
 
 interface MainFeedProps {
   type: string;
@@ -17,19 +17,18 @@ export const MainFeed = ({ type }: MainFeedProps) => {
 
   // depending on the type of feed needed, update the request url, fetch the feed and update state
   const fetchFeed = async () => {
-    let feedUrl = '';
-    if (type === 'main') {
+    let feedUrl = "";
+    if (type === "main") {
       feedUrl = `http://localhost:8080/feed/main?id=${userSession?.user.id}`;
-    } else if (type === 'explore') {
-      feedUrl = 'http://localhost:8080/feed/';
-    } else if (type === 'profile') {
+    } else if (type === "explore") {
+      feedUrl = "http://localhost:8080/feed/";
+    } else if (type === "profile") {
       feedUrl = `http://localhost:8080/feed/profile?id=${userSession?.user.id}`;
-    } else if (type === 'reply') {
+    } else if (type === "reply") {
       feedUrl = `http://localhost:8080/feed/reply?id=${userSession?.user.id}`;
     }
     const response = await fetch(feedUrl);
     const data = await response.json();
-    console.log(data);
     setAllFeed(data);
   };
 
@@ -38,17 +37,16 @@ export const MainFeed = ({ type }: MainFeedProps) => {
     fetchFeed();
   }, []);
 
-  console.log(allFeed);
   return (
-    <div id='main-feed-container' className='p-2 w-full bg-[#17191A]'>
-      {(type === 'main' || type === 'explore') && (
+    <div id="main-feed-container" className="p-2 w-full bg-[#17191A]">
+      {(type === "main" || type === "explore") && (
         <NewFeedInputBox
-          type={'POST'}
+          type={"POST"}
           setAllFeed={setAllFeed}
           replyToId={null}
         />
       )}
-      <div className='flex justify-center items-center flex-col gap-y-5'>
+      <div className="flex justify-center items-center flex-col gap-y-5">
         {allFeed.map((feed) => (
           <FeedWrapper
             key={feed.id}

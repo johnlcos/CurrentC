@@ -19,8 +19,8 @@ messageController.getRoom = (req, res, next) => __awaiter(void 0, void 0, void 0
         const { data: { user }, } = yield supabase_1.default.auth.getUser();
         res.locals.currentUser = user;
         const { data, error } = yield supabase_1.default
-            .from('chatrooms')
-            .select('id')
+            .from("chatrooms")
+            .select("id")
             .or(`user_1.eq.${user === null || user === void 0 ? void 0 : user.id},user_2.eq.${user === null || user === void 0 ? void 0 : user.id}`)
             .or(`user_1.eq.${req.query.userId}, user_2.eq.${req.query.userId}`);
         if (data && data[0]) {
@@ -29,7 +29,7 @@ messageController.getRoom = (req, res, next) => __awaiter(void 0, void 0, void 0
         next();
     }
     catch (err) {
-        console.log('------------------Error------------------\n', err);
+        console.log("------------------Error------------------\n", err);
     }
 });
 messageController.createRoom = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -37,7 +37,7 @@ messageController.createRoom = (req, res, next) => __awaiter(void 0, void 0, voi
         if (res.locals.room)
             return next();
         const { data, error } = yield supabase_1.default
-            .from('chatrooms')
+            .from("chatrooms")
             .insert({ user_1: res.locals.currentUser.id, user_2: req.query.userId })
             .select();
         console.log(data);
@@ -51,7 +51,7 @@ messageController.createRoom = (req, res, next) => __awaiter(void 0, void 0, voi
 messageController.createNewMessage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { chatid, sender_id, content } = req.body;
-        const { data, error } = yield supabase_1.default.from('messages').insert(req.body);
+        const { data, error } = yield supabase_1.default.from("messages").insert(req.body);
         next();
     }
     catch (err) {
@@ -61,16 +61,17 @@ messageController.createNewMessage = (req, res, next) => __awaiter(void 0, void 
 messageController.getAllMessages = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { data, error } = yield supabase_1.default
-            .from('messages')
-            .select('content, created_at, profiles(display_name)')
-            .eq('chat_id', req.query.chatId);
+            .from("messages")
+            .select("content, created_at, sender_id, profiles(display_name)")
+            .eq("chat_id", req.query.chatId);
         if (data) {
-            console.log('getAllMessages data: ', data);
+            console.log("getAllMessages data: ", data);
             const messages = data.map((message) => {
                 return {
                     display_name: message.profiles.display_name,
                     content: message.content,
                     created_at: message.created_at,
+                    sender_id: message.sender_id,
                 };
             });
             // console.log('getAllMessages messages: ', messages);
@@ -79,7 +80,7 @@ messageController.getAllMessages = (req, res, next) => __awaiter(void 0, void 0,
         }
     }
     catch (err) {
-        console.log('------------------Error------------------\n', err);
+        console.log("------------------Error------------------\n", err);
         next(err);
     }
 });

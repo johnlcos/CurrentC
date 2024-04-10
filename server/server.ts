@@ -52,22 +52,12 @@ io.on("connection", (socket) => {
 
   socket.on("join_room", (data) => {
     const { chatId, user1, user2 } = data;
-    console.log(chatId, user1, user2);
     socket.join(chatId);
     console.log(`user-${user1} joined room - ${chatId}`);
-
-    // let createdTime = Date.now();
-    // socket.to(chatId).emit('receive_message', {
-    //   message: `${user1} has joined the chatroom`,
-    //   username: 'Server',
-    //   createdTime,
-    // });
   });
 
   socket.on("send_message", (data) => {
-    console.log("send_message DATA", data);
-    // socket.to(data.chatId).emit("receive_message", data);
-    io.in(data.chatId).emit("receive_message", data);
+    io.in(data.chat_id).emit("receive_message", data);
   });
 
   socket.on("disconnect", () => {

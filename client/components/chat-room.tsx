@@ -20,9 +20,7 @@ export const ChatRoom = ({ chatId }: ChatRoomProps) => {
   const { userSession } = useContext(SessionContext);
 
   useEffect(() => {
-    console.log("ChatRoom useEffect firing on socket");
     const handleMessageReceive = (data: any) => {
-      console.log("handleMessageReceive data:", data);
       setAllMessages((prev) => [...prev, data]);
     };
     socket.on("receive_message", handleMessageReceive);
@@ -30,7 +28,6 @@ export const ChatRoom = ({ chatId }: ChatRoomProps) => {
   }, [socket]);
 
   useEffect(() => {
-    console.log("useEffect for intial messages firing");
     const getIntialMessages = async () => {
       const response = await fetch(
         `http://localhost:8080/messages/?chatId=${chatId}`
@@ -43,7 +40,6 @@ export const ChatRoom = ({ chatId }: ChatRoomProps) => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    console.log("In handleSendMessage: ", message);
     if (message !== "") {
       const messageData = {
         chat_id: chatId,
@@ -67,8 +63,6 @@ export const ChatRoom = ({ chatId }: ChatRoomProps) => {
       setMessage("");
     }
   };
-
-  // console.log(allMessages);
 
   return (
     <div className="text-text-white">

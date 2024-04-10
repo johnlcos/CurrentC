@@ -119,7 +119,7 @@ feedController.getFollowedFeed = async (
 ) => {
   try {
     const follower_id = req.query.id;
-    console.log(follower_id);
+    // console.log(follower_id);
     const { data, error } = await supabase
       .from('feed_with_relationship')
       .select(
@@ -127,10 +127,10 @@ feedController.getFollowedFeed = async (
       )
       .or(`follower_id.eq.${follower_id}`)
       .order('created_at', { ascending: false });
-    console.log('getFollowedFeed', data);
-    console.log('getFollowedFeed error', error);
+    // console.log('getFollowedFeed', data);
+    // console.log('getFollowedFeed error', error);
     res.locals.followedFeed = data;
-    console.log('getFollowedFeed: ', data);
+    // console.log('getFollowedFeed: ', data);
     next();
   } catch (error) {
     next(error);

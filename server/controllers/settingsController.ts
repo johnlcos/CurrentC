@@ -24,7 +24,7 @@ settingsController.changePassword = async (req, res, next) => {
     if (confirmNewPassword !== newPassword) {
       throw new Error('Do Not Match');
     }
-    console.log(currentPassword, newPassword, confirmNewPassword);
+    // console.log(currentPassword, newPassword, confirmNewPassword);
 
     const {
       data: { user },
@@ -36,7 +36,7 @@ settingsController.changePassword = async (req, res, next) => {
         new_plain_password: newPassword,
         current_id: user.id,
       });
-      console.log(data);
+      // console.log(data);
       if (data === 'incorrect') {
         console.log('error');
         throw new Error('Incorrect');

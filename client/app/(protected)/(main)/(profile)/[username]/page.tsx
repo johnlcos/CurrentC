@@ -79,7 +79,6 @@ export default function UserProfile({
 
     fetchProfileInfo();
     getCurrentSession();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleStartEdits = () => {

@@ -71,7 +71,7 @@ export const ChatRoom = ({ chatId }: ChatRoomProps) => {
       setMessage('');
     }
   };
-
+  console.log('ewiruaoiweuroiasejfoajsdiojfah');
   return (
     <div className='text-text-white bg-surface m-4 p-4 h-full w-full flex flex-col'>
       <div>

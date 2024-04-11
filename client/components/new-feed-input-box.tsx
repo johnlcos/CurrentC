@@ -5,9 +5,9 @@ import { SessionContext } from "@/app/(protected)/layout";
 
 interface NewFeedInputBoxProps {
   //MAYBE MOVE SETALLFEED TO CONTEXT
-  setAllFeed?: (data: FeedSchema[]) => void;
+  setAllFeed: React.Dispatch<React.SetStateAction<FeedSchema[]>>;
   type: "POST" | "REPLY";
-  replyToId: string | null;
+  replyToId: string | undefined;
 }
 
 export const NewFeedInputBox = ({
@@ -21,26 +21,25 @@ export const NewFeedInputBox = ({
 
   const handleClick = async () => {
     if (userSession) {
-      const response = await fetch(
-        `http://localhost:8080/feed/create?id=${userSession.user.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            message: value,
-            author_id: userSession.user.id,
-            type,
-            replyToId,
-          }),
-        }
-      );
+      const fetchUrl =
+        type === "POST"
+          ? `http://localhost:8080/feed/create?id=${userSession.user.id}`
+          : `http://localhost:8080/feed/reply?id=${replyToId}`;
+      const response = await fetch(fetchUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: value,
+          author_id: userSession.user.id,
+          type,
+          replyToId,
+        }),
+      });
       const data = await response.json();
       console.log(data);
-      if (type === "POST") {
-        if (setAllFeed) setAllFeed(data);
-      }
+      setAllFeed(data);
       setValue("");
     } else {
       return null;

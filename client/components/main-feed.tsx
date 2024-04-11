@@ -7,10 +7,11 @@ import { NewFeedInputBox } from "./new-feed-input-box";
 import { SessionContext } from "@/app/(protected)/layout";
 
 interface MainFeedProps {
-  type: string;
+  type: "main" | "explore" | "profile" | "reply";
+  replyToId?: string;
 }
 
-export const MainFeed = ({ type }: MainFeedProps) => {
+export const MainFeed = ({ type, replyToId }: MainFeedProps) => {
   // store the displayed feed in state
   const [allFeed, setAllFeed] = useState<FeedSchema[]>([]);
   const { userSession } = useContext(SessionContext);
@@ -25,7 +26,7 @@ export const MainFeed = ({ type }: MainFeedProps) => {
     } else if (type === "profile") {
       feedUrl = `http://localhost:8080/feed/profile?id=${userSession?.user.id}`;
     } else if (type === "reply") {
-      feedUrl = `http://localhost:8080/feed/reply?id=${userSession?.user.id}`;
+      feedUrl = `http://localhost:8080/feed/reply?id=${replyToId}`;
     }
     const response = await fetch(feedUrl);
     const data = await response.json();
@@ -39,11 +40,11 @@ export const MainFeed = ({ type }: MainFeedProps) => {
 
   return (
     <div id="main-feed-container" className="p-2 w-full bg-[#17191A]">
-      {(type === "main" || type === "explore") && (
+      {(type === "main" || type === "explore" || "reply") && (
         <NewFeedInputBox
-          type={"POST"}
+          type={type === "reply" ? "REPLY" : "POST"}
           setAllFeed={setAllFeed}
-          replyToId={null}
+          replyToId={replyToId}
         />
       )}
       <div className="flex justify-center items-center flex-col gap-y-5">

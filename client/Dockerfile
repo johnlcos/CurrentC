@@ -1,6 +1,8 @@
 FROM node:18-alpine as base
+RUN apk add --no-cache g++ make py3-pip libc6-compat
 WORKDIR /client
 COPY package*.json ./
+RUN npm install
 EXPOSE 3000
 
 FROM base as builder

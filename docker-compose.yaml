@@ -4,8 +4,8 @@ services:
     image: alerty
     container_name: alerty
     build:
-      context: ./
-
+      context: ./client
+      target: production
       dockerfile: Dockerfile
     volumes:
       - .:/client
@@ -19,7 +19,10 @@ services:
   server:
     image: alerty-server
     build:
-      context: ../server
-
+      context: ./server
       dockerfile: Dockerfile
+    volumes:
+      - .:/server
+      - /server/node_modules
+      - /server/dist
     ports: ['8080:8080']

@@ -51,20 +51,6 @@ export default function UserProfile({
 
   // get the profileId from session if it is the users profile, or search params if someone else
 
-  const fetchProfileInfo = async () => {
-    const response = await fetch(
-      `http://localhost:8080/users/info?user=${params.username}`
-    );
-    const json = await response.json();
-    console.log('fetchProfileInfo: ', json);
-    setDisplayName(json.data[0].display_name);
-    setProfileId(json.data[0].id);
-    setDescription(json.data[0].description || '');
-    setAvatarUrl(json.data[0].profile_avatar);
-    setFollowers(json.followers);
-    setFollowing(json.following);
-    setLoading(false);
-  };
   //! Might not need this
   // after updating info, get the new session which includes updated username in meta data and update the session context for use in sidebar
   const getCurrentSession = async () => {
@@ -74,11 +60,26 @@ export default function UserProfile({
     console.log(session);
     setUserSession(session);
   };
-
   // on render and after updates cause router.push, fetch the profile info and the updated session
   useEffect(() => {
+    const fetchProfileInfo = async () => {
+      const response = await fetch(
+        `http://localhost:8080/users/info?user=${params.username}`
+      );
+      const json = await response.json();
+      console.log('fetchProfileInfo: ', json);
+      setDisplayName(json.data[0].display_name);
+      setProfileId(json.data[0].id);
+      setDescription(json.data[0].description || '');
+      setAvatarUrl(json.data[0].profile_avatar);
+      setFollowers(json.followers);
+      setFollowing(json.following);
+      setLoading(false);
+    };
+
     fetchProfileInfo();
     getCurrentSession();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleStartEdits = () => {
@@ -153,7 +154,6 @@ export default function UserProfile({
     router.push(`/${params.username}/${chatId}`);
   };
 
-  // console.log('avatar url', avatarUrl);
   return loading ? null : (
     <div className='w-full flex flex-col items-center'>
       <form

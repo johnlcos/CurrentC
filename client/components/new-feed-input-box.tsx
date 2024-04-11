@@ -5,7 +5,7 @@ import { SessionContext } from "@/app/(protected)/layout";
 
 interface NewFeedInputBoxProps {
   //MAYBE MOVE SETALLFEED TO CONTEXT
-  setAllFeed: React.Dispatch<React.SetStateAction<FeedSchema[]>>;
+  setAllFeed?: React.Dispatch<React.SetStateAction<FeedSchema[]>>;
   type: "POST" | "REPLY";
   replyToId: string | undefined;
 }
@@ -39,7 +39,7 @@ export const NewFeedInputBox = ({
       });
       const data = await response.json();
       console.log(data);
-      setAllFeed(data);
+      if (setAllFeed) setAllFeed(data);
       setValue("");
     } else {
       return null;

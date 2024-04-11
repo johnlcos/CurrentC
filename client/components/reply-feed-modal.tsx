@@ -32,7 +32,7 @@ export const ReplyFeedModal = () => {
         lastFetchedID.current = selectedFeedID;
       });
     }
-  }, [selectedFeedID, showModal]);
+  }, [selectedFeedID, showModal, selectedFeed]);
 
   return (
     <div>

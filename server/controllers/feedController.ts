@@ -1,6 +1,6 @@
-import { db } from '../utils/db';
-import { Request, Response, NextFunction } from 'express';
-import supabase from '../utils/supabase';
+import { db } from "../utils/db";
+import { Request, Response, NextFunction } from "express";
+import supabase from "../utils/supabase";
 
 const feedController = {} as FeedController;
 
@@ -42,11 +42,11 @@ feedController.getFeed = async (
     // get a single post when clicked on
     try {
       const { data, error } = await supabase
-        .from('feeds')
+        .from("feeds")
         .select(
-          'id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar, display_name)'
+          "id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar, display_name)"
         )
-        .eq('id', req.query.id);
+        .eq("id", req.query.id);
       res.locals.results = data;
       next();
     } catch (error) {
@@ -56,12 +56,12 @@ feedController.getFeed = async (
     // get the total feed to display on explore
     try {
       const { data, error } = await supabase
-        .from('feeds')
+        .from("feeds")
         .select(
-          'id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar, display_name)'
+          "id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar, display_name)"
         )
-        .eq('type', 'POST')
-        .order('created_at', { ascending: false });
+        .eq("type", "POST")
+        .order("created_at", { ascending: false });
       res.locals.results = data;
       next();
     } catch (error) {
@@ -77,12 +77,12 @@ feedController.getProfileFeed = async (
 ) => {
   try {
     const { data, error } = await supabase
-      .from('feeds')
+      .from("feeds")
       .select(
-        'id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar, display_name)'
+        "id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar, display_name)"
       )
-      .match({ type: 'POST', author_id: req.query.id })
-      .order('created_at', { ascending: false });
+      .match({ type: "POST", author_id: req.query.id })
+      .order("created_at", { ascending: false });
 
     res.locals.profileFeed = data;
     next();
@@ -98,13 +98,15 @@ feedController.getReplyFeed = async (
 ) => {
   try {
     const reply_to_id = req.query.id;
+    console.log(reply_to_id);
     const { data, error } = await supabase
-      .from('feeds')
+      .from("feeds")
       .select(
-        'id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar)'
+        "id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar, display_name)"
       )
-      .match({ type: 'REPLY', reply_to_id })
-      .order('created_at', { ascending: false });
+      .match({ type: "REPLY", reply_to_id })
+      .order("created_at", { ascending: false });
+    console.log("getReplyFeed data: ", data);
     res.locals.results = data;
     next();
   } catch (error) {
@@ -121,12 +123,12 @@ feedController.getFollowedFeed = async (
     const follower_id = req.query.id;
     // console.log(follower_id);
     const { data, error } = await supabase
-      .from('feed_with_relationship')
+      .from("feed_with_relationship")
       .select(
-        'id, created_at, content, like_count, dislike_count, author_id, username, profile_avatar, display_name'
+        "id, created_at, content, like_count, dislike_count, author_id, username, profile_avatar, display_name"
       )
       .or(`follower_id.eq.${follower_id}`)
-      .order('created_at', { ascending: false });
+      .order("created_at", { ascending: false });
     // console.log('getFollowedFeed', data);
     // console.log('getFollowedFeed error', error);
     res.locals.followedFeed = data;
@@ -142,21 +144,21 @@ feedController.createFeed = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (req.body.type === 'POST') {
+  if (req.body.type === "POST") {
     try {
       const { message, author_id } = req.body;
       const { error } = await supabase
-        .from('feeds')
+        .from("feeds")
         .insert({ content: message, author_id });
       next();
     } catch (error) {
       next(error);
     }
-  } else if (req.body.type === 'REPLY') {
+  } else if (req.body.type === "REPLY") {
     try {
       const { message, author_id, replyToId, type } = req.body;
       const { error } = await supabase
-        .from('feeds')
+        .from("feeds")
         .insert({ content: message, author_id, reply_to_id: replyToId, type });
       next();
     } catch (error) {

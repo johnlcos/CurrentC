@@ -51,7 +51,7 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
             htmlFor='email'
             className='flex flex-col justify-center items-start w-full text-subtext-color text-sm font-bold mb-2'
           >
-            Email
+            Email What
             <input
               placeholder='Email'
               type='email'

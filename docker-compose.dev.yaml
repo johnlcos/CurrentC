@@ -9,8 +9,6 @@ services:
       target: dev
     volumes:
       - ./client:/client
-      - ./client/node_modules:/client/node_modules
-      - ./client/.next:/client/.next
     ports:
       - '3000:3000'
 

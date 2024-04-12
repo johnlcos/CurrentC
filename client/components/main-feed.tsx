@@ -37,7 +37,6 @@ export const MainFeed = ({ type, replyToId }: MainFeedProps) => {
     };
     fetchFeed();
   }, [replyToId, type, userSession?.user.id]);
-
   return (
     <div id='main-feed-container' className='p-2 w-full bg-[#17191A]'>
       {(type === 'main' || type === 'explore' || 'reply') && (

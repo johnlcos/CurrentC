@@ -15,7 +15,9 @@ RUN npm run build
 FROM base as production
 WORKDIR /server
 ENV NODE_ENV=production
-RUN ls /server
+RUN npm ci
+
+
 COPY --from=builder /server/dist ./dist
 COPY --from=builder /server/node_modules ./node_modules
 COPY --from=builder /server/package.json ./package.json

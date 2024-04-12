@@ -1,6 +1,5 @@
 # Base stage with common setup
-FROM node:18-alpine as base
-RUN apk add --no-cache g++ make py3-pip libc6-compat
+FROM node:18 as base
 WORKDIR /client
 COPY package*.json ./
 RUN npm install
@@ -16,6 +15,8 @@ RUN npm run build
 FROM base as production
 WORKDIR /client
 ENV NODE_ENV=production
+RUN npm ci
+
 COPY --from=builder /client/.next ./.next
 COPY --from=builder /client/node_modules ./node_modules
 COPY --from=builder /client/package.json ./package.json

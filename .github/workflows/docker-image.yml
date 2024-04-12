@@ -21,12 +21,12 @@ jobs:
       - name: Build and push client
         uses: docker/build-push-action@v5
         with:
-          context: /client
+          context: ./client
           push: true
-          tags: client
+          tags: client:latest
       - name: Build and push server
         uses: docker/build-push-action@v5
         with:
-          context: /server
+          context: ./server
           push: true
-          tags: sever
+          tags: sever:latest

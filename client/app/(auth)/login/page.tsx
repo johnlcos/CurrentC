@@ -1,6 +1,6 @@
-import { FormWrapper } from "@/components/form-wrapper";
+import { FormWrapper } from '@/components/form-wrapper';
 
 const LoginPage = () => {
-  return <FormWrapper formType="login" />;
+  return <FormWrapper formType='login' />;
 };
 export default LoginPage;

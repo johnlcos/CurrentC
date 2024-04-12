@@ -1,21 +1,27 @@
 version: '3.8'
 services:
   client:
-    image: alerty-prod
-    container_name: alerty-prod
+    image: alerty-dev
+    container_name: alerty-dev
     build:
       context: ./client
-      target: production
       dockerfile: Dockerfile
+      target: dev
+    volumes:
+      - .:/client
+      - /client/node_modules
+      - /client/.next
     ports:
       - '3000:3000'
     depends_on:
       - server
 
   server:
-    image: alerty-server-prod
+    image: alerty-server-dev
+    container_name: alerty-server-dev
     build:
       context: ./server
       dockerfile: Dockerfile
+      target: dev
     ports:
       - '8080:8080'

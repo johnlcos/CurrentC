@@ -5,6 +5,9 @@ on:
     branches:
       - 'dev'
 
+env:
+  AWS_REGION: MY_AWS_REGION # set this to your preferred AWS region, e.g. us-west-1
+
 jobs:
   docker:
     runs-on: ubuntu-latest

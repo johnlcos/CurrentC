@@ -23,6 +23,6 @@ jobs:
       - name: Build and push client
         uses: docker/build-push-action@v5
         with:
-          context: /client
+          context: ./client
           push: true
           tags: client:latest

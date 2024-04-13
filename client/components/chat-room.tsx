@@ -73,27 +73,35 @@ export const ChatRoom = ({ chatId }: ChatRoomProps) => {
   };
   console.log("ewiruaoiweuroiasejfoajsdiojfah");
   return (
-    <div className="border-primary-500 border rounded-lg m-4 p-4 h-full w-full flex flex-col">
-      <div className="text-text-white p-4 gap-4 h-full w-full flex flex-col">
-        {allMessages.map((message, index) => {
-          return (
-            <Message
-              key={index}
-              content={message.content}
-              display_name={message.display_name}
-              created_at={getTimeDifferenceInMinutes(`${message.created_at}`)}
-              type={
-                message.sender_id === userSession?.user.id ? "sent" : "received"
-              }
-            />
-          );
-        })}
+    <div className="border-primary-500 border rounded-lg m-4 p-4 h-full w-full flex flex-col gap-4">
+      <div className="text-text-white bg-white p-4 gap-4 h-full w-full flex items-end">
+        <div className="w-full flex flex-col gap-4">
+          {allMessages.map((message, index) => {
+            return (
+              <Message
+                key={index}
+                content={message.content}
+                display_name={message.display_name}
+                created_at={getTimeDifferenceInMinutes(`${message.created_at}`)}
+                type={
+                  message.sender_id === userSession?.user.id
+                    ? "sent"
+                    : "received"
+                }
+              />
+            );
+          })}
+        </div>
       </div>
-      <form onSubmit={handleSendMessage}>
+      <form
+        onSubmit={handleSendMessage}
+        className="w-full flex justify-center gap-4"
+      >
         <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          className="w-2/3"
         />
         <button type="submit" className="text-text-white">
           Send

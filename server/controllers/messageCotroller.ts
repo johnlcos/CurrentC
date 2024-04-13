@@ -90,8 +90,7 @@ messageController.getAllMessages = async (
       .select("content, created_at, sender_id, profiles(display_name)")
       .eq("chat_id", req.query.chatId);
     if (data) {
-      console.log("getAllMessages data: ", data);
-      const messages = data.map((message) => {
+      const messages = data.map((message: any) => {
         return {
           display_name: message.profiles.display_name,
           content: message.content,
@@ -99,7 +98,6 @@ messageController.getAllMessages = async (
           sender_id: message.sender_id,
         };
       });
-      // console.log('getAllMessages messages: ', messages);
       res.locals.messages = messages;
       next();
     }

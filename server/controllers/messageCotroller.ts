@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
-import { ServerError } from '../types';
-import supabase from '../utils/supabase';
+import { Request, Response, NextFunction } from "express";
+import { ServerError } from "../types";
+import supabase from "../utils/supabase";
 
 const messageController = {} as MessageController;
 
@@ -34,8 +34,8 @@ messageController.getRoom = async (
     } = await supabase.auth.getUser();
     res.locals.currentUser = user;
     const { data, error } = await supabase
-      .from('chatrooms')
-      .select('id')
+      .from("chatrooms")
+      .select("id")
       .or(`user_1.eq.${user?.id},user_2.eq.${user?.id}`)
       .or(`user_1.eq.${req.query.userId}, user_2.eq.${req.query.userId}`);
     if (data && data[0]) {
@@ -43,7 +43,7 @@ messageController.getRoom = async (
     }
     next();
   } catch (err) {
-    console.log('------------------Error------------------\n', err);
+    console.log("------------------Error------------------\n", err);
   }
 };
 
@@ -55,7 +55,7 @@ messageController.createRoom = async (
   try {
     if (res.locals.room) return next();
     const { data, error } = await supabase
-      .from('chatrooms')
+      .from("chatrooms")
       .insert({ user_1: res.locals.currentUser.id, user_2: req.query.userId })
       .select();
     console.log(data);
@@ -72,7 +72,7 @@ messageController.createNewMessage = async (
 ) => {
   try {
     const { chatid, sender_id, content } = req.body;
-    const { data, error } = await supabase.from('messages').insert(req.body);
+    const { data, error } = await supabase.from("messages").insert(req.body);
     next();
   } catch (err) {
     next(err);
@@ -86,14 +86,14 @@ messageController.getAllMessages = async (
 ) => {
   try {
     const { data, error } = await supabase
-      .from('messages')
-      .select('content, created_at, sender_id, profiles(display_name)')
-      .eq('chat_id', req.query.chatId);
+      .from("messages")
+      .select("content, created_at, sender_id, profiles(display_name)")
+      .eq("chat_id", req.query.chatId);
     if (data) {
-      console.log('getAllMessages data: ', data);
+      console.log("getAllMessages data: ", data);
       const messages = data.map((message) => {
         return {
-          display_name: message.profiles[0].display_name,
+          display_name: message.profiles.display_name,
           content: message.content,
           created_at: message.created_at,
           sender_id: message.sender_id,
@@ -104,7 +104,7 @@ messageController.getAllMessages = async (
       next();
     }
   } catch (err) {
-    console.log('------------------Error------------------\n', err);
+    console.log("------------------Error------------------\n", err);
     next(err);
   }
 };

@@ -1,9 +1,9 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:us-east-2:525357733102:task-definition/currentC-server:8",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-2:525357733102:task-definition/currentC-server:10",
   "containerDefinitions": [
     {
       "name": "currentC-server",
-      "image": "525357733102.dkr.ecr.us-east-2.amazonaws.com/currentc:server",
+      "image": "525357733102.dkr.ecr.us-east-2.amazonaws.com/currentc-server:latest",
       "cpu": 0,
       "portMappings": [
         {
@@ -16,10 +16,8 @@
       ],
       "essential": true,
       "environment": [],
-      "environmentFiles": [],
       "mountPoints": [],
       "volumesFrom": [],
-      "ulimits": [],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
@@ -27,8 +25,7 @@
           "awslogs-group": "/ecs/currentC-server",
           "awslogs-region": "us-east-2",
           "awslogs-stream-prefix": "ecs"
-        },
-        "secretOptions": []
+        }
       },
       "systemControls": []
     }
@@ -36,7 +33,7 @@
   "family": "currentC-server",
   "executionRoleArn": "arn:aws:iam::525357733102:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
-  "revision": 8,
+  "revision": 10,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -74,7 +71,7 @@
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2024-04-17T20:36:46.964Z",
+  "registeredAt": "2024-04-17T20:44:30.038Z",
   "registeredBy": "arn:aws:iam::525357733102:user/weiwang0305",
   "tags": []
 }

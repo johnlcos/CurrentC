@@ -10,7 +10,7 @@ const getMySecret = async (SecretId: string) => {
   return s.SecretString;
 };
 
-let supabase;
+let supabase: any;
 
 const creatingClient = async () => {
   const secret = await getMySecret(
@@ -22,5 +22,6 @@ const creatingClient = async () => {
     `${process.env.PROJECT_ANON_KEY}`
   );
 };
+creatingClient();
 
 export default supabase;

@@ -143,12 +143,11 @@ export default function UserProfile({
     );
     const result = await response.json();
     const chatId = result.chatId;
-    const user1 = userSession?.user.user_metadata.display_name;
-    const user2 = displayName;
+    const user = userSession?.user.user_metadata.display_name;
     console.log("Start Chatroom: ", chatId);
     if (chatId) {
       console.log("Emmitting join_room");
-      socket.emit("join_room", { chatId, user1, user2 });
+      socket.emit("join_room", { chatId, user });
     }
 
     router.push(`/${params.username}/${chatId}`);

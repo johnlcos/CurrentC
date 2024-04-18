@@ -78,11 +78,11 @@ export const ChatRoom = ({ chatId }: ChatRoomProps) => {
   }
 
   return (
-    <div className="border-primary-500 border rounded-lg m-4 p-4 h-full w-full flex flex-col gap-4">
-      <div className="text-text-white bg-white p-4 gap-4 h-full w-full flex items-end">
+    <div className="m-4 p-4 h-screen w-full flex flex-col gap-4">
+      <div className="text-text-white p-4 gap-4 h-[95%] w-full flex items-end border-b border-primary-500">
         <div
           id="chat-feed"
-          className="w-full flex flex-col gap-4 max-h-full overflow-y-auto"
+          className="w-full flex flex-col gap-4 max-h-full overflow-y-auto px-3"
         >
           {allMessages.map((message, index) => {
             return (
@@ -109,9 +109,13 @@ export const ChatRoom = ({ chatId }: ChatRoomProps) => {
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-2/3"
+          className="input w-2/3"
         />
-        <button type="submit" className="text-text-white">
+        <button
+          type="submit"
+          className="submit-button-with-disable"
+          disabled={message.length === 0}
+        >
           Send
         </button>
       </form>

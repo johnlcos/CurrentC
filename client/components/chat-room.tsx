@@ -78,7 +78,7 @@ export const ChatRoom = ({ chatId }: ChatRoomProps) => {
   }
 
   return (
-    <div className="m-4 p-4 h-screen w-full flex flex-col gap-4">
+    <div className="m-1 p-4 h-screen w-full flex flex-col gap-4">
       <div className="text-text-white p-4 gap-4 h-[95%] w-full flex items-end border-b border-primary-500">
         <div
           id="chat-feed"

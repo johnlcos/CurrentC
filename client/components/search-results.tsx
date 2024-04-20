@@ -51,7 +51,7 @@ export const SearchResults = ({
     loading ? (
       "loading"
     ) : (
-      <div className="py-2 flex flex-col gap-2">
+      <div className="py-2 w-3/4 flex flex-col gap-2">
         {searchResults.map((result) => {
           return (
             <div

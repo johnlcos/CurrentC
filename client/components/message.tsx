@@ -15,7 +15,7 @@ export const Message = ({
     <div
       className={`${
         type === "sent" ? "bg-primary-500 self-end" : "bg-surface self-start"
-      } w-1/2 p-4 rounded-2xl shadow-md`}
+      } w-5/6 sm:w-2/3 p-4 rounded-2xl shadow-md`}
     >
       <div className="flex items-center justify-between border-b border-text-white">
         <p className="text-[14px] bolded text-text-white">{display_name}</p>

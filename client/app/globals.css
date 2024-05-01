@@ -40,4 +40,10 @@
     text-text-white font-semibold shadow-md hover:bg-primary-600 
     transition duration-300 flex items-center justify-center gap-2;
   }
+
+  .input {
+    @apply bg-background border border-gray-300 text-text-white  
+    text-sm rounded-lg w-full p-2.5 focus:ring-primary-500 
+    focus:border-primary-500 focus:ring-2 focus:outline-none;
+  }
 }

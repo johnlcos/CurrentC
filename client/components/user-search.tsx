@@ -26,8 +26,8 @@ export const UserSearch = () => {
   }, [query, pathname, router]);
 
   return (
-    <div className="py-4 px-10">
-      <div className="flex bg-white items-center p-2 rounded-md shadow-sm gap-1 max-w-[300px]">
+    <div className="py-4 px-2 flex flex-col items-center">
+      <div className="flex bg-white items-center p-2 rounded-md shadow-sm gap-1 w-3/4">
         <BiSearch size={25} />
         <input
           type="text"

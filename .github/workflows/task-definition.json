@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "currentC-client",
-      "image": "525357733102.dkr.ecr.us-east-2.amazonaws.com/currentc-client:latest",
+      "image": "525357733102.dkr.ecr.us-east-2.amazonaws.com/currentc-client",
       "cpu": 0,
       "portMappings": [
         {

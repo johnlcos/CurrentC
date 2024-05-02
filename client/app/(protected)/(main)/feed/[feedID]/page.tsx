@@ -1,11 +1,11 @@
 "use client";
 
-import { FeedWrapper } from "@/components/feed-wrapper";
+import { FeedWrapper } from "@/components/FeedWrapper";
 import { FeedSchema } from "@/types";
 import { useState, useEffect, useContext } from "react";
-import { MainFeed } from "@/components/main-feed";
+import { MainFeed } from "@/components/MainFeed";
 import fetchSpecificFeed from "@/hooks/fetchSpecficFeed";
-import { NewFeedInputBox } from "@/components/new-feed-input-box";
+import { NewFeedInputBox } from "@/components/NewFeedInputBox";
 
 const FeedPage = ({ params }: { params: { feedID: string } }) => {
   const [currentFeed, setCurrentFeed] = useState<FeedSchema | null>(null);

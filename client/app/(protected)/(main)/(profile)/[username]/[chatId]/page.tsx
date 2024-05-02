@@ -1,4 +1,4 @@
-import { ChatRoom } from "@/components/chat-room";
+import { ChatRoom } from "@/components/ChatRoom";
 
 interface ChatRoomPageProps {
   params: {

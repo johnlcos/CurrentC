@@ -1,9 +1,9 @@
 "use client";
-import { SideNavBar } from "../side-navbar";
+import { SideNavBar } from "../../components/SideNavbar";
 import { useEffect, useState, createContext } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Session } from "@supabase/gotrue-js/src/lib/types";
-import { ReplyFeedModal } from "@/components/reply-feed-modal";
+import { ReplyFeedModal } from "@/components/ReplyFeedModal";
 
 interface OverviewContextSchema {
   showModal: boolean;

@@ -3,7 +3,7 @@
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import { SearchResults } from "./search-results";
+import { SearchResults } from "./SearchResults";
 import { useDebounce } from "use-debounce";
 
 export const UserSearch = () => {

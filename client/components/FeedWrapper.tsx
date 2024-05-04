@@ -4,11 +4,11 @@ import { FaUserCircle } from "react-icons/fa";
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { FaReply } from "react-icons/fa";
-import { MessageWrapper } from "./message-wrapper";
+import { MessageWrapper } from "./MessageWrapper";
 import { OverviewContext, SessionContext } from "@/app/(protected)/layout";
 import { useContext, useState, useRef, useEffect } from "react";
-import { DropDown } from "./dropdown";
-import { Avatar } from "./avatar";
+import { DropDown } from "./DropDown";
+import { Avatar } from "./Avatar";
 import { getTimeDifferenceInMinutes } from "@/utils";
 
 interface FeedWrapperProps {

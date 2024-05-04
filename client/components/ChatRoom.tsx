@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { socket } from "@/socket";
 import { SessionContext } from "@/app/(protected)/layout";
 import { getTimeDifferenceInMinutes } from "@/utils";
-import { Message } from "./message";
+import { Message } from "./Message";
 import type { Socket } from "socket.io-client";
 
 interface ChatRoomProps {

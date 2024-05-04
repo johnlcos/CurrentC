@@ -4,8 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useContext } from "react";
 import Link from "next/link";
 import { SessionContext } from "@/app/(protected)/layout";
-import { FollowButton } from "./follow-button";
-import { Avatar } from "./avatar";
+import { FollowButton } from "./FollowButton";
+import { Avatar } from "./Avatar";
 
 interface SearchResultType {
   id: string;

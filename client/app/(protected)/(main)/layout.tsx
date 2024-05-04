@@ -1,4 +1,4 @@
-import { RightSideWrapper } from "@/components/right-side-wrapper";
+import { RightSideWrapper } from "@/components/RightSideWrapper";
 
 export default function Layout({
   children,

@@ -3,7 +3,7 @@
 import { useState, useEffect, useContext } from "react";
 import { FeedSchema } from "@/types";
 import { SessionContext } from "@/app/(protected)/layout";
-import { FeedWrapper } from "./feed-wrapper";
+import { FeedWrapper } from "./FeedWrapper";
 
 export const ProfileFeed = ({ id }: { id: string }) => {
   const [allFeed, setAllFeed] = useState<FeedSchema[]>([]);

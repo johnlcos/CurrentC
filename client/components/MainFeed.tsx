@@ -1,49 +1,49 @@
 "use client";
 
-import { FeedWrapper } from "./feed-wrapper";
+import { FeedWrapper } from "./FeedWrapper";
 import { useState, useEffect, useContext } from "react";
 import { FeedSchema } from "@/types";
-import { NewFeedInputBox } from "./new-feed-input-box";
+import { NewFeedInputBox } from "./NewFeedInputBox";
 import { SessionContext } from "@/app/(protected)/layout";
 
 interface MainFeedProps {
-  type: string;
+  type: "main" | "explore" | "profile" | "reply";
+  replyToId?: string;
 }
 
-export const MainFeed = ({ type }: MainFeedProps) => {
+export const MainFeed = ({ type, replyToId }: MainFeedProps) => {
   // store the displayed feed in state
   const [allFeed, setAllFeed] = useState<FeedSchema[]>([]);
   const { userSession } = useContext(SessionContext);
 
   // depending on the type of feed needed, update the request url, fetch the feed and update state
-  const fetchFeed = async () => {
-    let feedUrl = "";
-    if (type === "main") {
-      feedUrl = `http://localhost:8080/feed/main?id=${userSession?.user.id}`;
-    } else if (type === "explore") {
-      feedUrl = "http://localhost:8080/feed/";
-    } else if (type === "profile") {
-      feedUrl = `http://localhost:8080/feed/profile?id=${userSession?.user.id}`;
-    } else if (type === "reply") {
-      feedUrl = `http://localhost:8080/feed/reply?id=${userSession?.user.id}`;
-    }
-    const response = await fetch(feedUrl);
-    const data = await response.json();
-    setAllFeed(data);
-  };
 
   // fetch the feed on component render
   useEffect(() => {
+    const fetchFeed = async () => {
+      let feedUrl = "";
+      if (type === "main") {
+        feedUrl = `http://localhost:8080/feed/main?id=${userSession?.user.id}`;
+      } else if (type === "explore") {
+        feedUrl = "http://localhost:8080/feed/";
+      } else if (type === "profile") {
+        feedUrl = `http://localhost:8080/feed/profile?id=${userSession?.user.id}`;
+      } else if (type === "reply") {
+        feedUrl = `http://localhost:8080/feed/reply?id=${replyToId}`;
+      }
+      const response = await fetch(feedUrl);
+      const data = await response.json();
+      setAllFeed(data);
+    };
     fetchFeed();
-  }, []);
-
+  }, [replyToId, type, userSession?.user.id]);
   return (
     <div id="main-feed-container" className="p-2 w-full bg-[#17191A]">
-      {(type === "main" || type === "explore") && (
+      {(type === "main" || type === "explore" || "reply") && (
         <NewFeedInputBox
-          type={"POST"}
+          type={type === "reply" ? "REPLY" : "POST"}
           setAllFeed={setAllFeed}
-          replyToId={null}
+          replyToId={replyToId}
         />
       )}
       <div className="flex justify-center items-center flex-col gap-y-5">

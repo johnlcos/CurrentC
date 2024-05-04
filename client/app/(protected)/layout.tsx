@@ -1,9 +1,9 @@
 "use client";
-import { SideNavBar } from "../side-navbar";
+import { SideNavBar } from "../../components/SideNavbar";
 import { useEffect, useState, createContext } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Session } from "@supabase/gotrue-js/src/lib/types";
-import { ReplyFeedModal } from "@/components/reply-feed-modal";
+import { ReplyFeedModal } from "@/components/ReplyFeedModal";
 
 interface OverviewContextSchema {
   showModal: boolean;
@@ -71,11 +71,24 @@ export default function Layout({
             <ReplyFeedModal />
           </div>
           {!isLoading && (
-            <div className="flex w-full h-full">
-              <div className="w-1/6 fixed h-full">
-                <SideNavBar />
+            <div
+              id="main-wrapper"
+              className="flex w-full h-full justify-center"
+            >
+              <div
+                id="left-wrapper"
+                className="w-[80px] md:w-[120px] lg:w-[220px] h-full"
+              >
+                <div className="fixed w-[80px] md:w-[120px] lg:w-[220px] h-full">
+                  <SideNavBar />
+                </div>
               </div>
-              <div className="flex-grow h-full">{children}</div>
+              <div
+                id="middle-right-wrapper"
+                className="flex-grow lg:flex-grow-0 lg:w-[800px] xl:w-[1050px] h-full"
+              >
+                {children}
+              </div>
             </div>
           )}
         </div>

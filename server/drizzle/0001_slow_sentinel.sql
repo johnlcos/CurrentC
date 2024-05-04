@@ -1,1 +1,0 @@
-ALTER TABLE "profiles" ALTER COLUMN "id" SET DATA TYPE uuid;

@@ -56,7 +56,7 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
               placeholder="Email"
               type="email"
               name="email"
-              className="bg-background border border-gray-300 text-text-white text-sm rounded-lg w-full p-2.5 focus:ring-primary-500 focus:border-primary-500 focus:ring-2 focus:outline-none"
+              className="input"
             ></input>
           </label>
           {formType === "register" && (
@@ -69,7 +69,7 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
                 placeholder="Username"
                 type="text"
                 name="username"
-                className="bg-background border border-gray-300 text-text-white  text-sm rounded-lg w-full p-2.5 focus:ring-primary-500 focus:border-primary-500 focus:ring-2 focus:outline-none"
+                className="input"
               ></input>
             </label>
           )}
@@ -82,7 +82,7 @@ export const FormWrapper = ({ formType }: FormWrapperProps) => {
               placeholder="Password"
               type="password"
               name="password"
-              className="bg-background border border-gray-300 text-text-white  text-sm rounded-lg w-full p-2.5 focus:ring-primary-500 focus:border-primary-500 focus:ring-2 focus:outline-none"
+              className="input"
             ></input>
           </label>
           <button type="submit" className="auth-button">

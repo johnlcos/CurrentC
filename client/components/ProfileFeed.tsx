@@ -3,27 +3,26 @@
 import { useState, useEffect, useContext } from "react";
 import { FeedSchema } from "@/types";
 import { SessionContext } from "@/app/(protected)/layout";
-import { FeedWrapper } from "./feed-wrapper";
+import { FeedWrapper } from "./FeedWrapper";
 
 export const ProfileFeed = ({ id }: { id: string }) => {
   const [allFeed, setAllFeed] = useState<FeedSchema[]>([]);
   const [isActiveUsersProfile, setIsActiveUsersProfile] = useState<boolean>();
   const { userSession } = useContext(SessionContext);
 
-  const fetchFeed = async () => {
-    let feedUrl = "";
-    // const id = userSession?.user.id;
-    feedUrl = `http://localhost:8080/feed/profile?id=${id}`;
-    const response = await fetch(feedUrl);
-    const data = await response.json();
-    setAllFeed(data);
-  };
-
   // fetch the feed on component render
   useEffect(() => {
+    const fetchFeed = async () => {
+      let feedUrl = "";
+      // const id = userSession?.user.id;
+      feedUrl = `http://localhost:8080/feed/profile?id=${id}`;
+      const response = await fetch(feedUrl);
+      const data = await response.json();
+      setAllFeed(data);
+    };
     setIsActiveUsersProfile(userSession?.user.id === id);
     fetchFeed();
-  }, [userSession]);
+  }, [userSession, id]);
 
   return (
     <div className="p-2 w-full bg-[#17191A]">

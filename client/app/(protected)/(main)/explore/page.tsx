@@ -1,9 +1,9 @@
-import { MainFeed } from "@/components/main-feed";
+import { MainFeed } from "@/components/MainFeed";
 
 export default function Explore() {
   return (
     <div className="w-full flex flex-col">
-      <MainFeed type="explore" id="" />
+      <MainFeed type="explore" />
     </div>
   );
 }

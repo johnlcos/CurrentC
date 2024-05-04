@@ -2,11 +2,10 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useContext } from "react";
-import { FaUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { SessionContext } from "@/app/(protected)/layout";
-import { FollowButton } from "./follow-button";
-import { Avatar } from "./avatar";
+import { FollowButton } from "./FollowButton";
+import { Avatar } from "./Avatar";
 
 interface SearchResultType {
   id: string;
@@ -30,22 +29,21 @@ export const SearchResults = ({
 
   const { userSession } = useContext(SessionContext);
 
-  const fetchSearchResults = async () => {
-    if (searchValue) {
-      setLoading(true);
-      const response = await fetch(
-        `http://localhost:8080/users?name=${searchValue}`
-      );
-
-      const json = await response.json();
-      // console.log(json);
-      setSearchResults(json.data);
-      setLoading(false);
-    }
-  };
-
   // whenever the search params change, fetch the backend for results and update state for rendering
   useEffect(() => {
+    const fetchSearchResults = async () => {
+      if (searchValue) {
+        setLoading(true);
+        const response = await fetch(
+          `http://localhost:8080/users?name=${searchValue}`
+        );
+
+        const json = await response.json();
+        // console.log(json);
+        setSearchResults(json.data);
+        setLoading(false);
+      }
+    };
     fetchSearchResults();
   }, [searchValue]);
 
@@ -53,7 +51,7 @@ export const SearchResults = ({
     loading ? (
       "loading"
     ) : (
-      <div className="py-2 flex flex-col gap-2">
+      <div className="py-2 w-3/4 flex flex-col gap-2">
         {searchResults.map((result) => {
           return (
             <div

@@ -46,6 +46,9 @@ app.use("/overview", (req, res) => __awaiter(void 0, void 0, void 0, function* (
     const { data, error } = yield supabase_1.default.auth.getSession();
     // console.log('session', data);
 }));
+app.get("/", (req, res) => {
+    res.status(200).json("working backend");
+});
 app.use((err, req, res, next) => {
     const errorObj = Object.assign({}, err);
     console.log(errorObj);
@@ -54,9 +57,9 @@ app.use((err, req, res, next) => {
 io.on("connection", (socket) => {
     console.log(`a user connected ${socket.id}}`);
     socket.on("join_room", (data) => {
-        const { chatId, user1, user2 } = data;
+        const { chatId, user } = data;
         socket.join(chatId);
-        console.log(`user-${user1} joined room - ${chatId}`);
+        console.log(`user-${user} joined room - ${chatId}`);
     });
     socket.on("send_message", (data) => {
         io.in(data.chat_id).emit("receive_message", data);

@@ -40,6 +40,10 @@ app.use("/overview", async (req: Request, res: Response) => {
   // console.log('session', data);
 });
 
+app.get("/", (req: Request, res: Response) => {
+  res.status(200).json("working backend");
+});
+
 app.use((err: ServerError, req: Request, res: Response, next: NextFunction) => {
   const errorObj: ServerError = Object.assign({}, err);
 
@@ -51,9 +55,9 @@ io.on("connection", (socket) => {
   console.log(`a user connected ${socket.id}}`);
 
   socket.on("join_room", (data) => {
-    const { chatId, user1, user2 } = data;
+    const { chatId, user } = data;
     socket.join(chatId);
-    console.log(`user-${user1} joined room - ${chatId}`);
+    console.log(`user-${user} joined room - ${chatId}`);
   });
 
   socket.on("send_message", (data) => {

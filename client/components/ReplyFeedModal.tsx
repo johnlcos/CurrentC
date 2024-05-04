@@ -2,8 +2,8 @@ import { OverviewContext } from "@/app/(protected)/layout";
 import fetchSpecificFeed from "@/hooks/fetchSpecficFeed";
 import { FeedSchema } from "@/types";
 import { useContext, useEffect, useState, useRef } from "react";
-import { FeedWrapper } from "./feed-wrapper";
-import { NewFeedInputBox } from "./new-feed-input-box";
+import { FeedWrapper } from "./FeedWrapper";
+import { NewFeedInputBox } from "./NewFeedInputBox";
 
 export const ReplyFeedModal = () => {
   const [selectedFeed, setSelectedFeed] = useState<FeedSchema | null>(null);
@@ -32,7 +32,7 @@ export const ReplyFeedModal = () => {
         lastFetchedID.current = selectedFeedID;
       });
     }
-  }, [selectedFeedID, showModal]);
+  }, [selectedFeedID, showModal, selectedFeed]);
 
   return (
     <div>

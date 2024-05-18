@@ -40,7 +40,6 @@ messageController.createRoom = (req, res, next) => __awaiter(void 0, void 0, voi
             .from("chatrooms")
             .insert({ user_1: res.locals.currentUser.id, user_2: req.query.userId })
             .select();
-        console.log(data);
         if (data)
             res.locals.room = data[0].id;
     }

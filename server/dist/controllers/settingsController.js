@@ -19,40 +19,38 @@ settingsController.changePassword = (req, res, next) => __awaiter(void 0, void 0
         const { currentPassword, newPassword, confirmNewPassword } = req.body;
         //Compare confirmation Password and new Password
         if (confirmNewPassword !== newPassword) {
-            throw new Error('Do Not Match');
+            throw new Error("Do Not Match");
         }
-        // console.log(currentPassword, newPassword, confirmNewPassword);
         const { data: { user }, } = yield supabase_1.default.auth.getUser();
         if (user && user.email) {
-            const { data } = yield supabase_1.default.rpc('changepassword', {
+            const { data } = yield supabase_1.default.rpc("changepassword", {
                 current_plain_password: currentPassword,
                 new_plain_password: newPassword,
                 current_id: user.id,
             });
-            // console.log(data);
-            if (data === 'incorrect') {
-                console.log('error');
-                throw new Error('Incorrect');
+            if (data === "incorrect") {
+                console.log("error");
+                throw new Error("Incorrect");
             }
         }
         next();
     }
     catch (err) {
-        console.log('------------------Error------------------\n', err);
+        console.log("------------------Error------------------\n", err);
         const error = err;
-        if (error.message === 'Do Not Match') {
+        if (error.message === "Do Not Match") {
             const errObj = {
                 status: 500,
-                errorType: 'Confirmation',
-                message: 'Passwords do not match',
+                errorType: "Confirmation",
+                message: "Passwords do not match",
             };
             next(errObj);
         }
-        else if (error.message === 'Incorrect') {
+        else if (error.message === "Incorrect") {
             const errObj = {
                 status: 500,
-                errorType: 'Incorrect',
-                message: 'The password you entered was incorrect',
+                errorType: "Incorrect",
+                message: "The password you entered was incorrect",
             };
             next(errObj);
         }
@@ -60,12 +58,12 @@ settingsController.changePassword = (req, res, next) => __awaiter(void 0, void 0
 });
 settingsController.accountDeletion = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield supabase_1.default.rpc('delete_user');
+        yield supabase_1.default.rpc("delete_user");
         const { error } = yield supabase_1.default.auth.signOut();
         next();
     }
     catch (err) {
-        console.log('------------------Error------------------\n', err);
+        console.log("------------------Error------------------\n", err);
         next(err);
     }
 });

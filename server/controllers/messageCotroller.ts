@@ -21,6 +21,11 @@ interface MessageController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  getChatrooms: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
 }
 
 messageController.getRoom = async (
@@ -86,6 +91,34 @@ messageController.getAllMessages = async (
   try {
     const { data, error } = await supabase
       .from("messages")
+      .select("content, created_at, sender_id, profiles(display_name)")
+      .eq("chat_id", req.query.chatId);
+    if (data) {
+      const messages = data.map((message: any) => {
+        return {
+          display_name: message.profiles.display_name,
+          content: message.content,
+          created_at: message.created_at,
+          sender_id: message.sender_id,
+        };
+      });
+      res.locals.messages = messages;
+      next();
+    }
+  } catch (err) {
+    console.log("------------------Error------------------\n", err);
+    next(err);
+  }
+};
+
+messageController.getChatrooms = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { data, error } = await supabase
+      .from("chatrooms")
       .select("content, created_at, sender_id, profiles(display_name)")
       .eq("chat_id", req.query.chatId);
     if (data) {

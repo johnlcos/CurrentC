@@ -81,4 +81,28 @@ messageController.getAllMessages = (req, res, next) => __awaiter(void 0, void 0,
         next(err);
     }
 });
+messageController.getChatrooms = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { data, error } = yield supabase_1.default
+            .from("chatrooms")
+            .select("content, created_at, sender_id, profiles(display_name)")
+            .eq("chat_id", req.query.chatId);
+        if (data) {
+            const messages = data.map((message) => {
+                return {
+                    display_name: message.profiles.display_name,
+                    content: message.content,
+                    created_at: message.created_at,
+                    sender_id: message.sender_id,
+                };
+            });
+            res.locals.messages = messages;
+            next();
+        }
+    }
+    catch (err) {
+        console.log("------------------Error------------------\n", err);
+        next(err);
+    }
+});
 exports.default = messageController;

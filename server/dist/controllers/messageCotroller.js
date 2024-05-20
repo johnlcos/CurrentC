@@ -83,22 +83,39 @@ messageController.getAllMessages = (req, res, next) => __awaiter(void 0, void 0,
 });
 messageController.getChatrooms = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { data, error } = yield supabase_1.default
+        console.log("id: ", req.query.id);
+        // obtain chatrooms where user1 or user2 is the provided id
+        const { data: chatrooms, error: chatroomsError } = yield supabase_1.default
             .from("chatrooms")
-            .select("content, created_at, sender_id, profiles(display_name)")
-            .eq("chat_id", req.query.chatId);
-        if (data) {
-            const messages = data.map((message) => {
-                return {
-                    display_name: message.profiles.display_name,
-                    content: message.content,
-                    created_at: message.created_at,
-                    sender_id: message.sender_id,
-                };
+            .select("id, last_message_sent_at, user_1, user_2")
+            .or(`user_1.eq.${req.query.id}, user_1.eq.${req.query.id}`);
+        if (chatrooms.length > 0) {
+            console.log("chatrooms: ", chatrooms);
+            // create an array of ids that are not the user
+            const otherIds = chatrooms.map((chatroom) => {
+                return chatroom.user_1 === req.query.id
+                    ? chatroom.user_2
+                    : chatroom.user_1;
             });
-            res.locals.messages = messages;
-            next();
+            // obtain the profile information from the other ids
+            const { data: profiles, error: profilesError } = yield supabase_1.default
+                .from("profiles")
+                .select("id, username, display_name, profile_avatar")
+                .in("id", otherIds);
+            console.log("profiles: ", profiles);
+            // create a map of ids to profile info
+            const idToProfileMap = profiles.reduce((acc, curr) => {
+                acc[curr.id] = curr;
+            }, {});
+            // assemble the object to return
+            const processedChatrooms = chatrooms.map((chatroom) => {
+                const otherId = chatroom.user_1 === req.query.id ? chatroom.user_2 : chatroom.user_1;
+                return Object.assign({ chatroomId: chatroom.id, lastMessageSentAt: chatroom.last_message_sent_at }, idToProfileMap[otherId]);
+            });
+            console.log("processedChatrooms: ", processedChatrooms);
         }
+        // res.locals.chatrooms = ;
+        next();
     }
     catch (err) {
         console.log("------------------Error------------------\n", err);

@@ -4,7 +4,8 @@ import { SessionContext } from "../../layout";
 
 interface Chatroom {
   chatroomId: string;
-  userId: string;
+  username: string;
+  displayName: string;
   avatarUrl: string;
   lastMessageSentAt: Date;
 }
@@ -15,12 +16,13 @@ const MessagesPage = () => {
   const { userSession } = useContext(SessionContext);
 
   useEffect(() => {
-    const fetchConversations = async () => {
+    const fetchChatrooms = async () => {
       const response = await fetch(
         `http://localhost:8080/messages/chatrooms?id=${userSession?.user.id}`
       );
       const data = await response.json();
     };
+    fetchChatrooms();
   }, []);
 
   return <div>Messsages</div>;

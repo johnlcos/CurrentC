@@ -121,7 +121,8 @@ messageController.getChatrooms = async (
     const { data: chatrooms, error: chatroomsError } = await supabase
       .from("chatrooms")
       .select("id, last_message_sent_at, user_1, user_2")
-      .or(`user_1.eq.${req.query.id}, user_1.eq.${req.query.id}`);
+      .or(`user_1.eq.${req.query.id}, user_1.eq.${req.query.id}`)
+      .order("last_message_sent_at", { ascending: false });
     if (chatrooms.length > 0) {
       // create an array of ids that are not the user
       const otherIds = chatrooms.map((chatroom: any) => {

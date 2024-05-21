@@ -1,12 +1,14 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
 import { SessionContext } from "../../layout";
+import { Conversation } from "@/components/Conversation";
 
 interface Chatroom {
   chatroomId: string;
   username: string;
-  displayName: string;
-  avatarUrl: string;
+  display_name: string;
+  id: string;
+  profile_avatar: string;
   lastMessageSentAt: Date;
 }
 
@@ -21,11 +23,30 @@ const MessagesPage = () => {
         `http://localhost:8080/messages/chatrooms?id=${userSession?.user.id}`
       );
       const data = await response.json();
-      console.log("chatroom data: ", data);
+      setChatrooms(data.chatrooms);
     };
     fetchChatrooms();
   }, []);
 
-  return <div>Messsages</div>;
+  return (
+    <div>
+      <h1>Messages</h1>
+      <div>
+        {chatrooms.map((chatroom) => {
+          console.log("chatroom: ", chatroom);
+          return (
+            <Conversation
+              key={chatroom.chatroomId}
+              chatroomId={chatroom.chatroomId}
+              username={chatroom.username}
+              display_name={chatroom.display_name}
+              profile_avatar={chatroom.profile_avatar}
+              lastMessageSentAt={chatroom.lastMessageSentAt}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
 };
 export default MessagesPage;

@@ -83,14 +83,12 @@ messageController.getAllMessages = (req, res, next) => __awaiter(void 0, void 0,
 });
 messageController.getChatrooms = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("id: ", req.query.id);
         // obtain chatrooms where user1 or user2 is the provided id
         const { data: chatrooms, error: chatroomsError } = yield supabase_1.default
             .from("chatrooms")
             .select("id, last_message_sent_at, user_1, user_2")
             .or(`user_1.eq.${req.query.id}, user_1.eq.${req.query.id}`);
         if (chatrooms.length > 0) {
-            console.log("chatrooms: ", chatrooms);
             // create an array of ids that are not the user
             const otherIds = chatrooms.map((chatroom) => {
                 return chatroom.user_1 === req.query.id
@@ -102,19 +100,18 @@ messageController.getChatrooms = (req, res, next) => __awaiter(void 0, void 0, v
                 .from("profiles")
                 .select("id, username, display_name, profile_avatar")
                 .in("id", otherIds);
-            console.log("profiles: ", profiles);
             // create a map of ids to profile info
             const idToProfileMap = profiles.reduce((acc, curr) => {
                 acc[curr.id] = curr;
+                return acc;
             }, {});
             // assemble the object to return
             const processedChatrooms = chatrooms.map((chatroom) => {
                 const otherId = chatroom.user_1 === req.query.id ? chatroom.user_2 : chatroom.user_1;
                 return Object.assign({ chatroomId: chatroom.id, lastMessageSentAt: chatroom.last_message_sent_at }, idToProfileMap[otherId]);
             });
-            console.log("processedChatrooms: ", processedChatrooms);
+            res.locals.chatrooms = processedChatrooms;
         }
-        // res.locals.chatrooms = ;
         next();
     }
     catch (err) {

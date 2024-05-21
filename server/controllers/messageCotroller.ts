@@ -117,14 +117,12 @@ messageController.getChatrooms = async (
   next: NextFunction
 ) => {
   try {
-    console.log("id: ", req.query.id);
     // obtain chatrooms where user1 or user2 is the provided id
     const { data: chatrooms, error: chatroomsError } = await supabase
       .from("chatrooms")
       .select("id, last_message_sent_at, user_1, user_2")
       .or(`user_1.eq.${req.query.id}, user_1.eq.${req.query.id}`);
     if (chatrooms.length > 0) {
-      console.log("chatrooms: ", chatrooms);
       // create an array of ids that are not the user
       const otherIds = chatrooms.map((chatroom: any) => {
         return chatroom.user_1 === req.query.id
@@ -136,10 +134,10 @@ messageController.getChatrooms = async (
         .from("profiles")
         .select("id, username, display_name, profile_avatar")
         .in("id", otherIds);
-      console.log("profiles: ", profiles);
       // create a map of ids to profile info
       const idToProfileMap = profiles.reduce((acc: any, curr: any) => {
         acc[curr.id] = curr;
+        return acc;
       }, {});
       // assemble the object to return
       const processedChatrooms = chatrooms.map((chatroom: any) => {
@@ -151,10 +149,8 @@ messageController.getChatrooms = async (
           ...idToProfileMap[otherId],
         };
       });
-      console.log("processedChatrooms: ", processedChatrooms);
+      res.locals.chatrooms = processedChatrooms;
     }
-
-    // res.locals.chatrooms = ;
     next();
   } catch (err) {
     console.log("------------------Error------------------\n", err);

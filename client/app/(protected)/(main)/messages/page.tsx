@@ -21,6 +21,7 @@ const MessagesPage = () => {
         `http://localhost:8080/messages/chatrooms?id=${userSession?.user.id}`
       );
       const data = await response.json();
+      console.log("chatroom data: ", data);
     };
     fetchChatrooms();
   }, []);

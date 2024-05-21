@@ -16,13 +16,22 @@ export const Conversation = ({
   profile_avatar,
   lastMessageSentAt,
 }: ConversationProps) => {
-  const convertToTime12Hour = (isoString: Date) => {
+  const formatTime = (isoString: Date) => {
     const date = new Date(isoString);
-    return date.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
+    const now = new Date();
+
+    if (date.toDateString() === now.toDateString()) {
+      return date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+    } else {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
   };
 
   return (
@@ -30,7 +39,7 @@ export const Conversation = ({
       <Avatar url={profile_avatar} type="conversation" />
       <div>
         <p>{display_name}</p>
-        <p>{convertToTime12Hour(lastMessageSentAt)}</p>
+        <p>{formatTime(lastMessageSentAt)}</p>
       </div>
     </Link>
   );

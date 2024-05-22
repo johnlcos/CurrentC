@@ -29,23 +29,20 @@ const MessagesPage = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Messages</h1>
-      <div>
-        {chatrooms.map((chatroom) => {
-          console.log("chatroom: ", chatroom);
-          return (
-            <Conversation
-              key={chatroom.chatroomId}
-              chatroomId={chatroom.chatroomId}
-              username={chatroom.username}
-              display_name={chatroom.display_name}
-              profile_avatar={chatroom.profile_avatar}
-              lastMessageSentAt={chatroom.lastMessageSentAt}
-            />
-          );
-        })}
-      </div>
+    <div className="m-4 flex flex-col gap-4">
+      {chatrooms.map((chatroom) => {
+        console.log("chatroom: ", chatroom);
+        return (
+          <Conversation
+            key={chatroom.chatroomId}
+            chatroomId={chatroom.chatroomId}
+            username={chatroom.username}
+            display_name={chatroom.display_name}
+            profile_avatar={chatroom.profile_avatar}
+            lastMessageSentAt={chatroom.lastMessageSentAt}
+          />
+        );
+      })}
     </div>
   );
 };

@@ -48,12 +48,16 @@ export const Conversation = ({
   };
 
   return (
-    <Link href={`/${username}/${chatroomId}`} onClick={handleStartMessage}>
-      <Avatar url={profile_avatar} type="conversation" />
-      <div>
+    <Link
+      href={`/${username}/${chatroomId}`}
+      onClick={handleStartMessage}
+      className="flex text-center text-text-white font-semibold border-b border-surface shadow-md justify-between gap-2 hover:border-primary-500 transition duration-300 p-4"
+    >
+      <div className="flex items-center gap-4">
+        <Avatar url={profile_avatar} type="conversation" />
         <p>{display_name}</p>
-        <p>{formatTime(lastMessageSentAt)}</p>
       </div>
+      <p>{formatTime(lastMessageSentAt)}</p>
     </Link>
   );
 };

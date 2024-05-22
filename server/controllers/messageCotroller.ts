@@ -26,6 +26,11 @@ interface MessageController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  updateLastSent: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
 }
 
 messageController.getRoom = async (
@@ -75,8 +80,11 @@ messageController.createNewMessage = async (
   next: NextFunction
 ) => {
   try {
-    const { chatid, sender_id, content } = req.body;
-    const { data, error } = await supabase.from("messages").insert(req.body);
+    const { data, error } = await supabase
+      .from("messages")
+      .insert(req.body)
+      .select("created_at");
+    res.locals.createdAt = data[0].created_at;
     next();
   } catch (err) {
     next(err);
@@ -152,6 +160,23 @@ messageController.getChatrooms = async (
       });
       res.locals.chatrooms = processedChatrooms;
     }
+    next();
+  } catch (err) {
+    console.log("------------------Error------------------\n", err);
+    next(err);
+  }
+};
+
+messageController.updateLastSent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { data, error } = await supabase
+      .from("chatrooms")
+      .update({ last_message_sent_at: res.locals.createdAt })
+      .eq("id", req.body.chat_id);
     next();
   } catch (err) {
     console.log("------------------Error------------------\n", err);

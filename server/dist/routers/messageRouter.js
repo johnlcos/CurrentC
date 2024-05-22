@@ -17,7 +17,7 @@ router.post("/room", messageCotroller_1.default.getRoom, messageCotroller_1.defa
         .status(200)
         .json({ success: "Successfully created room", chatId: res.locals.room });
 });
-router.post("/send", messageCotroller_1.default.createNewMessage, (req, res) => {
+router.post("/send", messageCotroller_1.default.createNewMessage, messageCotroller_1.default.updateLastSent, (req, res) => {
     res.status(200).json({ success: "Message Sent" });
 });
 router.get("/chatrooms", messageCotroller_1.default.getChatrooms, (req, res) => {

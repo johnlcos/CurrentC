@@ -49,8 +49,11 @@ messageController.createRoom = (req, res, next) => __awaiter(void 0, void 0, voi
 });
 messageController.createNewMessage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { chatid, sender_id, content } = req.body;
-        const { data, error } = yield supabase_1.default.from("messages").insert(req.body);
+        const { data, error } = yield supabase_1.default
+            .from("messages")
+            .insert(req.body)
+            .select("created_at");
+        res.locals.createdAt = data[0].created_at;
         next();
     }
     catch (err) {
@@ -113,6 +116,19 @@ messageController.getChatrooms = (req, res, next) => __awaiter(void 0, void 0, v
             });
             res.locals.chatrooms = processedChatrooms;
         }
+        next();
+    }
+    catch (err) {
+        console.log("------------------Error------------------\n", err);
+        next(err);
+    }
+});
+messageController.updateLastSent = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { data, error } = yield supabase_1.default
+            .from("chatrooms")
+            .update({ last_message_sent_at: res.locals.createdAt })
+            .eq("id", req.body.chat_id);
         next();
     }
     catch (err) {

@@ -28,6 +28,7 @@ router.post(
 router.post(
   "/send",
   messageController.createNewMessage,
+  messageController.updateLastSent,
   (req: Request, res: Response) => {
     res.status(200).json({ success: "Message Sent" });
   }

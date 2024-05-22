@@ -1,4 +1,3 @@
-import { db } from "../utils/db";
 import { Request, Response, NextFunction } from "express";
 import supabase from "../utils/supabase";
 
@@ -98,7 +97,6 @@ feedController.getReplyFeed = async (
 ) => {
   try {
     const reply_to_id = req.query.id;
-    console.log(reply_to_id);
     const { data, error } = await supabase
       .from("feeds")
       .select(
@@ -106,7 +104,6 @@ feedController.getReplyFeed = async (
       )
       .match({ type: "REPLY", reply_to_id })
       .order("created_at", { ascending: false });
-    console.log("getReplyFeed data: ", data);
     res.locals.results = data;
     next();
   } catch (error) {
@@ -121,7 +118,6 @@ feedController.getFollowedFeed = async (
 ) => {
   try {
     const follower_id = req.query.id;
-    // console.log(follower_id);
     const { data, error } = await supabase
       .from("feed_with_relationship")
       .select(
@@ -129,10 +125,7 @@ feedController.getFollowedFeed = async (
       )
       .or(`follower_id.eq.${follower_id}`)
       .order("created_at", { ascending: false });
-    // console.log('getFollowedFeed', data);
-    // console.log('getFollowedFeed error', error);
     res.locals.followedFeed = data;
-    // console.log('getFollowedFeed: ', data);
     next();
   } catch (error) {
     next(error);
@@ -182,7 +175,6 @@ feedController.mergeFeeds = async (
       return b.created_at - a.created_at;
     });
     res.locals.results = results;
-    // console.log(results);
     next();
   } catch (error) {
     next(error);

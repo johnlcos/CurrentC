@@ -2,10 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 import { FollowButton } from "@/components/FollowButton";
 import { SessionContext } from "@/app/(protected)/layout";
-import { FaUserCircle } from "react-icons/fa";
-import { MainFeed } from "@/components/MainFeed";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { Avatar } from "@/components/Avatar";
 import { ProfileFeed } from "@/components/ProfileFeed";
 import { socket } from "@/socket";

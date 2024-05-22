@@ -62,13 +62,11 @@ feedController.getProfileFeed = (req, res, next) => __awaiter(void 0, void 0, vo
 feedController.getReplyFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const reply_to_id = req.query.id;
-        console.log(reply_to_id);
         const { data, error } = yield supabase_1.default
             .from("feeds")
             .select("id, created_at, content, like_count, dislike_count, author_id, profiles(username, profile_avatar, display_name)")
             .match({ type: "REPLY", reply_to_id })
             .order("created_at", { ascending: false });
-        console.log("getReplyFeed data: ", data);
         res.locals.results = data;
         next();
     }
@@ -79,16 +77,12 @@ feedController.getReplyFeed = (req, res, next) => __awaiter(void 0, void 0, void
 feedController.getFollowedFeed = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const follower_id = req.query.id;
-        // console.log(follower_id);
         const { data, error } = yield supabase_1.default
             .from("feed_with_relationship")
             .select("id, created_at, content, like_count, dislike_count, author_id, username, profile_avatar, display_name")
             .or(`follower_id.eq.${follower_id}`)
             .order("created_at", { ascending: false });
-        // console.log('getFollowedFeed', data);
-        // console.log('getFollowedFeed error', error);
         res.locals.followedFeed = data;
-        // console.log('getFollowedFeed: ', data);
         next();
     }
     catch (error) {
@@ -132,7 +126,6 @@ feedController.mergeFeeds = (req, res, next) => __awaiter(void 0, void 0, void 0
             return b.created_at - a.created_at;
         });
         res.locals.results = results;
-        // console.log(results);
         next();
     }
     catch (error) {
